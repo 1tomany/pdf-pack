@@ -38,8 +38,8 @@ Extracted data is stored in memory and can be written to the filesystem or conve
 
 Using the library is easy, and you have two ways to interact with it:
 
-1. **Direct** Instantiate the `OneToMany\PdfPack\Client\Poppler\PopplerExtractorClient` class and call the methods directly. This method is easier to use, but comes with the cost that your application will be less flexible and testable.
-2. **Actions** Create a container of `OneToMany\PdfPack\Contract\Client\ExtractorClientInterface` objects, and use the `OneToMany\PdfPack\Factory\ExtractorClientFactory` class to instantiate them.
+1. **Direct** Instantiate the `OneToMany\PdfPack\Client\Poppler\PopplerClient` class and call the methods directly. This method is easier to use, but comes with the cost that your application will be less flexible and testable.
+2. **Actions** Create a container of `OneToMany\PdfPack\Contract\Client\ClientInterface` objects, and use the `OneToMany\PdfPack\Factory\ExtractorClientFactory` class to instantiate them.
 
 **Note:** A [Symfony bundle](https://github.com/1tomany/pdf-pack-bundle) is available if you wish to integrate this library into your Symfony applications with autowiring and configuration support.
 
