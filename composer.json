@@ -1,5 +1,5 @@
 {
-    "name": "1tomany/pdf-ai",
+    "name": "1tomany/pdf-pack",
     "description": "A simple PHP library that makes extracting data from PDFs for large language models easy",
     "license": "MIT",
     "type": "library",
