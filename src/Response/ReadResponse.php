@@ -6,8 +6,12 @@ use function max;
 
 final readonly class ReadResponse
 {
-    public function __construct(private int $pages = 1)
+    /** @var positive-int */
+    private int $pages;
+
+    public function __construct(int $pages = 1)
     {
+        $this->pages = max(1, $pages);
     }
 
     /**
@@ -15,6 +19,6 @@ final readonly class ReadResponse
      */
     public function getPages(): int
     {
-        return max(1, $this->pages);
+        return $this->pages;
     }
 }
