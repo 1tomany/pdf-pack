@@ -8,7 +8,7 @@ use OneToMany\PdfPack\Client\Poppler\PopplerExtractorClient;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Contract\Response\ExtractedDataResponseInterface;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Request\ExtractDataRequest;
+use OneToMany\PdfPack\Request\Data\ExtractRequest;
 use OneToMany\PdfPack\Request\ExtractTextRequest;
 use OneToMany\PdfPack\Request\ReadMetadataRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -81,7 +81,7 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "'.$pdfToPpmBinary.'" could not be found.');
 
-        new PopplerExtractorClient(pdfToPpmBinary: $pdfToPpmBinary)->extractData(new ExtractDataRequest(__FILE__))->current();
+        new PopplerExtractorClient(pdfToPpmBinary: $pdfToPpmBinary)->extractData(new ExtractRequest(__FILE__))->current();
     }
 
     public function testExtractingTextDataRequiresValidPdfToTextBinary(): void
@@ -99,7 +99,7 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(ExtractingDataFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
 
-        new PopplerExtractorClient()->extractData(new ExtractDataRequest(__FILE__))->current();
+        new PopplerExtractorClient()->extractData(new ExtractRequest(__FILE__))->current();
     }
 
     public function testExtractingDataRequiresValidPage(): void
@@ -109,7 +109,7 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(ExtractingDataFailedException::class);
         $this->expectExceptionMessageMatches('/Wrong page range given/');
 
-        new PopplerExtractorClient()->extractData(new ExtractDataRequest(__DIR__.'/../files/pages-1.pdf', $page, $page))->current();
+        new PopplerExtractorClient()->extractData(new ExtractRequest(__DIR__.'/../files/pages-1.pdf', $page, $page))->current();
     }
 
     #[DataProvider('providerExtractingDataRange')]
@@ -121,7 +121,7 @@ final class PopplerExtractorClientTest extends TestCase
     ): void {
         $client = new PopplerExtractorClient();
 
-        $request = new ExtractDataRequest(
+        $request = new ExtractRequest(
             $filePath, $firstPage, $lastPage,
         );
 
@@ -219,7 +219,7 @@ final class PopplerExtractorClientTest extends TestCase
     ): void {
         $client = new PopplerExtractorClient();
 
-        $request = new ExtractDataRequest(
+        $request = new ExtractRequest(
             $filePath,
             $firstPage,
             $firstPage,

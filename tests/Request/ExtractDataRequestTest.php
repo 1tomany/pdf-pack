@@ -5,7 +5,7 @@ namespace OneToMany\PdfPack\Tests\Request;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Request\ExtractDataRequest;
+use OneToMany\PdfPack\Request\Data\ExtractRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +30,7 @@ final class ExtractDataRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The file path cannot be empty.');
 
-        new ExtractDataRequest('');
+        new ExtractRequest('');
     }
 
     public function testConstructorRequiresReadableFile(): void
@@ -41,7 +41,7 @@ final class ExtractDataRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The file path "'.$filePath.'" does not exist or is not readable.');
 
-        new ExtractDataRequest($filePath);
+        new ExtractRequest($filePath);
     }
 
     public function testConstructorRequiresPositiveNonZeroFirstPage(): void
@@ -49,7 +49,7 @@ final class ExtractDataRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The first page number must be a positive non-zero integer.');
 
-        new ExtractDataRequest($this->filePath, firstPage: 0);
+        new ExtractRequest($this->filePath, firstPage: 0);
     }
 
     public function testConstructorRequiresPositiveNonZeroLastPage(): void
@@ -57,7 +57,7 @@ final class ExtractDataRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The last page number must be a positive non-zero integer.');
 
-        new ExtractDataRequest($this->filePath, lastPage: 0);
+        new ExtractRequest($this->filePath, lastPage: 0);
     }
 
     public function testConstructorRequiresResolutionToBeLessThanOrEqualToMinimumResolution(): void
@@ -65,7 +65,7 @@ final class ExtractDataRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The resolution must be an integer between '.ExtractDataRequestInterface::MIN_RESOLUTION.' and '.ExtractDataRequestInterface::MAX_RESOLUTION.'.');
 
-        new ExtractDataRequest($this->filePath, resolution: random_int(1, ExtractDataRequestInterface::MIN_RESOLUTION - 1));
+        new ExtractRequest($this->filePath, resolution: random_int(1, ExtractDataRequestInterface::MIN_RESOLUTION - 1));
     }
 
     public function testConstructorRequiresResolutionToBeLessThanOrEqualToMaximumResolution(): void
@@ -73,7 +73,7 @@ final class ExtractDataRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The resolution must be an integer between '.ExtractDataRequestInterface::MIN_RESOLUTION.' and '.ExtractDataRequestInterface::MAX_RESOLUTION.'.');
 
-        new ExtractDataRequest($this->filePath, resolution: random_int(ExtractDataRequestInterface::MAX_RESOLUTION + 1, PHP_INT_MAX));
+        new ExtractRequest($this->filePath, resolution: random_int(ExtractDataRequestInterface::MAX_RESOLUTION + 1, PHP_INT_MAX));
     }
 
     #[DataProvider('providerConstructor')]
@@ -84,7 +84,7 @@ final class ExtractDataRequestTest extends TestCase
         OutputType $outputType,
         int $resolution,
     ): void {
-        $request = new ExtractDataRequest($filePath, $firstPage, $lastPage, $outputType, $resolution);
+        $request = new ExtractRequest($filePath, $firstPage, $lastPage, $outputType, $resolution);
 
         $this->assertEquals($filePath, $request->getFilePath());
         $this->assertEquals($firstPage, $request->getFirstPage());
@@ -113,7 +113,7 @@ final class ExtractDataRequestTest extends TestCase
 
     public function testSettingFirstPageGreaterThanLastPageClampsLastPageToFirstPage(): void
     {
-        $request = new ExtractDataRequest($this->filePath);
+        $request = new ExtractRequest($this->filePath);
         $this->assertEquals($request->getFirstPage(), $request->getLastPage());
 
         $firstPage = $request->getFirstPage() + 1;
@@ -127,13 +127,13 @@ final class ExtractDataRequestTest extends TestCase
     {
         $page = random_int(2, 10);
 
-        $request = new ExtractDataRequest($this->filePath, $page, $page);
+        $request = new ExtractRequest($this->filePath, $page, $page);
         $this->assertEquals($request->getLastPage(), $request->getFirstPage());
 
         $lastPage = $request->getLastPage() - 1;
         $this->assertLessThan($request->getFirstPage(), $lastPage);
 
-        $request->setLastPage($lastPage);
+        $request->toPage($lastPage);
         $this->assertEquals($request->getLastPage(), $request->getFirstPage());
     }
 }

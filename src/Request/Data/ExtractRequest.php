@@ -1,0 +1,140 @@
+<?php
+
+namespace OneToMany\PdfPack\Request\Data;
+
+use OneToMany\PdfPack\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Exception\InvalidArgumentException;
+
+use function sprintf;
+
+class ExtractRequest
+{
+    /** @var ?non-empty-string */
+    private ?string $path = null;
+
+    /** @var positive-int */
+    protected int $firstPage = 1;
+
+    /** @var ?positive-int */
+    protected ?int $lastPage = null;
+
+    protected OutputType $outputType = OutputType::Jpeg;
+
+    public const int DEFAULT_RESOLUTION = 72;
+    public const int MIN_RESOLUTION = 48;
+    public const int MAX_RESOLUTION = 300;
+
+    /**
+     * @var int<self::MIN_RESOLUTION, self::MAX_RESOLUTION>
+     */
+    protected int $resolution = self::DEFAULT_RESOLUTION;
+
+    public function __construct(
+        ?string $path,
+        int $firstPage = 1,
+        ?int $lastPage = 1,
+        OutputType $outputType = OutputType::Jpeg,
+        int $resolution = self::DEFAULT_RESOLUTION,
+    ) {
+        // $this->setFilePath($filePath);
+        // $this->setFirstPage($firstPage);
+        // $this->setLastPage($lastPage);
+        // $this->setOutputType($outputType);
+        // $this->setResolution($resolution);
+    }
+
+    public function atPath(?string $path): static
+    {
+        $this->path = \trim($path ?? '') ?: null;
+
+        return $this;
+    }
+
+    /**
+     * @return ?non-empty-string
+     */
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function fromPage(int $page): static
+    {
+        if ($page < 1) {
+            throw new InvalidArgumentException('The first page must be a positive integer.');
+        }
+
+        $this->firstPage = $page;
+
+        if ($page > $this->getLastPage()) {
+            $this->toPage($page);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return positive-int
+     */
+    public function getFirstPage(): int
+    {
+        return $this->firstPage;
+    }
+
+    public function toPage(?int $page): static
+    {
+        if (null !== $page) {
+            if ($page < 1) {
+                throw new InvalidArgumentException('The last page must be a positive integer.');
+            }
+
+            if ($page < $this->getFirstPage()) {
+                $this->fromPage($page);
+            }
+        }
+
+        $this->lastPage = $page;
+
+        return $this;
+    }
+
+    /**
+     * @return ?positive-int
+     */
+    public function getLastPage(): ?int
+    {
+        return $this->lastPage;
+    }
+
+    public function asOutputType(OutputType $outputType): static
+    {
+        $this->outputType = $outputType;
+
+        return $this;
+    }
+
+    public function getOutputType(): OutputType
+    {
+        return $this->outputType;
+    }
+
+    public function atResolution(int $resolution): static
+    {
+        if ($resolution < self::MIN_RESOLUTION || $resolution > self::MAX_RESOLUTION) {
+            throw new InvalidArgumentException(sprintf('The resolution must be an integer between %d and %d.', self::MIN_RESOLUTION, self::MAX_RESOLUTION));
+        }
+
+        $this->resolution = $resolution;
+
+        return $this;
+    }
+
+    /**
+     * @return int<self::MIN_RESOLUTION, self::MAX_RESOLUTION>
+     */
+    public function getResolution(): int
+    {
+        return $this->resolution;
+    }
+
+}
