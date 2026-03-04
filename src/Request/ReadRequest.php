@@ -2,29 +2,27 @@
 
 namespace OneToMany\PdfPack\Request;
 
-use function trim;
+use OneToMany\PdfPack\Request\Trait\ValidatePathTrait;
 
 class ReadRequest
 {
-    /** @var ?non-empty-string */
-    private ?string $path = null;
+    use ValidatePathTrait;
 
-    public function __construct(?string $path)
+    private string $path;
+
+    public function __construct(string $path)
     {
         $this->atPath($path);
     }
 
-    public function atPath(?string $path): static
+    public function atPath(string $path): static
     {
-        $this->path = trim($path ?? '') ?: null;
+        $this->path = $this->validatePath($path);
 
         return $this;
     }
 
-    /**
-     * @return ?non-empty-string
-     */
-    public function getPath(): ?string
+    public function getPath(): string
     {
         return $this->path;
     }

@@ -4,14 +4,15 @@ namespace OneToMany\PdfPack\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
+use OneToMany\PdfPack\Request\Trait\ValidatePathTrait;
 
 use function sprintf;
-use function trim;
 
 class ExtractRequest
 {
-    /** @var ?non-empty-string */
-    private ?string $path = null;
+    use ValidatePathTrait;
+
+    private string $path;
 
     /** @var positive-int */
     private int $firstPage = 1;
@@ -21,9 +22,7 @@ class ExtractRequest
 
     private OutputType $outputType = OutputType::Jpeg;
 
-    /**
-     * @var int<self::MIN_RESOLUTION, self::MAX_RESOLUTION>
-     */
+    /** @var int<48, 300> */
     private int $resolution = self::DEFAULT_RESOLUTION;
 
     public const int DEFAULT_RESOLUTION = 72;
@@ -31,7 +30,7 @@ class ExtractRequest
     public const int MAX_RESOLUTION = 300;
 
     public function __construct(
-        ?string $path,
+        string $path,
         int $firstPage = 1,
         ?int $lastPage = null,
         OutputType $outputType = OutputType::Jpeg,
@@ -44,17 +43,14 @@ class ExtractRequest
         $this->atResolution($resolution);
     }
 
-    public function atPath(?string $path): static
+    public function atPath(string $path): static
     {
-        $this->path = trim($path ?? '') ?: null;
+        $this->path = $this->validatePath($path);
 
         return $this;
     }
 
-    /**
-     * @return ?non-empty-string
-     */
-    public function getPath(): ?string
+    public function getPath(): string
     {
         return $this->path;
     }

@@ -57,7 +57,7 @@ final readonly class PopplerExtractorClient implements ExtractorClientInterface
     public function extract(ExtractRequest $request): \Generator
     {
         // Determine the number of pages to extract
-        if (null === $lastPage = $request->getLastPage()) {
+        if (!$lastPage = $request->getLastPage()) {
             $readRequest = new ReadRequest(...[
                 'path' => $request->getPath(),
             ]);
