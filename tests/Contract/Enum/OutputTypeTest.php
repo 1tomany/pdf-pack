@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 #[Group('EnumTests')]
 final class OutputTypeTest extends TestCase
 {
-    #[DataProvider('providerGettingExtension')]
+    #[DataProvider('providerOutputTypeAndExtension')]
     public function testGettingExtension(OutputType $type, string $extension): void
     {
         $this->assertEquals($extension, $type->getExtension());
@@ -21,7 +21,7 @@ final class OutputTypeTest extends TestCase
     /**
      * @return list<list<non-empty-lowercase-string|OutputType>>
      */
-    public static function providerGettingExtension(): array
+    public static function providerOutputTypeAndExtension(): array
     {
         $provider = [
             [OutputType::Jpeg, 'jpeg'],
@@ -32,7 +32,7 @@ final class OutputTypeTest extends TestCase
         return $provider;
     }
 
-    #[DataProvider('providerGettingFormat')]
+    #[DataProvider('providerOutputTypeAndFormat')]
     public function testGettingFormat(OutputType $type, string $format): void
     {
         $this->assertEquals($format, $type->getFormat());
@@ -41,7 +41,7 @@ final class OutputTypeTest extends TestCase
     /**
      * @return list<list<non-empty-lowercase-string|OutputType>>
      */
-    public static function providerGettingFormat(): array
+    public static function providerOutputTypeAndFormat(): array
     {
         $provider = [
             [OutputType::Jpeg, 'image/jpeg'],
