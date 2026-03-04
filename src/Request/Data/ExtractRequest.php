@@ -6,6 +6,7 @@ use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function sprintf;
+use function trim;
 
 class ExtractRequest
 {
@@ -45,7 +46,7 @@ class ExtractRequest
 
     public function atPath(?string $path): static
     {
-        $this->path = \trim($path ?? '') ?: null;
+        $this->path = trim($path ?? '') ?: null;
 
         return $this;
     }
@@ -136,5 +137,4 @@ class ExtractRequest
     {
         return $this->resolution;
     }
-
 }
