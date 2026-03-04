@@ -7,7 +7,7 @@ use OneToMany\PdfPack\Request\ReadRequest;
 use OneToMany\PdfPack\Response\ExtractResponse;
 use OneToMany\PdfPack\Response\ReadResponse;
 
-interface ExtractorClientInterface
+interface ClientInterface
 {
     public function read(ReadRequest $request): ReadResponse;
 

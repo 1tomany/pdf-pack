@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use OneToMany\PdfPack\Client\Poppler\PopplerExtractorClient;
+use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface;
 use OneToMany\PdfPack\Request\ExtractRequest;
 use OneToMany\PdfPack\Request\ReadRequest;
@@ -11,7 +11,7 @@ use OneToMany\PdfPack\Request\ReadRequest;
 $path = realpath(__DIR__.'/data/pages-4.pdf');
 assert(is_file($path) && is_readable($path));
 
-$client = new PopplerExtractorClient();
+$client = new PopplerClient();
 
 try {
     $response = $client->read(new ReadRequest($path));

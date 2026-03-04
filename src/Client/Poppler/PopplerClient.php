@@ -4,7 +4,7 @@ namespace OneToMany\PdfPack\Client\Poppler;
 
 use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
 use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
-use OneToMany\PdfPack\Contract\Client\ExtractorClientInterface;
+use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Helper\BinaryFinder;
 use OneToMany\PdfPack\Request\ExtractRequest;
 use OneToMany\PdfPack\Request\ReadRequest;
@@ -16,7 +16,7 @@ use Symfony\Component\Process\Process;
 use function explode;
 use function str_contains;
 
-final readonly class PopplerExtractorClient implements ExtractorClientInterface
+final readonly class PopplerClient implements ClientInterface
 {
     public function __construct(
         private string $pdfInfoBinary = 'pdfinfo',
@@ -26,7 +26,7 @@ final readonly class PopplerExtractorClient implements ExtractorClientInterface
     }
 
     /**
-     * @see OneToMany\PdfPack\Contract\Client\ExtractorClientInterface
+     * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
     public function read(ReadRequest $request): ReadResponse
     {
@@ -52,7 +52,7 @@ final readonly class PopplerExtractorClient implements ExtractorClientInterface
     }
 
     /**
-     * @see OneToMany\PdfPack\Contract\Client\ExtractorClientInterface
+     * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
     public function extract(ExtractRequest $request): \Generator
     {

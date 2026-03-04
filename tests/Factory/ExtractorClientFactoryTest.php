@@ -2,7 +2,7 @@
 
 namespace OneToMany\PdfPack\Tests\Factory;
 
-use OneToMany\PdfPack\Client\Mock\MockExtractorClient;
+use OneToMany\PdfPack\Client\Mock\MockClient;
 use OneToMany\PdfPack\Factory\Exception\CreatingExtractorClientFailedServiceNotFoundException;
 use OneToMany\PdfPack\Factory\ExtractorClientFactory;
 use PHPUnit\Framework\Attributes\Group;
@@ -32,7 +32,7 @@ final class ExtractorClientFactoryTest extends TestCase
         $container = new class implements ContainerInterface {
             /**
              * @var array{
-             *   mock: MockExtractorClient,
+             *   mock: MockClient,
              *   error: \InvalidArgumentException,
              * }
              */
@@ -41,7 +41,7 @@ final class ExtractorClientFactoryTest extends TestCase
             public function __construct()
             {
                 $this->services = [
-                    'mock' => new MockExtractorClient(),
+                    'mock' => new MockClient(),
                     'error' => new \InvalidArgumentException(),
                 ];
             }

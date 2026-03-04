@@ -2,7 +2,7 @@
 
 namespace OneToMany\PdfPack\Factory;
 
-use OneToMany\PdfPack\Contract\Client\ExtractorClientInterface;
+use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Factory\Exception\CreatingExtractorClientFailedServiceNotFoundException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -13,12 +13,12 @@ final readonly class ExtractorClientFactory
     {
     }
 
-    public function create(string $id): ExtractorClientInterface
+    public function create(string $id): ClientInterface
     {
         try {
             $service = $this->container->get($id);
 
-            if (!$service instanceof ExtractorClientInterface) {
+            if (!$service instanceof ClientInterface) {
                 throw new CreatingExtractorClientFailedServiceNotFoundException($id);
             }
         } catch (ContainerExceptionInterface $e) {
