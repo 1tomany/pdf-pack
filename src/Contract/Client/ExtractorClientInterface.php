@@ -2,17 +2,17 @@
 
 namespace OneToMany\PdfPack\Contract\Client;
 
-use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
-use OneToMany\PdfPack\Contract\Request\ReadMetadataRequestInterface;
-use OneToMany\PdfPack\Contract\Response\ExtractedDataResponseInterface;
-use OneToMany\PdfPack\Contract\Response\MetadataResponseInterface;
+use OneToMany\PdfPack\Request\ExtractRequest;
+use OneToMany\PdfPack\Request\ReadRequest;
+use OneToMany\PdfPack\Response\ExtractResponse;
+use OneToMany\PdfPack\Response\ReadResponse;
 
 interface ExtractorClientInterface
 {
-    public function readMetadata(ReadMetadataRequestInterface $request): MetadataResponseInterface;
+    public function read(ReadRequest $request): ReadResponse;
 
     /**
-     * @return \Generator<int, ExtractedDataResponseInterface>
+     * @return \Generator<int, ExtractResponse>
      */
-    public function extractData(ExtractDataRequestInterface $request): \Generator;
+    public function extract(ExtractRequest $request): \Generator;
 }

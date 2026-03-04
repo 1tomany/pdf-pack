@@ -3,13 +3,11 @@
 namespace OneToMany\PdfPack\Tests\Client\Poppler;
 
 use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
-use OneToMany\PdfPack\Client\Exception\ReadingMetadataFailedException;
+use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
 use OneToMany\PdfPack\Client\Poppler\PopplerExtractorClient;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Contract\Response\ExtractedDataResponseInterface;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-
-ExtractRequest;
 use OneToMany\PdfPack\Request\ExtractTextRequest;
 use OneToMany\PdfPack\Request\ReadRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -24,8 +22,6 @@ use function iterator_to_array;
 use function md5;
 use function random_int;
 
-use const ExtractRequest;
-
 #[Large]
 #[Group('UnitTests')]
 #[Group('ClientTests')]
@@ -39,15 +35,15 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "'.$pdfInfoBinary.'" could not be found.');
 
-        new PopplerExtractorClient(pdfInfoBinary: $pdfInfoBinary)->readMetadata(new ReadRequest(__FILE__));
+        new PopplerExtractorClient(pdfInfoBinary: $pdfInfoBinary)->read(new ReadRequest(__FILE__));
     }
 
     public function testReadingMetadataRequiresValidPdfFile(): void
     {
-        $this->expectException(ReadingMetadataFailedException::class);
+        $this->expectException(ReadingFileFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
 
-        new PopplerExtractorClient()->readMetadata(new ReadRequest(__FILE__));
+        new PopplerExtractorClient()->read(new ReadRequest(__FILE__));
     }
 
     #[DataProvider('providerReadingMetadata')]
@@ -55,7 +51,7 @@ final class PopplerExtractorClientTest extends TestCase
     {
         $client = new PopplerExtractorClient();
 
-        $metadata = $client->readMetadata(
+        $metadata = $client->read(
             new ReadRequest($filePath),
         );
 
@@ -84,7 +80,7 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "'.$pdfToPpmBinary.'" could not be found.');
 
-        new PopplerExtractorClient(pdfToPpmBinary: $pdfToPpmBinary)->extractData(new ExtractRequest(__FILE__))->current();
+        new PopplerExtractorClient(pdfToPpmBinary: $pdfToPpmBinary)->extract(new ExtractRequest(__FILE__))->current();
     }
 
     public function testExtractingTextDataRequiresValidPdfToTextBinary(): void
@@ -94,7 +90,7 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "'.$pdfToTextBinary.'" could not be found.');
 
-        new PopplerExtractorClient(pdfToTextBinary: $pdfToTextBinary)->extractData(new ExtractTextRequest(__FILE__))->current();
+        new PopplerExtractorClient(pdfToTextBinary: $pdfToTextBinary)->extract(new ExtractTextRequest(__FILE__))->current();
     }
 
     public function testExtractingDataRequiresValidPdfFile(): void
@@ -102,7 +98,7 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(ExtractingDataFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
 
-        new PopplerExtractorClient()->extractData(new ExtractRequest(__FILE__))->current();
+        new PopplerExtractorClient()->extract(new ExtractRequest(__FILE__))->current();
     }
 
     public function testExtractingDataRequiresValidPage(): void
@@ -112,7 +108,7 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(ExtractingDataFailedException::class);
         $this->expectExceptionMessageMatches('/Wrong page range given/');
 
-        new PopplerExtractorClient()->extractData(new ExtractRequest(__DIR__.'/../files/pages-1.pdf', $page, $page))->current();
+        new PopplerExtractorClient()->extract(new ExtractRequest(__DIR__.'/../files/pages-1.pdf', $page, $page))->current();
     }
 
     #[DataProvider('providerExtractingDataRange')]
@@ -129,7 +125,7 @@ final class PopplerExtractorClientTest extends TestCase
         );
 
         /** @var list<ExtractedDataResponseInterface> $responses */
-        $responses = iterator_to_array($client->extractData($request));
+        $responses = iterator_to_array($client->extract($request));
 
         $this->assertCount($responseCount, $responses);
         $this->assertContainsOnlyInstancesOf(ExtractedDataResponseInterface::class, $responses); // @phpstan-ignore-line
@@ -189,7 +185,7 @@ final class PopplerExtractorClientTest extends TestCase
         );
 
         /** @var list<ExtractedDataResponseInterface> $responses */
-        $responses = iterator_to_array($client->extractData($request));
+        $responses = iterator_to_array($client->extract($request));
 
         $this->assertCount(1, $responses);
         $this->assertEquals($page, $responses[0]->getPage());
@@ -231,7 +227,7 @@ final class PopplerExtractorClientTest extends TestCase
         );
 
         /** @var list<ExtractedDataResponseInterface> $responses */
-        $responses = iterator_to_array($client->extractData($request));
+        $responses = iterator_to_array($client->extract($request));
 
         $this->assertCount(1, $responses);
         $this->assertNotEmpty($responses[0]->getData());

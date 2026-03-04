@@ -3,12 +3,10 @@
 namespace OneToMany\PdfPack\Client\Poppler;
 
 use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
-use OneToMany\PdfPack\Client\Exception\ReadingMetadataFailedException;
+use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
 use OneToMany\PdfPack\Contract\Client\ExtractorClientInterface;
-use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
-use OneToMany\PdfPack\Contract\Request\ReadMetadataRequestInterface;
-use OneToMany\PdfPack\Contract\Response\MetadataResponseInterface;
 use OneToMany\PdfPack\Helper\BinaryFinder;
+use OneToMany\PdfPack\Request\ExtractRequest;
 use OneToMany\PdfPack\Request\ReadRequest;
 use OneToMany\PdfPack\Response\ExtractResponse;
 use OneToMany\PdfPack\Response\ReadResponse;
@@ -17,7 +15,6 @@ use Symfony\Component\Process\Process;
 
 use function explode;
 use function str_contains;
-use function strcmp;
 
 readonly class PopplerExtractorClient implements ExtractorClientInterface
 {
@@ -28,52 +25,56 @@ readonly class PopplerExtractorClient implements ExtractorClientInterface
     ) {
     }
 
-    public function readMetadata(ReadMetadataRequestInterface $request): MetadataResponseInterface
+    /**
+     * @see OneToMany\PdfPack\Contract\Client\ExtractorClientInterface
+     */
+    public function read(ReadRequest $request): ReadResponse
     {
-        $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getFilePath()]);
+        $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getPath()]);
 
         try {
             $output = $process->mustRun()->getOutput();
         } catch (ProcessExceptionInterface $e) {
-            throw new ReadingMetadataFailedException($request->getFilePath(), $process->getErrorOutput(), $e);
+            throw new ReadingFileFailedException($request->getPath(), $process->getErrorOutput(), $e);
         }
-
-        $response = new ReadResponse();
 
         foreach (explode("\n", $output) as $infoBit) {
             if (str_contains($infoBit, ':')) {
                 $bits = explode(':', $infoBit);
 
-                if (0 === strcmp('Pages', $bits[0])) {
-                    $response->setPages((int) $bits[1]);
+                if ('Pages' === $bits[0]) {
+                    $pages = (int) $bits[1];
                 }
             }
         }
 
-        return $response;
+        return new ReadResponse($pages ?? 1);
     }
 
-    public function extractData(ExtractDataRequestInterface $request): \Generator
+    /**
+     * @see OneToMany\PdfPack\Contract\Client\ExtractorClientInterface
+     */
+    public function extract(ExtractRequest $request): \Generator
     {
         // Determine the number of pages to extract
         if (null === $lastPage = $request->getLastPage()) {
-            $metadataRequest = new ReadRequest(...[
-                'filePath' => $request->getFilePath(),
+            $readRequest = new ReadRequest(...[
+                'path' => $request->getPath(),
             ]);
 
-            $lastPage = $this->readMetadata($metadataRequest)->getPages();
+            $lastPage = $this->read($readRequest)->getPages();
         }
 
         if ($request->getOutputType()->isText()) {
             $command = BinaryFinder::find($this->pdfToTextBinary);
 
             for ($page = $request->getFirstPage(); $page <= $lastPage; ++$page) {
-                $process = new Process([$command, '-nodiag', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getFilePath(), '-']);
+                $process = new Process([$command, '-nodiag', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath(), '-']);
 
                 try {
                     $output = $process->mustRun()->getOutput();
                 } catch (ProcessExceptionInterface $e) {
-                    throw new ExtractingDataFailedException($request->getFilePath(), $page, $process->getErrorOutput(), $e);
+                    throw new ExtractingDataFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
                 yield new ExtractResponse($request->getOutputType(), $output, $page);
@@ -82,12 +83,12 @@ readonly class PopplerExtractorClient implements ExtractorClientInterface
             $command = BinaryFinder::find($this->pdfToPpmBinary);
 
             for ($page = $request->getFirstPage(); $page <= $lastPage; ++$page) {
-                $process = new Process([$command, $request->getOutputType()->isJpeg() ? '-jpeg' : '-png', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getFilePath()]);
+                $process = new Process([$command, $request->getOutputType()->isJpeg() ? '-jpeg' : '-png', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath()]);
 
                 try {
                     $output = $process->mustRun()->getOutput();
                 } catch (ProcessExceptionInterface $e) {
-                    throw new ExtractingDataFailedException($request->getFilePath(), $page, $process->getErrorOutput(), $e);
+                    throw new ExtractingDataFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
                 yield new ExtractResponse($request->getOutputType(), $output, $page);
