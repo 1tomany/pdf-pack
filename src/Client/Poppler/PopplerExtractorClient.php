@@ -16,7 +16,7 @@ use Symfony\Component\Process\Process;
 use function explode;
 use function str_contains;
 
-readonly class PopplerExtractorClient implements ExtractorClientInterface
+final readonly class PopplerExtractorClient implements ExtractorClientInterface
 {
     public function __construct(
         private string $pdfInfoBinary = 'pdfinfo',
