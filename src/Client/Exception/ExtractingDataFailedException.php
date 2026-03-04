@@ -6,8 +6,8 @@ use function sprintf;
 
 final class ExtractingDataFailedException extends BinaryProcessFailedException
 {
-    public function __construct(string $path, int $pageNumber, ?string $error = null, ?\Throwable $previous = null)
+    public function __construct(string $path, int $page, ?string $error = null, ?\Throwable $previous = null)
     {
-        parent::__construct(sprintf('Extracting data from page %d of the file "%s" failed.', $pageNumber, $path), $error, $previous);
+        parent::__construct(sprintf('Extracting data from page %d of the file "%s" failed.', $page, $path), $error, $previous);
     }
 }
