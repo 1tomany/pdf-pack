@@ -33,7 +33,7 @@ class ExtractRequest
     public function __construct(
         ?string $path,
         int $firstPage = 1,
-        ?int $lastPage = 1,
+        ?int $lastPage = null,
         OutputType $outputType = OutputType::Jpeg,
         int $resolution = self::DEFAULT_RESOLUTION,
     ) {
@@ -67,7 +67,7 @@ class ExtractRequest
 
         $this->firstPage = $page;
 
-        if ($page > $this->getLastPage()) {
+        if (null !== $this->lastPage && $page > $this->lastPage) {
             $this->toPage($page);
         }
 
@@ -89,7 +89,7 @@ class ExtractRequest
                 throw new InvalidArgumentException('The last page must be a positive integer.');
             }
 
-            if ($page < $this->getFirstPage()) {
+            if ($page < $this->firstPage) {
                 $this->fromPage($page);
             }
         }
