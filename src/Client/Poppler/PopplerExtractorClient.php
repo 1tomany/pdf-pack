@@ -9,7 +9,7 @@ use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
 use OneToMany\PdfPack\Contract\Request\ReadMetadataRequestInterface;
 use OneToMany\PdfPack\Contract\Response\MetadataResponseInterface;
 use OneToMany\PdfPack\Helper\BinaryFinder;
-use OneToMany\PdfPack\Request\ReadMetadataRequest;
+use OneToMany\PdfPack\Request\ReadRequest;
 use OneToMany\PdfPack\Response\ExtractedDataResponse;
 use OneToMany\PdfPack\Response\MetadataResponse;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
@@ -57,7 +57,7 @@ readonly class PopplerExtractorClient implements ExtractorClientInterface
     {
         // Determine the number of pages to extract
         if (null === $lastPage = $request->getLastPage()) {
-            $metadataRequest = new ReadMetadataRequest(...[
+            $metadataRequest = new ReadRequest(...[
                 'filePath' => $request->getFilePath(),
             ]);
 

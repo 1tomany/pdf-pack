@@ -8,9 +8,10 @@ use OneToMany\PdfPack\Client\Poppler\PopplerExtractorClient;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Contract\Response\ExtractedDataResponseInterface;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Request\Data\ExtractRequest;
+
+ExtractRequest;
 use OneToMany\PdfPack\Request\ExtractTextRequest;
-use OneToMany\PdfPack\Request\ReadMetadataRequest;
+use OneToMany\PdfPack\Request\ReadRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Large;
@@ -22,6 +23,8 @@ use function imagesy;
 use function iterator_to_array;
 use function md5;
 use function random_int;
+
+use const ExtractRequest;
 
 #[Large]
 #[Group('UnitTests')]
@@ -36,7 +39,7 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "'.$pdfInfoBinary.'" could not be found.');
 
-        new PopplerExtractorClient(pdfInfoBinary: $pdfInfoBinary)->readMetadata(new ReadMetadataRequest(__FILE__));
+        new PopplerExtractorClient(pdfInfoBinary: $pdfInfoBinary)->readMetadata(new ReadRequest(__FILE__));
     }
 
     public function testReadingMetadataRequiresValidPdfFile(): void
@@ -44,7 +47,7 @@ final class PopplerExtractorClientTest extends TestCase
         $this->expectException(ReadingMetadataFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
 
-        new PopplerExtractorClient()->readMetadata(new ReadMetadataRequest(__FILE__));
+        new PopplerExtractorClient()->readMetadata(new ReadRequest(__FILE__));
     }
 
     #[DataProvider('providerReadingMetadata')]
@@ -53,7 +56,7 @@ final class PopplerExtractorClientTest extends TestCase
         $client = new PopplerExtractorClient();
 
         $metadata = $client->readMetadata(
-            new ReadMetadataRequest($filePath),
+            new ReadRequest($filePath),
         );
 
         $this->assertEquals($pages, $metadata->getPages());

@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\PdfPack\Request\Data;
+namespace OneToMany\PdfPack\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
@@ -14,21 +14,21 @@ class ExtractRequest
     private ?string $path = null;
 
     /** @var positive-int */
-    protected int $firstPage = 1;
+    private int $firstPage = 1;
 
     /** @var ?positive-int */
-    protected ?int $lastPage = null;
+    private ?int $lastPage = null;
 
-    protected OutputType $outputType = OutputType::Jpeg;
-
-    public const int DEFAULT_RESOLUTION = 72;
-    public const int MIN_RESOLUTION = 48;
-    public const int MAX_RESOLUTION = 300;
+    private OutputType $outputType = OutputType::Jpeg;
 
     /**
      * @var int<self::MIN_RESOLUTION, self::MAX_RESOLUTION>
      */
-    protected int $resolution = self::DEFAULT_RESOLUTION;
+    private int $resolution = self::DEFAULT_RESOLUTION;
+
+    public const int DEFAULT_RESOLUTION = 72;
+    public const int MIN_RESOLUTION = 48;
+    public const int MAX_RESOLUTION = 300;
 
     public function __construct(
         ?string $path,
@@ -37,11 +37,11 @@ class ExtractRequest
         OutputType $outputType = OutputType::Jpeg,
         int $resolution = self::DEFAULT_RESOLUTION,
     ) {
-        // $this->setFilePath($filePath);
-        // $this->setFirstPage($firstPage);
-        // $this->setLastPage($lastPage);
-        // $this->setOutputType($outputType);
-        // $this->setResolution($resolution);
+        $this->atPath($path);
+        $this->fromPage($firstPage);
+        $this->toPage($lastPage);
+        $this->asOutputType($outputType);
+        $this->atResolution($resolution);
     }
 
     public function atPath(?string $path): static
@@ -105,6 +105,21 @@ class ExtractRequest
     public function getLastPage(): ?int
     {
         return $this->lastPage;
+    }
+
+    public function asJpegOutput(): static
+    {
+        return $this->asOutputType(OutputType::Jpeg);
+    }
+
+    public function asPngOutput(): static
+    {
+        return $this->asOutputType(OutputType::Png);
+    }
+
+    public function asTextOutput(): static
+    {
+        return $this->asOutputType(OutputType::Text);
     }
 
     public function asOutputType(OutputType $outputType): static

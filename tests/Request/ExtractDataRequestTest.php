@@ -5,13 +5,15 @@ namespace OneToMany\PdfPack\Tests\Request;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Request\Data\ExtractRequest;
+
+ExtractRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 use function random_int;
 
+use const ExtractRequest;
 use const PHP_INT_MAX;
 
 #[Group('UnitTests')]
