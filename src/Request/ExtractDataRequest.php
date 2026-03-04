@@ -3,7 +3,6 @@
 namespace OneToMany\PdfPack\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
-use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function sprintf;
