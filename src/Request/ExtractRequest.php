@@ -132,8 +132,12 @@ class ExtractRequest
 
     public function atResolution(int $resolution): static
     {
-        if ($resolution < self::MIN_RESOLUTION || $resolution > self::MAX_RESOLUTION) {
-            throw new InvalidArgumentException(sprintf('The resolution must be an integer between %d and %d.', self::MIN_RESOLUTION, self::MAX_RESOLUTION));
+        if ($resolution < self::MIN_RESOLUTION) {
+            throw new InvalidArgumentException(sprintf('The resolution must be %d DPI or larger.', self::MIN_RESOLUTION));
+        }
+
+        if ($resolution > self::MAX_RESOLUTION) {
+            throw new InvalidArgumentException(sprintf('The resolution must be %d DPI or smaller.', self::MAX_RESOLUTION));
         }
 
         $this->resolution = $resolution;
