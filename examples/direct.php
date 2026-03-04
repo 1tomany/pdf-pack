@@ -24,7 +24,7 @@ try {
         printf("Page %d MD5 hash: %s\n", $page->getPage(), md5($page->getData()));
     }
 
-    print("\n");
+    echo "\n";
 
     // Extract text from pages 3 and 4
     $extractRequest = new ExtractRequest($path)->fromPage(3)->toPage(4)->asTextOutput();

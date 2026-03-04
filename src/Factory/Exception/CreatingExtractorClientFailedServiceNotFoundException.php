@@ -10,6 +10,6 @@ final class CreatingExtractorClientFailedServiceNotFoundException extends Invali
 {
     public function __construct(string $service, ?\Throwable $previous = null)
     {
-        parent::__construct(sprintf('Creating a client for the extractor service "%s" failed because a service with that tag could not be found.', $service), previous: $previous);
+        parent::__construct(sprintf('Creating a client for the extractor service "%s" failed because the service does not have a client registered.', $service), previous: $previous);
     }
 }
