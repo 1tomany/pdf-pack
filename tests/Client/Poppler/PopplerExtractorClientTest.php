@@ -6,10 +6,8 @@ use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
 use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
 use OneToMany\PdfPack\Client\Poppler\PopplerExtractorClient;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
-use OneToMany\PdfPack\Contract\Response\ExtractedDataResponseInterface;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use OneToMany\PdfPack\Request\ExtractRequest;
-use OneToMany\PdfPack\Request\ExtractTextRequest;
 use OneToMany\PdfPack\Request\ReadRequest;
 use OneToMany\PdfPack\Response\ExtractResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -22,7 +20,6 @@ use function imagesx;
 use function imagesy;
 use function iterator_to_array;
 use function md5;
-use function random_int;
 
 #[Large]
 #[Group('UnitTests')]
@@ -112,7 +109,7 @@ final class PopplerExtractorClientTest extends TestCase
     }
 
     #[DataProvider('providerPathFirstPageLastPageAndResponseCount')]
-    public function testExtractingDataRange(string $path, int $firstPage, ?int $lastPage, int $responseCount): void
+    public function testExtractingImageDataRange(string $path, int $firstPage, ?int $lastPage, int $responseCount): void
     {
         $request = new ExtractRequest($path, $firstPage, $lastPage);
 
@@ -164,20 +161,13 @@ final class PopplerExtractorClientTest extends TestCase
         return $provider;
     }
 
-    #[DataProvider('providerExtractingTextData')]
-    public function testExtractingTextData(
-        string $filePath,
-        int $page,
-        string $text,
-    ): void {
-        $client = new PopplerExtractorClient();
+    #[DataProvider('providerPathPageAndText')]
+    public function testExtractingTextData(string $path, int $page, string $text): void
+    {
+        $request = new ExtractRequest($path, $page, $page)->asTextOutput();
 
-        $request = new ExtractTextRequest(
-            $filePath, $page, $page,
-        );
-
-        /** @var list<ExtractedDataResponseInterface> $responses */
-        $responses = iterator_to_array($client->extract($request));
+        /** @var list<ExtractResponse> $responses */
+        $responses = iterator_to_array(new PopplerExtractorClient()->extract($request));
 
         $this->assertCount(1, $responses);
         $this->assertEquals($page, $responses[0]->getPage());
@@ -187,7 +177,7 @@ final class PopplerExtractorClientTest extends TestCase
     /**
      * @return list<list<int|string>>
      */
-    public static function providerExtractingTextData(): array
+    public static function providerPathPageAndText(): array
     {
         $provider = [
             [__DIR__.'/../../data/pages-1.pdf', 1, ''],
@@ -200,26 +190,13 @@ final class PopplerExtractorClientTest extends TestCase
         return $provider;
     }
 
-    #[DataProvider('providerExtractingImageData')]
-    public function testExtractingImageData(
-        string $filePath,
-        int $firstPage,
-        OutputType $outputType,
-        int $resolution,
-        string $md5Hash,
-    ): void {
-        $client = new PopplerExtractorClient();
+    #[DataProvider('providerPathFirstPageLastPageOutputTypeResolutionAndMd5Hash')]
+    public function testExtractingImageData(string $path, int $firstPage, OutputType $outputType, int $resolution, string $md5Hash): void
+    {
+        $request = new ExtractRequest($path, $firstPage, $firstPage, $outputType, $resolution);
 
-        $request = new ExtractRequest(
-            $filePath,
-            $firstPage,
-            $firstPage,
-            $outputType,
-            $resolution,
-        );
-
-        /** @var list<ExtractedDataResponseInterface> $responses */
-        $responses = iterator_to_array($client->extract($request));
+        /** @var list<ExtractResponse> $responses */
+        $responses = iterator_to_array(new PopplerExtractorClient()->extract($request));
 
         $this->assertCount(1, $responses);
         $this->assertNotEmpty($responses[0]->getData());
@@ -234,7 +211,7 @@ final class PopplerExtractorClientTest extends TestCase
     /**
      * @return list<list<int|non-empty-string|OutputType>>
      */
-    public static function providerExtractingImageData(): array
+    public static function providerPathFirstPageLastPageOutputTypeResolutionAndMd5Hash(): array
     {
         $provider = [
             [__DIR__.'/../../data/pages-1.pdf', 1, OutputType::Jpeg, 48, '832bfdfd9a01a3087f765b54684347f4'],
