@@ -8,14 +8,18 @@ use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function sprintf;
 
-class ExtractDataRequest extends ReadMetadataRequest implements ExtractDataRequestInterface
+class ExtractDataRequest extends ReadMetadataRequest
 {
     /**
      * @var positive-int
      */
     protected int $firstPage = 1;
     protected ?int $lastPage = null;
-    protected OutputType $outputType = OutputType::Jpg;
+    protected OutputType $outputType = OutputType::Jpeg;
+
+    public const int DEFAULT_RESOLUTION = 72;
+    public const int MIN_RESOLUTION = 48;
+    public const int MAX_RESOLUTION = 300;
 
     /**
      * @var int<self::MIN_RESOLUTION, self::MAX_RESOLUTION>
@@ -26,7 +30,7 @@ class ExtractDataRequest extends ReadMetadataRequest implements ExtractDataReque
         ?string $filePath,
         int $firstPage = 1,
         ?int $lastPage = 1,
-        OutputType $outputType = OutputType::Jpg,
+        OutputType $outputType = OutputType::Jpeg,
         int $resolution = self::DEFAULT_RESOLUTION,
     ) {
         $this->setFilePath($filePath);
@@ -36,6 +40,9 @@ class ExtractDataRequest extends ReadMetadataRequest implements ExtractDataReque
         $this->setResolution($resolution);
     }
 
+    /**
+     * @return positive-int
+     */
     public function getFirstPage(): int
     {
         return $this->firstPage;
@@ -56,6 +63,9 @@ class ExtractDataRequest extends ReadMetadataRequest implements ExtractDataReque
         return $this;
     }
 
+    /**
+     * A NULL last page indicates that all pages should be extracted.
+     */
     public function getLastPage(): ?int
     {
         return $this->lastPage;

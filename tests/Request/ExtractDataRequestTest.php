@@ -105,7 +105,7 @@ final class ExtractDataRequestTest extends TestCase
 
         $provider = [
             [__DIR__.'/files/label.pdf', 1, 1, OutputType::Png, $resolution],
-            [__DIR__.'/files/label.pdf', 2, 4, OutputType::Jpg, $resolution],
+            [__DIR__.'/files/label.pdf', 2, 4, OutputType::Jpeg, $resolution],
         ];
 
         return $provider;

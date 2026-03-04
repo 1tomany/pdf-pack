@@ -2,7 +2,6 @@
 
 namespace OneToMany\PdfPack\Request;
 
-use OneToMany\PdfPack\Contract\Request\ReadMetadataRequestInterface;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function is_file;
@@ -10,7 +9,7 @@ use function is_readable;
 use function sprintf;
 use function trim;
 
-class ReadMetadataRequest implements ReadMetadataRequestInterface
+class ReadMetadataRequest
 {
     /**
      * @var non-empty-string
@@ -22,6 +21,9 @@ class ReadMetadataRequest implements ReadMetadataRequestInterface
         $this->setFilePath($filePath);
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getFilePath(): string
     {
         return $this->filePath;

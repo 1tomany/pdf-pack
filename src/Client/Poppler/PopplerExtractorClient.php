@@ -64,7 +64,7 @@ readonly class PopplerExtractorClient implements ExtractorClientInterface
             $lastPage = $this->readMetadata($metadataRequest)->getPages();
         }
 
-        if ($request->getOutputType()->isTxt()) {
+        if ($request->getOutputType()->isText()) {
             $command = BinaryFinder::find($this->pdfToTextBinary);
 
             for ($page = $request->getFirstPage(); $page <= $lastPage; ++$page) {
@@ -82,7 +82,7 @@ readonly class PopplerExtractorClient implements ExtractorClientInterface
             $command = BinaryFinder::find($this->pdfToPpmBinary);
 
             for ($page = $request->getFirstPage(); $page <= $lastPage; ++$page) {
-                $process = new Process([$command, $request->getOutputType()->isJpg() ? '-jpeg' : '-png', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getFilePath()]);
+                $process = new Process([$command, $request->getOutputType()->isJpeg() ? '-jpeg' : '-png', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getFilePath()]);
 
                 try {
                     $output = $process->mustRun()->getOutput();

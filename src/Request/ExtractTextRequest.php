@@ -12,6 +12,6 @@ class ExtractTextRequest extends ExtractDataRequest
         ?int $lastPage = 1,
         int $resolution = self::DEFAULT_RESOLUTION,
     ) {
-        parent::__construct($filePath, $firstPage, $lastPage, OutputType::Txt, $resolution);
+        parent::__construct($filePath, $firstPage, $lastPage, OutputType::Text, $resolution);
     }
 }

@@ -20,13 +20,13 @@ final class ExtractedDataResponseTest extends TestCase
     {
         $text = 'Hello, world!';
 
-        $this->assertEquals($text, new ExtractedDataResponse(OutputType::Txt, $text)->__toString());
+        $this->assertEquals($text, new ExtractedDataResponse(OutputType::Text, $text)->__toString());
     }
 
     public function testGettingPageClampsNonPositiveNonZeroValuesToOne(): void
     {
         $response = new ExtractedDataResponse(
-            OutputType::Txt, 'Hello, world!'
+            OutputType::Text, 'Hello, world!'
         );
 
         $property = new \ReflectionProperty($response, 'page');
@@ -53,7 +53,7 @@ final class ExtractedDataResponseTest extends TestCase
     public function testSettingPageClampsNonPositiveNonZeroValuesToOne(): void
     {
         $response = new ExtractedDataResponse(
-            OutputType::Txt, 'Hello, world!'
+            OutputType::Text, 'Hello, world!'
         );
 
         $this->assertEquals(1, $response->getPage());
@@ -94,9 +94,9 @@ final class ExtractedDataResponseTest extends TestCase
         $page = random_int(1, 100);
 
         $provider = [
-            [OutputType::Jpg, $page, "page-{$page}.jpeg"],
+            [OutputType::Jpeg, $page, "page-{$page}.jpeg"],
             [OutputType::Png, $page, "page-{$page}.png"],
-            [OutputType::Txt, $page, "page-{$page}.txt"],
+            [OutputType::Text, $page, "page-{$page}.txt"],
         ];
 
         return $provider;

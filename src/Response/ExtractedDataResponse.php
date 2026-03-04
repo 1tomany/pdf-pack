@@ -78,6 +78,6 @@ class ExtractedDataResponse implements \Stringable
      */
     public function toDataUri(): string
     {
-        return sprintf('data:%s;base64,%s', $this->type->getMimeType(), base64_encode($this->getData()));
+        return sprintf('data:%s;base64,%s', $this->type->getFormat(), base64_encode($this->getData()));
     }
 }

@@ -19,34 +19,34 @@ final class OutputTypeTest extends TestCase
     }
 
     /**
-     * @return list<list<non-empty-string|OutputType>>
+     * @return list<list<non-empty-lowercase-string|OutputType>>
      */
     public static function providerGettingExtension(): array
     {
         $provider = [
-            [OutputType::Jpg, 'jpeg'],
+            [OutputType::Jpeg, 'jpeg'],
             [OutputType::Png, 'png'],
-            [OutputType::Txt, 'txt'],
+            [OutputType::Text, 'txt'],
         ];
 
         return $provider;
     }
 
-    #[DataProvider('providerGettingMimeType')]
-    public function testGettingMimeType(OutputType $type, string $mimeType): void
+    #[DataProvider('providerGettingFormat')]
+    public function testGettingFormat(OutputType $type, string $format): void
     {
-        $this->assertEquals($mimeType, $type->getMimeType());
+        $this->assertEquals($format, $type->getFormat());
     }
 
     /**
-     * @return list<list<non-empty-string|OutputType>>
+     * @return list<list<non-empty-lowercase-string|OutputType>>
      */
-    public static function providerGettingMimeType(): array
+    public static function providerGettingFormat(): array
     {
         $provider = [
-            [OutputType::Jpg, 'image/jpeg'],
+            [OutputType::Jpeg, 'image/jpeg'],
             [OutputType::Png, 'image/png'],
-            [OutputType::Txt, 'text/plain'],
+            [OutputType::Text, 'text/plain'],
         ];
 
         return $provider;

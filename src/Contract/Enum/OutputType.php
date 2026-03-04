@@ -4,44 +4,67 @@ namespace OneToMany\PdfPack\Contract\Enum;
 
 enum OutputType
 {
-    case Jpg;
+    case Jpeg;
     case Png;
-    case Txt;
+    case Text;
 
+    /**
+     * @return non-empty-string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return non-empty-lowercase-string
+     */
     public function getExtension(): string
     {
         $extension = match ($this) {
-            self::Jpg => 'jpeg',
+            self::Jpeg => 'jpeg',
             self::Png => 'png',
-            self::Txt => 'txt',
+            self::Text => 'txt',
         };
 
         return $extension;
     }
 
-    public function getMimeType(): string
+    /**
+     * @return non-empty-lowercase-string
+     */
+    public function getFormat(): string
     {
         $mimeType = match ($this) {
-            self::Jpg => 'image/jpeg',
+            self::Jpeg => 'image/jpeg',
             self::Png => 'image/png',
-            self::Txt => 'text/plain',
+            self::Text => 'text/plain',
         };
 
         return $mimeType;
     }
 
-    public function isJpg(): bool
+    /**
+     * @phpstan-assert-if-true self::Jpeg $this
+     */
+    public function isJpeg(): bool
     {
-        return self::Jpg === $this;
+        return self::Jpeg === $this;
     }
 
+    /**
+     * @phpstan-assert-if-true self::Png $this
+     */
     public function isPng(): bool
     {
         return self::Png === $this;
     }
 
-    public function isTxt(): bool
+    /**
+     * @phpstan-assert-if-true self::Text $this
+     */
+    public function isText(): bool
     {
-        return self::Txt === $this;
+        return self::Text === $this;
     }
 }
