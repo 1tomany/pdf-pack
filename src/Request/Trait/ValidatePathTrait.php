@@ -19,7 +19,7 @@ trait ValidatePathTrait
      */
     private function validatePath(string $path): string
     {
-        $path = trim($path ?? '');
+        $path = trim($path);
 
         if ('' === $path) {
             throw new InvalidArgumentException('The path cannot be empty.');
