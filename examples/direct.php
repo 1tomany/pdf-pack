@@ -3,7 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use OneToMany\PdfPack\Client\Poppler\PopplerClient;
-use OneToMany\PdfPack\Contract\Exception\ExceptionInterface;
+use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
 use OneToMany\PdfPack\Request\ExtractRequest;
 use OneToMany\PdfPack\Request\ReadRequest;
 
@@ -32,6 +32,6 @@ try {
     foreach ($client->extract($extractRequest) as $page) {
         printf("Page %d length: %d\n", $page->getPage(), strlen($page->getData()));
     }
-} catch (ExceptionInterface $e) {
+} catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());
 }
