@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Contract\Request;
+namespace OneToMany\PdfPack\Contract\Request;
 
-use OneToMany\PDFAI\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
 
 interface ExtractDataRequestInterface extends ReadMetadataRequestInterface
 {

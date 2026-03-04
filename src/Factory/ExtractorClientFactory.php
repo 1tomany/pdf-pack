@@ -1,9 +1,9 @@
 <?php
 
-namespace OneToMany\PDFAI\Factory;
+namespace OneToMany\PdfPack\Factory;
 
-use OneToMany\PDFAI\Contract\Client\ExtractorClientInterface;
-use OneToMany\PDFAI\Factory\Exception\CreatingExtractorClientFailedServiceNotFoundException;
+use OneToMany\PdfPack\Contract\Client\ExtractorClientInterface;
+use OneToMany\PdfPack\Factory\Exception\CreatingExtractorClientFailedServiceNotFoundException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 

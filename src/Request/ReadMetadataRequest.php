@@ -1,9 +1,9 @@
 <?php
 
-namespace OneToMany\PDFAI\Request;
+namespace OneToMany\PdfPack\Request;
 
-use OneToMany\PDFAI\Contract\Request\ReadMetadataRequestInterface;
-use OneToMany\PDFAI\Exception\InvalidArgumentException;
+use OneToMany\PdfPack\Contract\Request\ReadMetadataRequestInterface;
+use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function is_file;
 use function is_readable;

@@ -1,13 +1,13 @@
 <?php
 
-namespace OneToMany\PDFAI\Client\Mock;
+namespace OneToMany\PdfPack\Client\Mock;
 
-use OneToMany\PDFAI\Contract\Client\ExtractorClientInterface;
-use OneToMany\PDFAI\Contract\Request\ExtractDataRequestInterface;
-use OneToMany\PDFAI\Contract\Request\ReadMetadataRequestInterface;
-use OneToMany\PDFAI\Contract\Response\MetadataResponseInterface;
-use OneToMany\PDFAI\Exception\RuntimeException;
-use OneToMany\PDFAI\Response\MetadataResponse;
+use OneToMany\PdfPack\Contract\Client\ExtractorClientInterface;
+use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
+use OneToMany\PdfPack\Contract\Request\ReadMetadataRequestInterface;
+use OneToMany\PdfPack\Contract\Response\MetadataResponseInterface;
+use OneToMany\PdfPack\Exception\RuntimeException;
+use OneToMany\PdfPack\Response\MetadataResponse;
 
 use function random_int;
 

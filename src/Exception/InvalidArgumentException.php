@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Exception;
+namespace OneToMany\PdfPack\Exception;
 
-use OneToMany\PDFAI\Contract\Exception\ExceptionInterface;
+use OneToMany\PdfPack\Contract\Exception\ExceptionInterface;
 
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {

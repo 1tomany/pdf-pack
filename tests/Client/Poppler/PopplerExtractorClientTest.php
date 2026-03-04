@@ -1,16 +1,16 @@
 <?php
 
-namespace OneToMany\PDFAI\Tests\Client\Poppler;
+namespace OneToMany\PdfPack\Tests\Client\Poppler;
 
-use OneToMany\PDFAI\Client\Exception\ExtractingDataFailedException;
-use OneToMany\PDFAI\Client\Exception\ReadingMetadataFailedException;
-use OneToMany\PDFAI\Client\Poppler\PopplerExtractorClient;
-use OneToMany\PDFAI\Contract\Enum\OutputType;
-use OneToMany\PDFAI\Contract\Response\ExtractedDataResponseInterface;
-use OneToMany\PDFAI\Exception\InvalidArgumentException;
-use OneToMany\PDFAI\Request\ExtractDataRequest;
-use OneToMany\PDFAI\Request\ExtractTextRequest;
-use OneToMany\PDFAI\Request\ReadMetadataRequest;
+use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
+use OneToMany\PdfPack\Client\Exception\ReadingMetadataFailedException;
+use OneToMany\PdfPack\Client\Poppler\PopplerExtractorClient;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Contract\Response\ExtractedDataResponseInterface;
+use OneToMany\PdfPack\Exception\InvalidArgumentException;
+use OneToMany\PdfPack\Request\ExtractDataRequest;
+use OneToMany\PdfPack\Request\ExtractTextRequest;
+use OneToMany\PdfPack\Request\ReadMetadataRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Large;

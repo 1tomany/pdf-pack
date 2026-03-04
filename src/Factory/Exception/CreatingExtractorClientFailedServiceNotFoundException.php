@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Factory\Exception;
+namespace OneToMany\PdfPack\Factory\Exception;
 
-use OneToMany\PDFAI\Exception\InvalidArgumentException;
+use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function sprintf;
 

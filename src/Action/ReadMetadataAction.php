@@ -1,11 +1,11 @@
 <?php
 
-namespace OneToMany\PDFAI\Action;
+namespace OneToMany\PdfPack\Action;
 
-use OneToMany\PDFAI\Contract\Action\ReadMetadataActionInterface;
-use OneToMany\PDFAI\Contract\Client\ExtractorClientInterface;
-use OneToMany\PDFAI\Contract\Request\ReadMetadataRequestInterface;
-use OneToMany\PDFAI\Contract\Response\MetadataResponseInterface;
+use OneToMany\PdfPack\Contract\Action\ReadMetadataActionInterface;
+use OneToMany\PdfPack\Contract\Client\ExtractorClientInterface;
+use OneToMany\PdfPack\Contract\Request\ReadMetadataRequestInterface;
+use OneToMany\PdfPack\Contract\Response\MetadataResponseInterface;
 
 final readonly class ReadMetadataAction implements ReadMetadataActionInterface
 {

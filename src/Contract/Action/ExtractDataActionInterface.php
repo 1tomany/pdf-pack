@@ -1,9 +1,9 @@
 <?php
 
-namespace OneToMany\PDFAI\Contract\Action;
+namespace OneToMany\PdfPack\Contract\Action;
 
-use OneToMany\PDFAI\Contract\Request\ExtractDataRequestInterface;
-use OneToMany\PDFAI\Contract\Response\ExtractedDataResponseInterface;
+use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
+use OneToMany\PdfPack\Contract\Response\ExtractedDataResponseInterface;
 
 interface ExtractDataActionInterface
 {

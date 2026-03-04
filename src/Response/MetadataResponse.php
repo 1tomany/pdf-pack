@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Response;
+namespace OneToMany\PdfPack\Response;
 
-use OneToMany\PDFAI\Contract\Response\MetadataResponseInterface;
+use OneToMany\PdfPack\Contract\Response\MetadataResponseInterface;
 
 use function max;
 

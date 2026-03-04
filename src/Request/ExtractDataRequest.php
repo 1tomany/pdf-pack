@@ -1,10 +1,10 @@
 <?php
 
-namespace OneToMany\PDFAI\Request;
+namespace OneToMany\PdfPack\Request;
 
-use OneToMany\PDFAI\Contract\Enum\OutputType;
-use OneToMany\PDFAI\Contract\Request\ExtractDataRequestInterface;
-use OneToMany\PDFAI\Exception\InvalidArgumentException;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
+use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function sprintf;
 

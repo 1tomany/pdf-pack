@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Tests\Contract\Enum;
+namespace OneToMany\PdfPack\Tests\Contract\Enum;
 
-use OneToMany\PDFAI\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;

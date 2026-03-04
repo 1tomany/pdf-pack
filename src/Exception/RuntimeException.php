@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Exception;
+namespace OneToMany\PdfPack\Exception;
 
-use OneToMany\PDFAI\Contract\Exception\ExceptionInterface;
+use OneToMany\PdfPack\Contract\Exception\ExceptionInterface;
 
 class RuntimeException extends \RuntimeException implements ExceptionInterface
 {

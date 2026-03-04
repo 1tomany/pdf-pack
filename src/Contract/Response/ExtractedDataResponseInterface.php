@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Contract\Response;
+namespace OneToMany\PdfPack\Contract\Response;
 
-use OneToMany\PDFAI\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
 
 interface ExtractedDataResponseInterface extends \Stringable
 {

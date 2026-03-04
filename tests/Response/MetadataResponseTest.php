@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Tests\Response;
+namespace OneToMany\PdfPack\Tests\Response;
 
-use OneToMany\PDFAI\Response\MetadataResponse;
+use OneToMany\PdfPack\Response\MetadataResponse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 

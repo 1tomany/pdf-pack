@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\PDFAI\Contract\Response;
+namespace OneToMany\PdfPack\Contract\Response;
 
 interface MetadataResponseInterface
 {

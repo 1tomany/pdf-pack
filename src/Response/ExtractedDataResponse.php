@@ -1,16 +1,15 @@
 <?php
 
-namespace OneToMany\PDFAI\Response;
+namespace OneToMany\PdfPack\Response;
 
-use OneToMany\PDFAI\Contract\Enum\OutputType;
-use OneToMany\PDFAI\Contract\Response\ExtractedDataResponseInterface;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
 
 use function base64_encode;
 use function max;
 use function sprintf;
 use function trim;
 
-class ExtractedDataResponse implements ExtractedDataResponseInterface
+class ExtractedDataResponse implements \Stringable
 {
     public function __construct(
         protected OutputType $type,
@@ -51,6 +50,9 @@ class ExtractedDataResponse implements ExtractedDataResponseInterface
         return $this;
     }
 
+    /**
+     * @return positive-int
+     */
     public function getPage(): int
     {
         return max(1, $this->page);
@@ -63,11 +65,17 @@ class ExtractedDataResponse implements ExtractedDataResponseInterface
         return $this;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getName(): string
     {
         return sprintf('page-%d.%s', $this->getPage(), $this->getType()->getExtension());
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function toDataUri(): string
     {
         return sprintf('data:%s;base64,%s', $this->type->getMimeType(), base64_encode($this->getData()));

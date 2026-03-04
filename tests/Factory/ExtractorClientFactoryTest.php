@@ -1,10 +1,10 @@
 <?php
 
-namespace OneToMany\PDFAI\Tests\Factory;
+namespace OneToMany\PdfPack\Tests\Factory;
 
-use OneToMany\PDFAI\Client\Mock\MockExtractorClient;
-use OneToMany\PDFAI\Factory\Exception\CreatingExtractorClientFailedServiceNotFoundException;
-use OneToMany\PDFAI\Factory\ExtractorClientFactory;
+use OneToMany\PdfPack\Client\Mock\MockExtractorClient;
+use OneToMany\PdfPack\Factory\Exception\CreatingExtractorClientFailedServiceNotFoundException;
+use OneToMany\PdfPack\Factory\ExtractorClientFactory;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;

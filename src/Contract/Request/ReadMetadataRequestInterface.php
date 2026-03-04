@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\PDFAI\Contract\Request;
+namespace OneToMany\PdfPack\Contract\Request;
 
 interface ReadMetadataRequestInterface
 {

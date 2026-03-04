@@ -1,10 +1,10 @@
 <?php
 
-namespace OneToMany\PDFAI\Action;
+namespace OneToMany\PdfPack\Action;
 
-use OneToMany\PDFAI\Contract\Action\ExtractDataActionInterface;
-use OneToMany\PDFAI\Contract\Client\ExtractorClientInterface;
-use OneToMany\PDFAI\Contract\Request\ExtractDataRequestInterface;
+use OneToMany\PdfPack\Contract\Action\ExtractDataActionInterface;
+use OneToMany\PdfPack\Contract\Client\ExtractorClientInterface;
+use OneToMany\PdfPack\Contract\Request\ExtractDataRequestInterface;
 
 final readonly class ExtractDataAction implements ExtractDataActionInterface
 {

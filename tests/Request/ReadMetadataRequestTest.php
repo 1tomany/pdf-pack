@@ -1,9 +1,9 @@
 <?php
 
-namespace OneToMany\PDFAI\Tests\Request;
+namespace OneToMany\PdfPack\Tests\Request;
 
-use OneToMany\PDFAI\Exception\InvalidArgumentException;
-use OneToMany\PDFAI\Request\ReadMetadataRequest;
+use OneToMany\PdfPack\Exception\InvalidArgumentException;
+use OneToMany\PdfPack\Request\ReadMetadataRequest;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 

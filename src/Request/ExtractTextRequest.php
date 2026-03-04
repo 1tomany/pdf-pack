@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Request;
+namespace OneToMany\PdfPack\Request;
 
-use OneToMany\PDFAI\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
 
 class ExtractTextRequest extends ExtractDataRequest
 {
