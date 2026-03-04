@@ -21,6 +21,9 @@ final class ExtractResponseTest extends TestCase
         $this->assertEquals('Hello, world!', new ExtractResponse(OutputType::Text, 'Hello, world!')->__toString());
     }
 
+    /**
+     * @param positive-int $page
+     */
     #[DataProvider('providerOutputTypePageNumberAndName')]
     public function testGettingName(OutputType $type, int $page, string $name): void
     {
