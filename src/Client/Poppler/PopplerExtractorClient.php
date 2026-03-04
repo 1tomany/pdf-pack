@@ -10,8 +10,8 @@ use OneToMany\PdfPack\Contract\Request\ReadMetadataRequestInterface;
 use OneToMany\PdfPack\Contract\Response\MetadataResponseInterface;
 use OneToMany\PdfPack\Helper\BinaryFinder;
 use OneToMany\PdfPack\Request\ReadRequest;
-use OneToMany\PdfPack\Response\ExtractedDataResponse;
-use OneToMany\PdfPack\Response\MetadataResponse;
+use OneToMany\PdfPack\Response\ExtractResponse;
+use OneToMany\PdfPack\Response\ReadResponse;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
 use Symfony\Component\Process\Process;
 
@@ -38,7 +38,7 @@ readonly class PopplerExtractorClient implements ExtractorClientInterface
             throw new ReadingMetadataFailedException($request->getFilePath(), $process->getErrorOutput(), $e);
         }
 
-        $response = new MetadataResponse();
+        $response = new ReadResponse();
 
         foreach (explode("\n", $output) as $infoBit) {
             if (str_contains($infoBit, ':')) {
@@ -76,7 +76,7 @@ readonly class PopplerExtractorClient implements ExtractorClientInterface
                     throw new ExtractingDataFailedException($request->getFilePath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ExtractedDataResponse($request->getOutputType(), $output, $page);
+                yield new ExtractResponse($request->getOutputType(), $output, $page);
             }
         } else {
             $command = BinaryFinder::find($this->pdfToPpmBinary);
@@ -90,7 +90,7 @@ readonly class PopplerExtractorClient implements ExtractorClientInterface
                     throw new ExtractingDataFailedException($request->getFilePath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ExtractedDataResponse($request->getOutputType(), $output, $page);
+                yield new ExtractResponse($request->getOutputType(), $output, $page);
             }
         }
     }

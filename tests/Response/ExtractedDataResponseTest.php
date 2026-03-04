@@ -3,7 +3,7 @@
 namespace OneToMany\PdfPack\Tests\Response;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
-use OneToMany\PdfPack\Response\ExtractedDataResponse;
+use OneToMany\PdfPack\Response\ExtractResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -20,12 +20,12 @@ final class ExtractedDataResponseTest extends TestCase
     {
         $text = 'Hello, world!';
 
-        $this->assertEquals($text, new ExtractedDataResponse(OutputType::Text, $text)->__toString());
+        $this->assertEquals($text, new ExtractResponse(OutputType::Text, $text)->__toString());
     }
 
     public function testGettingPageClampsNonPositiveNonZeroValuesToOne(): void
     {
-        $response = new ExtractedDataResponse(
+        $response = new ExtractResponse(
             OutputType::Text, 'Hello, world!'
         );
 
@@ -52,7 +52,7 @@ final class ExtractedDataResponseTest extends TestCase
 
     public function testSettingPageClampsNonPositiveNonZeroValuesToOne(): void
     {
-        $response = new ExtractedDataResponse(
+        $response = new ExtractResponse(
             OutputType::Text, 'Hello, world!'
         );
 
@@ -83,7 +83,7 @@ final class ExtractedDataResponseTest extends TestCase
         int $page,
         string $name,
     ): void {
-        $this->assertEquals($name, new ExtractedDataResponse($type, '', $page)->getName());
+        $this->assertEquals($name, new ExtractResponse($type, '', $page)->getName());
     }
 
     /**
@@ -113,6 +113,6 @@ final class ExtractedDataResponseTest extends TestCase
         $this->assertNotEmpty($data);
 
         $dataUri = 'data:image/png;base64,'.base64_encode($data);
-        $this->assertEquals($dataUri, new ExtractedDataResponse(OutputType::Png, $data)->toDataUri());
+        $this->assertEquals($dataUri, new ExtractResponse(OutputType::Png, $data)->toDataUri());
     }
 }

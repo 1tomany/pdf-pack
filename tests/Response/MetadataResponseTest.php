@@ -2,7 +2,7 @@
 
 namespace OneToMany\PdfPack\Tests\Response;
 
-use OneToMany\PdfPack\Response\MetadataResponse;
+use OneToMany\PdfPack\Response\ReadResponse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
@@ -14,6 +14,6 @@ final class MetadataResponseTest extends TestCase
 {
     public function testSettingPagesClampsNonPositiveNonZeroValuesToOne(): void
     {
-        $this->assertEquals(1, new MetadataResponse()->setPages(-1 * random_int(1, 100))->getPages());
+        $this->assertEquals(1, new ReadResponse()->setPages(-1 * random_int(1, 100))->getPages());
     }
 }

@@ -9,16 +9,16 @@ use function max;
 use function sprintf;
 use function trim;
 
-class ExtractedDataResponse implements \Stringable
+final readonly class ExtractResponse implements \Stringable
 {
+    /**
+     * @param positive-int $page
+     */
     public function __construct(
-        protected OutputType $type,
-        protected string $data,
-        protected int $page = 1,
+        private OutputType $type,
+        private string $data,
+        private int $page = 1,
     ) {
-        $this->setType($type);
-        $this->setData($data);
-        $this->setPage($page);
     }
 
     public function __toString(): string
@@ -31,23 +31,9 @@ class ExtractedDataResponse implements \Stringable
         return $this->type;
     }
 
-    public function setType(OutputType $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
     public function getData(): string
     {
         return $this->data;
-    }
-
-    public function setData(?string $data): static
-    {
-        $this->data = trim($data ?? '');
-
-        return $this;
     }
 
     /**
@@ -56,13 +42,6 @@ class ExtractedDataResponse implements \Stringable
     public function getPage(): int
     {
         return max(1, $this->page);
-    }
-
-    public function setPage(int $page): static
-    {
-        $this->page = max(1, $page);
-
-        return $this;
     }
 
     /**

@@ -4,8 +4,11 @@ namespace OneToMany\PdfPack\Response;
 
 use function max;
 
-final readonly class MetadataResponse
+final readonly class ReadResponse
 {
+    /**
+     * @param positive-int $pages
+     */
     public function __construct(private int $pages = 1)
     {
     }
