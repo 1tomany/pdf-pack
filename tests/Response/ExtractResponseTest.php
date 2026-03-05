@@ -48,7 +48,7 @@ final class ExtractResponseTest extends TestCase
 
     public function testToDataUri(): void
     {
-        $path = __DIR__.'/../data/label.jpeg';
+        $path = __DIR__.'/../.data/label.jpeg';
         $this->assertFileExists($path);
 
         $data = file_get_contents($path);
