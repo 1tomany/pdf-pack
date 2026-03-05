@@ -1,6 +1,6 @@
 {
     "name": "1tomany/pdf-pack",
-    "description": "A simple PHP library that makes extracting data from PDFs for large language models easy",
+    "description": "A simple PHP library that makes rasterizing pages and extracting text from PDFs for large language models easy",
     "license": "MIT",
     "type": "library",
     "minimum-stability": "stable",
