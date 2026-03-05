@@ -1,6 +1,6 @@
-# PDF Manipulating Library for PHP
+# PDF Extraction Library for PHP
 
-`pdf-pack` is a simple PHP library that makes extracting data from PDFs for large language models easy. It uses a single dependency, the [Symfony Process Component](https://symfony.com/doc/current/components/process.html), to interface with the [Poppler command line tools from the xpdf library](https://poppler.freedesktop.org/).
+`pdf-pack` is a simple PHP library that makes rasterizing pages and extracting text from PDFs for large language models easy. It uses a single dependency, the [Symfony Process Component](https://symfony.com/doc/current/components/process.html), to interface with the [Poppler command line tools from the xpdf library](https://poppler.freedesktop.org/).
 
 ## Installation
 
