@@ -13,18 +13,18 @@ final readonly class ClientFactory
     {
     }
 
-    public function create(string $id): ClientInterface
+    public function create(string $service): ClientInterface
     {
         try {
-            $service = $this->container->get($id);
+            $client = $this->container->get($service);
 
-            if (!$service instanceof ClientInterface) {
-                throw new CreatingClientFailedServiceNotFoundException($id);
+            if (!$client instanceof ClientInterface) {
+                throw new CreatingClientFailedServiceNotFoundException($service);
             }
         } catch (ContainerExceptionInterface $e) {
-            throw new CreatingClientFailedServiceNotFoundException($id, $e);
+            throw new CreatingClientFailedServiceNotFoundException($service, $e);
         }
 
-        return $service;
+        return $client;
     }
 }
