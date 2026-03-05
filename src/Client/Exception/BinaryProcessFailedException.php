@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Client\Exception;
+namespace OneToMany\PdfPack\Client\Exception;
 
-use OneToMany\PDFAI\Exception\RuntimeException;
+use OneToMany\PdfPack\Exception\RuntimeException;
 
 use function explode;
 use function rtrim;

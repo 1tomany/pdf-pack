@@ -2,31 +2,36 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use OneToMany\PDFAI\Client\Poppler\PopplerExtractorClient;
-use OneToMany\PDFAI\Contract\Enum\OutputType;
-use OneToMany\PDFAI\Request\ExtractDataRequest;
-use OneToMany\PDFAI\Request\ExtractTextRequest;
-use OneToMany\PDFAI\Request\ReadMetadataRequest;
+use OneToMany\PdfPack\Client\Poppler\PopplerClient;
+use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
+use OneToMany\PdfPack\Request\ExtractRequest;
+use OneToMany\PdfPack\Request\ReadRequest;
 
-$filePath = realpath(__DIR__.'/../tests/Client/files/pages-4.pdf');
+/** @var non-empty-string $path */
+$path = realpath(__DIR__.'/data/pages-4.pdf');
+assert(is_file($path) && is_readable($path));
 
-$client = new PopplerExtractorClient();
+$client = new PopplerClient();
 
-$metadata = $client->readMetadata(new ReadMetadataRequest($filePath));
-printf("The PDF '%s' has %d page(s).\n", $filePath, $metadata->getPages());
+try {
+    $response = $client->read(new ReadRequest($path));
+    printf("The PDF '%s' has %d %s.\n\n", basename($path), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 
-// Rasterize all pages as 150 DPI JPEGs
-$request = new ExtractDataRequest($filePath, 1, null, OutputType::Jpg, 150);
+    // Rasterize all pages as 150 DPI JPEGs
+    $extractRequest = new ExtractRequest($path)->fromPage(1)->asJpegOutput()->atResolution(150);
 
-foreach ($client->extractData($request) as $image) {
-    // $image->getData() or $image->toDataUri()
-    printf("MD5: %s\n", md5($image->getData()));
-}
+    foreach ($client->extract($extractRequest) as $page) {
+        printf("Page %d MD5 hash: %s\n", $page->getPage(), md5($page->getData()));
+    }
 
-// Extract text from pages 3 and 4
-$request = new ExtractTextRequest($filePath, 3, 4);
+    echo "\n";
 
-foreach ($client->extractData($request) as $text) {
-    // $text->getData()
-    printf("Length: %d\n", strlen($text->getData()));
+    // Extract text from pages 3 and 4
+    $extractRequest = new ExtractRequest($path)->fromPage(3)->toPage(4)->asTextOutput();
+
+    foreach ($client->extract($extractRequest) as $page) {
+        printf("Page %d length: %d\n", $page->getPage(), strlen($page->getData()));
+    }
+} catch (PdfPackExceptionInterface $e) {
+    printf("[ERROR] %s\n", $e->getMessage());
 }

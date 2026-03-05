@@ -1,30 +1,30 @@
 <?php
 
-namespace OneToMany\PDFAI\Tests\Factory;
+namespace OneToMany\PdfPack\Tests\Factory;
 
-use OneToMany\PDFAI\Client\Mock\MockExtractorClient;
-use OneToMany\PDFAI\Factory\Exception\CreatingExtractorClientFailedServiceNotFoundException;
-use OneToMany\PDFAI\Factory\ExtractorClientFactory;
+use OneToMany\PdfPack\Client\Mock\MockClient;
+use OneToMany\PdfPack\Factory\ClientFactory;
+use OneToMany\PdfPack\Factory\Exception\CreatingClientFailedServiceNotFoundException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 #[Group('UnitTests')]
 #[Group('FactoryTests')]
-final class ExtractorClientFactoryTest extends TestCase
+final class ClientFactoryTest extends TestCase
 {
     public function testCreatingServiceRequiresServiceToExist(): void
     {
-        $this->expectException(CreatingExtractorClientFailedServiceNotFoundException::class);
+        $this->expectException(CreatingClientFailedServiceNotFoundException::class);
 
-        new ExtractorClientFactory($this->createContainer())->create('invalid');
+        new ClientFactory($this->createContainer())->create('invalid');
     }
 
     public function testCreatingServiceRequiresServiceToImplementRasterServiceInterface(): void
     {
-        $this->expectException(CreatingExtractorClientFailedServiceNotFoundException::class);
+        $this->expectException(CreatingClientFailedServiceNotFoundException::class);
 
-        new ExtractorClientFactory($this->createContainer())->create('error');
+        new ClientFactory($this->createContainer())->create('error');
     }
 
     private function createContainer(): ContainerInterface
@@ -32,7 +32,7 @@ final class ExtractorClientFactoryTest extends TestCase
         $container = new class implements ContainerInterface {
             /**
              * @var array{
-             *   mock: MockExtractorClient,
+             *   mock: MockClient,
              *   error: \InvalidArgumentException,
              * }
              */
@@ -41,7 +41,7 @@ final class ExtractorClientFactoryTest extends TestCase
             public function __construct()
             {
                 $this->services = [
-                    'mock' => new MockExtractorClient(),
+                    'mock' => new MockClient(),
                     'error' => new \InvalidArgumentException(),
                 ];
             }

@@ -1,8 +1,8 @@
 <?php
 
-namespace OneToMany\PDFAI\Tests\Contract\Enum;
+namespace OneToMany\PdfPack\Tests\Contract\Enum;
 
-use OneToMany\PDFAI\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -12,41 +12,41 @@ use PHPUnit\Framework\TestCase;
 #[Group('EnumTests')]
 final class OutputTypeTest extends TestCase
 {
-    #[DataProvider('providerGettingExtension')]
+    #[DataProvider('providerOutputTypeAndExtension')]
     public function testGettingExtension(OutputType $type, string $extension): void
     {
         $this->assertEquals($extension, $type->getExtension());
     }
 
     /**
-     * @return list<list<non-empty-string|OutputType>>
+     * @return list<list<non-empty-lowercase-string|OutputType>>
      */
-    public static function providerGettingExtension(): array
+    public static function providerOutputTypeAndExtension(): array
     {
         $provider = [
-            [OutputType::Jpg, 'jpeg'],
+            [OutputType::Jpeg, 'jpeg'],
             [OutputType::Png, 'png'],
-            [OutputType::Txt, 'txt'],
+            [OutputType::Text, 'txt'],
         ];
 
         return $provider;
     }
 
-    #[DataProvider('providerGettingMimeType')]
-    public function testGettingMimeType(OutputType $type, string $mimeType): void
+    #[DataProvider('providerOutputTypeAndFormat')]
+    public function testGettingFormat(OutputType $type, string $format): void
     {
-        $this->assertEquals($mimeType, $type->getMimeType());
+        $this->assertEquals($format, $type->getFormat());
     }
 
     /**
-     * @return list<list<non-empty-string|OutputType>>
+     * @return list<list<non-empty-lowercase-string|OutputType>>
      */
-    public static function providerGettingMimeType(): array
+    public static function providerOutputTypeAndFormat(): array
     {
         $provider = [
-            [OutputType::Jpg, 'image/jpeg'],
+            [OutputType::Jpeg, 'image/jpeg'],
             [OutputType::Png, 'image/png'],
-            [OutputType::Txt, 'text/plain'],
+            [OutputType::Text, 'text/plain'],
         ];
 
         return $provider;

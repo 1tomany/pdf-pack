@@ -1,13 +1,13 @@
-# pdf-ai
+# PDF Extraction Library for PHP
 
-`pdf-ai` is a simple PHP library that makes extracting data from PDFs for large language models easy. It uses a single dependency, the [Symfony Process Component](https://symfony.com/doc/current/components/process.html), to interface with the [Poppler command line tools from the xpdf library](https://poppler.freedesktop.org/).
+`pdf-pack` is a simple PHP library that makes rasterizing pages and extracting text from PDFs for large language models easy. It uses a single dependency, the [Symfony Process Component](https://symfony.com/doc/current/components/process.html), to interface with the [Poppler command line tools from the xpdf library](https://poppler.freedesktop.org/).
 
 ## Installation
 
 Install the library using Composer:
 
 ```shell
-composer require 1tomany/pdf-ai
+composer require 1tomany/pdf-pack
 ```
 
 ## Installing Poppler
@@ -38,68 +38,14 @@ Extracted data is stored in memory and can be written to the filesystem or conve
 
 Using the library is easy, and you have two ways to interact with it:
 
-1. **Direct** Instantiate the `OneToMany\PDFAI\Client\Poppler\PopplerExtractorClient` class and call the methods directly. This method is easier to use, but comes with the cost that your application will be less flexible and testable.
-2. **Actions** Create a container of `OneToMany\PDFAI\Contract\Client\ExtractorClientInterface` objects, and use the `OneToMany\PDFAI\Factory\ExtractorClientFactory` class to instantiate them.
+1. **Direct** Instantiate the `OneToMany\PdfPack\Client\Poppler\PopplerClient` class and call the methods directly. This method is easier to use, but comes with the cost that your application will be less flexible and testable.
+2. **Actions** Create a container of `OneToMany\PdfPack\Contract\Client\ClientInterface` objects, and use the `OneToMany\PdfPack\Factory\ClientFactory` class to instantiate them.
 
-**Note:** A [Symfony bundle](https://github.com/1tomany/pdf-ai-bundle) is available if you wish to integrate this library into your Symfony applications with autowiring and configuration support.
+**Note:** A [Symfony bundle](https://github.com/1tomany/pdf-pack-bundle) is available if you wish to integrate this library into your Symfony applications with autowiring and configuration support.
 
 ### Direct usage
 
-```php
-<?php
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use OneToMany\PDFAI\Client\Poppler\PopplerExtractorClient;
-use OneToMany\PDFAI\Contract\Enum\OutputType;
-use OneToMany\PDFAI\Request\ExtractDataRequest;
-use OneToMany\PDFAI\Request\ExtractTextRequest;
-use OneToMany\PDFAI\Request\ReadMetadataRequest;
-
-$filePath = '/path/to/file.pdf';
-
-// Construct the Poppler wrapper
-$client = new PopplerExtractorClient();
-
-// Construct and execute a request to read the PDF metadata
-$metadata = $client->readMetadata(new ReadMetadataRequest($filePath));
-
-vprintf("The PDF '%s' has %d page(s).\n", [
-    $filePath, $metadata->getPages(),
-]);
-
-// Construct a request to rasterize all pages as 150 DPI JPEGs
-$request = new ExtractDataRequest($filePath, 1, null, OutputType::Jpg, 150);
-
-foreach ($client->extractData($request) as $image) {
-    // $image->getData() or $image->toDataUri()
-    printf("MD5: %s\n", md5($image->getData()));
-}
-
-// Extract text from pages 3 and 4
-$request = new ExtractTextRequest($filePath, 3, 4);
-
-foreach ($client->extractData($request) as $text) {
-    // $text->getData()
-    printf("Length: %d\n", strlen($text->getData()));
-}
-```
-
-### Test suite
-
-Run the test suite with PHPUnit:
-
-```shell
-./vendor/bin/phpunit
-```
-
-### Static analysis
-
-Run static analysis with PHPStan:
-
-```shell
-./vendor/bin/phpstan
-```
+See [`examples/direct.php`](https://github.com/1tomany/pdf-pack/blob/master/examples/direct.php).
 
 ## Credits
 

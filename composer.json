@@ -1,13 +1,12 @@
 {
-    "name": "1tomany/pdf-ai",
-    "description": "A simple PHP library that makes extracting data from PDFs for large language models easy",
+    "name": "1tomany/pdf-pack",
+    "description": "A simple PHP library that makes rasterizing pages and extracting text from PDFs for large language models easy",
     "license": "MIT",
     "type": "library",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "keywords": [
-        "ai",
-        "llm",
+        "ocr",
         "pdf",
         "pdf2img",
         "pdf2image",
@@ -32,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "OneToMany\\PDFAI\\": "src/"
+            "OneToMany\\PdfPack\\": "src/"
         },
         "exclude-from-classmap": [
             "/Tests/"
@@ -40,7 +39,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "OneToMany\\PDFAI\\Tests\\": "tests/"
+            "OneToMany\\PdfPack\\Tests\\": "tests/"
         }
     },
     "scripts": {
