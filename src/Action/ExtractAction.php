@@ -12,6 +12,9 @@ final readonly class ExtractAction implements ExtractActionInterface
     {
     }
 
+    /**
+     * @see OneToMany\PdfPack\Contract\Action\ExtractActionInterface
+     */
     public function act(ExtractRequest $request): \Generator
     {
         return $this->client->extract($request);

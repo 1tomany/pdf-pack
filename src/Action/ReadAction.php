@@ -13,6 +13,9 @@ final readonly class ReadAction implements ReadActionInterface
     {
     }
 
+    /**
+     * @see OneToMany\PdfPack\Contract\Action\ReadActionInterface
+     */
     public function act(ReadRequest $request): ReadResponse
     {
         return $this->client->read($request);
