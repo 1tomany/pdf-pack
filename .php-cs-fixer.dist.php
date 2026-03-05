@@ -36,11 +36,6 @@ $config->setRules([
     'phpdoc_align' => [
         'align' => 'left',
     ],
-    'phpdoc_to_comment' => [
-        'ignored_tags' => [
-            'disregard',
-        ],
-    ],
 ]);
 
 return $config;
