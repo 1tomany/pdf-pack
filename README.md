@@ -12,7 +12,7 @@ composer require 1tomany/pdf-pack
 
 ## Installing Poppler
 
-Before beginning, ensure the `pdfinfo`, `pdftoppm`, and `pdftotext` binaries are installed and located in the `$PATH` environment variables.
+Before beginning, ensure the `pdfinfo`, `pdftoppm`, and `pdftotext` binaries are installed and located in `$PATH`.
 
 ### macOS
 
