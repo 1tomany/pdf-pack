@@ -12,6 +12,7 @@ class ExtractRequest
 {
     use ValidatePathTrait;
 
+    /** @var non-empty-string */
     private string $path;
 
     /** @var positive-int */
@@ -50,6 +51,9 @@ class ExtractRequest
         return $this;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getPath(): string
     {
         return $this->path;
