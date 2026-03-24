@@ -19,7 +19,6 @@ use function imagecreatefromstring;
 use function imagesx;
 use function imagesy;
 use function iterator_to_array;
-use function md5;
 
 #[Large]
 #[Group('UnitTests')]
@@ -170,8 +169,7 @@ final class PopplerClientTest extends TestCase
         string $path,
         int $page,
         string $text,
-    ): void
-    {
+    ): void {
         $request = new ConvertPdfRequest($path, $page, $page)->asTextOutput();
 
         /** @var list<ConvertPdfResponse> $responses */
@@ -205,8 +203,7 @@ final class PopplerClientTest extends TestCase
         OutputType $outputType,
         int $resolution,
         string $hash,
-    ): void
-    {
+    ): void {
         $request = new ConvertPdfRequest($path, $firstPage, $firstPage, $outputType, $resolution);
 
         /** @var list<ConvertPdfResponse> $responses */
