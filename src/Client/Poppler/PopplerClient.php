@@ -6,7 +6,7 @@ use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
 use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Helper\BinaryFinder;
-use OneToMany\PdfPack\Request\ExtractPdfRequest;
+use OneToMany\PdfPack\Request\ConvertPdfRequest;
 use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ExtractResponse;
 use OneToMany\PdfPack\Response\ReadResponse;
@@ -54,7 +54,7 @@ final readonly class PopplerClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function extract(ExtractPdfRequest $request): \Generator
+    public function extract(ConvertPdfRequest $request): \Generator
     {
         // Determine the number of pages to extract
         if (!$lastPage = $request->getLastPage()) {

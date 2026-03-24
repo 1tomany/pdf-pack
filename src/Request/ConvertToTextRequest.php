@@ -4,7 +4,7 @@ namespace OneToMany\PdfPack\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 
-class ExtractTextRequest extends ExtractPdfRequest
+final class ConvertToTextRequest extends ConvertPdfRequest
 {
     public function __construct(
         ?string $path,
