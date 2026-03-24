@@ -36,7 +36,6 @@ try {
 
     printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 
-    //
     $convertPdfAction = new ConvertPdfAction(...[
         'client' => $clientFactory->create($vendor),
     ]);
