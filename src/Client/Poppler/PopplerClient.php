@@ -2,14 +2,14 @@
 
 namespace OneToMany\PdfPack\Client\Poppler;
 
-use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
-use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
+use OneToMany\PdfPack\Client\Exception\ConvertingPdfFailedException;
+use OneToMany\PdfPack\Client\Exception\ReadingPdfFailedException;
+use OneToMany\PdfPack\Client\Service\BinaryFinder;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
-use OneToMany\PdfPack\Helper\BinaryFinder;
-use OneToMany\PdfPack\Request\ExtractRequest;
-use OneToMany\PdfPack\Request\ReadRequest;
-use OneToMany\PdfPack\Response\ExtractResponse;
-use OneToMany\PdfPack\Response\ReadResponse;
+use OneToMany\PdfPack\Request\ConvertPdfRequest;
+use OneToMany\PdfPack\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Response\ConvertPdfResponse;
+use OneToMany\PdfPack\Response\ReadPdfResponse;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
 use Symfony\Component\Process\Process;
 
@@ -28,14 +28,22 @@ final readonly class PopplerClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function read(ReadRequest $request): ReadResponse
+    public static function getVendor(): string
+    {
+        return 'poppler';
+    }
+
+    /**
+     * @see OneToMany\PdfPack\Contract\Client\ClientInterface
+     */
+    public function read(ReadPdfRequest $request): ReadPdfResponse
     {
         $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getPath()]);
 
         try {
             $output = $process->mustRun()->getOutput();
         } catch (ProcessExceptionInterface $e) {
-            throw new ReadingFileFailedException($request->getPath(), $process->getErrorOutput(), $e);
+            throw new ReadingPdfFailedException($request->getPath(), $process->getErrorOutput(), $e);
         }
 
         foreach (explode("\n", $output) as $infoBit) {
@@ -48,17 +56,17 @@ final readonly class PopplerClient implements ClientInterface
             }
         }
 
-        return new ReadResponse($pages ?? 1);
+        return new ReadPdfResponse($request->getPath(), $pages ?? 1);
     }
 
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function extract(ExtractRequest $request): \Generator
+    public function convert(ConvertPdfRequest $request): \Generator
     {
         // Determine the number of pages to extract
         if (!$lastPage = $request->getLastPage()) {
-            $readRequest = new ReadRequest(...[
+            $readRequest = new ReadPdfRequest(...[
                 'path' => $request->getPath(),
             ]);
 
@@ -74,10 +82,10 @@ final readonly class PopplerClient implements ClientInterface
                 try {
                     $output = $process->mustRun()->getOutput();
                 } catch (ProcessExceptionInterface $e) {
-                    throw new ExtractingDataFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
+                    throw new ConvertingPdfFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ExtractResponse($request->getOutputType(), $output, $page);
+                yield new ConvertPdfResponse($request->getOutputType(), $output, $page);
             }
         } else {
             $command = BinaryFinder::find($this->pdfToPpmBinary);
@@ -88,10 +96,10 @@ final readonly class PopplerClient implements ClientInterface
                 try {
                     $output = $process->mustRun()->getOutput();
                 } catch (ProcessExceptionInterface $e) {
-                    throw new ExtractingDataFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
+                    throw new ConvertingPdfFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ExtractResponse($request->getOutputType(), $output, $page);
+                yield new ConvertPdfResponse($request->getOutputType(), $output, $page);
             }
         }
     }

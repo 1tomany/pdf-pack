@@ -4,61 +4,52 @@ namespace OneToMany\PdfPack\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Request\Trait\ValidatePathTrait;
 
+use function max;
+use function min;
 use function sprintf;
 
-class ExtractRequest
+class ConvertPdfRequest extends BaseRequest
 {
-    use ValidatePathTrait;
-
-    /** @var non-empty-string */
-    private string $path;
-
-    /** @var positive-int */
-    private int $firstPage = 1;
-
-    /** @var ?positive-int */
-    private ?int $lastPage = null;
-
-    private OutputType $outputType = OutputType::Jpeg;
-
-    /** @var int<48, 300> */
-    private int $resolution = self::DEFAULT_RESOLUTION;
-
+    /**
+     * The default DPI for rasterized pages.
+     *
+     * @var positive-int
+     */
     public const int DEFAULT_RESOLUTION = 72;
+
+    /**
+     * The minimum DPI pages can be rasterized as.
+     *
+     * @var positive-int
+     */
     public const int MIN_RESOLUTION = 48;
+
+    /**
+     * The maximum DPI pages can be rasterized as.
+     *
+     * @var positive-int
+     */
     public const int MAX_RESOLUTION = 300;
 
     public function __construct(
-        string $path,
-        int $firstPage = 1,
-        ?int $lastPage = null,
-        OutputType $outputType = OutputType::Jpeg,
-        int $resolution = self::DEFAULT_RESOLUTION,
+        ?string $path,
+        private int $firstPage = 1,
+        private ?int $lastPage = null,
+        private OutputType $outputType = OutputType::Jpeg,
+        private int $resolution = self::DEFAULT_RESOLUTION,
     ) {
-        $this->atPath($path);
+        parent::__construct($path);
+
         $this->fromPage($firstPage);
         $this->toPage($lastPage);
         $this->asOutputType($outputType);
         $this->atResolution($resolution);
     }
 
-    public function atPath(string $path): static
-    {
-        $this->path = $this->validatePath($path);
-
-        return $this;
-    }
-
     /**
-     * @return non-empty-string
+     * @throws InvalidArgumentException when the first page is not a positive integer
      */
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
     public function fromPage(int $page): static
     {
         if ($page < 1) {
@@ -79,9 +70,12 @@ class ExtractRequest
      */
     public function getFirstPage(): int
     {
-        return $this->firstPage;
+        return max(1, $this->firstPage);
     }
 
+    /**
+     * @throws InvalidArgumentException when the last page is not a positive integer
+     */
     public function toPage(?int $page): static
     {
         if (null !== $page) {
@@ -104,7 +98,7 @@ class ExtractRequest
      */
     public function getLastPage(): ?int
     {
-        return $this->lastPage;
+        return null !== $this->lastPage ? max(1, $this->lastPage) : null;
     }
 
     public function asJpegOutput(): static
@@ -134,6 +128,10 @@ class ExtractRequest
         return $this->outputType;
     }
 
+    /**
+     * @throws InvalidArgumentException when the resolution is less than self::MIN_RESOLUTION
+     * @throws InvalidArgumentException when the resolution is greater than self::MAX_RESOLUTION
+     */
     public function atResolution(int $resolution): static
     {
         if ($resolution < self::MIN_RESOLUTION) {
@@ -154,6 +152,6 @@ class ExtractRequest
      */
     public function getResolution(): int
     {
-        return $this->resolution;
+        return min(max(self::MIN_RESOLUTION, $this->resolution), self::MAX_RESOLUTION);
     }
 }

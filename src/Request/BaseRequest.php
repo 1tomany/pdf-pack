@@ -1,27 +1,42 @@
 <?php
 
-namespace OneToMany\PdfPack\Request\Trait;
+namespace OneToMany\PdfPack\Request;
 
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function is_file;
 use function is_readable;
 use function sprintf;
-use function trim;
 
-trait ValidatePathTrait
+class BaseRequest
 {
+    /**
+     * @var non-empty-string
+     */
+    private readonly string $path;
+
+    public function __construct(?string $path)
+    {
+        $this->path = $this->validatePath($path);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
     /**
      * @return non-empty-string
      *
      * @throws InvalidArgumentException when the trimmed path is empty
-     * @throws InvalidArgumentException when the path is not a readable file
+     * @throws InvalidArgumentException when the file is not a readable file
      */
-    private function validatePath(string $path): string
+    private function validatePath(?string $path): string
     {
-        $path = trim($path);
-
-        if ('' === $path) {
+        if (!$path = trim((string) $path)) {
             throw new InvalidArgumentException('The path cannot be empty.');
         }
 

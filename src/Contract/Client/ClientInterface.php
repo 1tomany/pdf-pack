@@ -2,17 +2,22 @@
 
 namespace OneToMany\PdfPack\Contract\Client;
 
-use OneToMany\PdfPack\Request\ExtractRequest;
-use OneToMany\PdfPack\Request\ReadRequest;
-use OneToMany\PdfPack\Response\ExtractResponse;
-use OneToMany\PdfPack\Response\ReadResponse;
+use OneToMany\PdfPack\Request\ConvertPdfRequest;
+use OneToMany\PdfPack\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Response\ConvertPdfResponse;
+use OneToMany\PdfPack\Response\ReadPdfResponse;
 
 interface ClientInterface
 {
-    public function read(ReadRequest $request): ReadResponse;
+    /**
+     * @return non-empty-lowercase-string
+     */
+    public static function getVendor(): string;
+
+    public function read(ReadPdfRequest $request): ReadPdfResponse;
 
     /**
-     * @return \Generator<int, ExtractResponse>
+     * @return \Generator<int, ConvertPdfResponse>
      */
-    public function extract(ExtractRequest $request): \Generator;
+    public function convert(ConvertPdfRequest $request): \Generator;
 }

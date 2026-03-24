@@ -3,7 +3,7 @@
 namespace OneToMany\PdfPack\Tests\Response;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
-use OneToMany\PdfPack\Response\ExtractResponse;
+use OneToMany\PdfPack\Response\ConvertPdfResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -14,11 +14,11 @@ use function random_int;
 
 #[Group('UnitTests')]
 #[Group('ResponseTests')]
-final class ExtractResponseTest extends TestCase
+final class ConvertPdfResponseTest extends TestCase
 {
     public function testToString(): void
     {
-        $this->assertEquals('Hello, world!', new ExtractResponse(OutputType::Text, 'Hello, world!')->__toString());
+        $this->assertEquals('Hello, world!', new ConvertPdfResponse(OutputType::Text, 'Hello, world!')->__toString());
     }
 
     /**
@@ -27,7 +27,7 @@ final class ExtractResponseTest extends TestCase
     #[DataProvider('providerOutputTypePageNumberAndName')]
     public function testGettingName(OutputType $type, int $page, string $name): void
     {
-        $this->assertEquals($name, new ExtractResponse($type, '', $page)->getName());
+        $this->assertEquals($name, new ConvertPdfResponse($type, '', $page)->getName());
     }
 
     /**
@@ -57,6 +57,6 @@ final class ExtractResponseTest extends TestCase
         $this->assertNotEmpty($data);
 
         $dataUri = 'data:image/jpeg;base64,'.base64_encode($data);
-        $this->assertEquals($dataUri, new ExtractResponse(OutputType::Jpeg, $data)->toDataUri());
+        $this->assertEquals($dataUri, new ConvertPdfResponse(OutputType::Jpeg, $data)->toDataUri());
     }
 }

@@ -5,11 +5,17 @@ namespace OneToMany\PdfPack\Response;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 
 use function base64_encode;
+use function hash;
 use function max;
 use function sprintf;
 
-final readonly class ExtractResponse implements \Stringable
+final readonly class ConvertPdfResponse implements \Stringable
 {
+    /**
+     * @var non-empty-lowercase-string
+     */
+    private string $hash;
+
     /**
      * @param positive-int $page
      */
@@ -18,6 +24,7 @@ final readonly class ExtractResponse implements \Stringable
         private string $data,
         private int $page = 1,
     ) {
+        $this->hash = hash('sha256', $data);
     }
 
     public function __toString(): string
@@ -33,6 +40,14 @@ final readonly class ExtractResponse implements \Stringable
     public function getData(): string
     {
         return $this->data;
+    }
+
+    /**
+     * @return non-empty-lowercase-string
+     */
+    public function getHash(): string
+    {
+        return $this->hash;
     }
 
     /**
