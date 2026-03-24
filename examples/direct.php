@@ -22,7 +22,7 @@ try {
     $convertToImageRequest = new ConvertToImageRequest($path)->fromPage(1)->atResolution(150);
 
     foreach ($client->convert($convertToImageRequest) as $page) {
-        printf("Page %d MD5 hash: %s\n", $page->getPage(), md5($page->getData()));
+        printf("Page %d sha-256 hash: %s\n", $page->getPage(), $page->getHash());
     }
 
     echo "\n";

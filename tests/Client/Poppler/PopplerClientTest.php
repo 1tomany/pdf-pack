@@ -166,7 +166,11 @@ final class PopplerClientTest extends TestCase
     }
 
     #[DataProvider('providerPathPageAndText')]
-    public function testConvertingPdfToText(string $path, int $page, string $text): void
+    public function testConvertingPdfToText(
+        string $path,
+        int $page,
+        string $text,
+    ): void
     {
         $request = new ConvertPdfRequest($path, $page, $page)->asTextOutput();
 
@@ -194,8 +198,14 @@ final class PopplerClientTest extends TestCase
         return $provider;
     }
 
-    #[DataProvider('providerPathFirstPageLastPageOutputTypeResolutionAndMd5Hash')]
-    public function testConvertingPdfToImage(string $path, int $firstPage, OutputType $outputType, int $resolution, string $md5Hash): void
+    #[DataProvider('providerPathFirstPageLastPageOutputTypeResolutionAndHash')]
+    public function testConvertingPdfToImage(
+        string $path,
+        int $firstPage,
+        OutputType $outputType,
+        int $resolution,
+        string $hash,
+    ): void
     {
         $request = new ConvertPdfRequest($path, $firstPage, $firstPage, $outputType, $resolution);
 
@@ -204,7 +214,7 @@ final class PopplerClientTest extends TestCase
 
         $this->assertCount(1, $responses);
         $this->assertNotEmpty($responses[0]->getData());
-        $this->assertEquals($md5Hash, md5($responses[0]));
+        $this->assertEquals($hash, $responses[0]->getHash());
 
         $image = imagecreatefromstring($responses[0]);
         $this->assertInstanceOf(\GdImage::class, $image);
@@ -215,18 +225,18 @@ final class PopplerClientTest extends TestCase
     /**
      * @return list<list<int|non-empty-string|OutputType>>
      */
-    public static function providerPathFirstPageLastPageOutputTypeResolutionAndMd5Hash(): array
+    public static function providerPathFirstPageLastPageOutputTypeResolutionAndHash(): array
     {
         $provider = [
-            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Jpeg, 48, '832bfdfd9a01a3087f765b54684347f4'],
-            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Jpeg, 72, '8d56f696328dfaf06c963e1179456d25'],
-            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Jpeg, 150, '080f873a6769b81d38f877d511e22a3c'],
-            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Jpeg, 300, '7573ebf741870bb85c30196013397a55'],
-            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Png, 48, 'a3b9529090369a93045cefe5b71151d6'],
-            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Png, 300, '96a6476a69171db7a8ac55848323b219'],
-            [__DIR__.'/../../.data/pages-2.pdf', 2, OutputType::Jpeg, 72, '3aa7339e59d5991590a14e26a2057002'],
-            [__DIR__.'/../../.data/pages-3.pdf', 3, OutputType::Jpeg, 72, 'f06ac9888a4da750bb7450f3955e7123'],
-            [__DIR__.'/../../.data/pages-4.pdf', 4, OutputType::Jpeg, 72, '48c209de64d027ed053a9e931da4ebc0'],
+            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Jpeg, 48, '28933b0d9af70074616a15d721f34c3f5d3bb6bb80f07a6992b572d8c3e80697'],
+            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Jpeg, 72, '1186d43f1e28e87ae6d380978ed1d5e5eacb19a67d8e478a1d610e9c24d06238'],
+            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Jpeg, 150, '1cb6e6f67bcffc8e16861c4789b67e06d4a59465933b98317183cff624a76df9'],
+            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Jpeg, 300, '7bf4599051ab17eca303d6264739916b8a6a51231c11d6041bd81bbe41661373'],
+            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Png, 48, 'afc38b7871f520934182b3ebf17f7bc3ef12ea0c87cb65416d3b540edf385083'],
+            [__DIR__.'/../../.data/pages-1.pdf', 1, OutputType::Png, 300, 'beba09056cf8eb7f1359bc8fc1b486c35e0bffa40b216524fe61ffd176658c0b'],
+            [__DIR__.'/../../.data/pages-2.pdf', 2, OutputType::Jpeg, 72, 'e1c2a91afd9508022090e1a4e836a63e48119aed48dd7bcf9e9cd1a857aaa90f'],
+            [__DIR__.'/../../.data/pages-3.pdf', 3, OutputType::Jpeg, 72, '2ce164dc8d4b55df22b2faa94c88bea5caa4c5c6fd8998eb0d985aa1c51659a1'],
+            [__DIR__.'/../../.data/pages-4.pdf', 4, OutputType::Jpeg, 72, 'f7553db6b12ad98c4d790788bc11823cd2a27f4bae35b227566b7927d177330f'],
         ];
 
         return $provider;

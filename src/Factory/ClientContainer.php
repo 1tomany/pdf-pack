@@ -21,8 +21,7 @@ final class ClientContainer implements ContainerInterface
      */
     public function __construct(
         array $clients = [],
-    )
-    {
+    ) {
         foreach ($clients as $client) {
             $this->addClient($client);
         }
