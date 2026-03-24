@@ -2,8 +2,8 @@
 
 namespace OneToMany\PdfPack\Client\Poppler;
 
-use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
-use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
+use OneToMany\PdfPack\Client\Exception\ConvertingPdfFailedException;
+use OneToMany\PdfPack\Client\Exception\ReadingPdfFailedException;
 use OneToMany\PdfPack\Client\Service\BinaryFinder;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Request\ConvertPdfRequest;
@@ -43,7 +43,7 @@ final readonly class PopplerClient implements ClientInterface
         try {
             $output = $process->mustRun()->getOutput();
         } catch (ProcessExceptionInterface $e) {
-            throw new ReadingFileFailedException($request->getPath(), $process->getErrorOutput(), $e);
+            throw new ReadingPdfFailedException($request->getPath(), $process->getErrorOutput(), $e);
         }
 
         foreach (explode("\n", $output) as $infoBit) {
@@ -82,7 +82,7 @@ final readonly class PopplerClient implements ClientInterface
                 try {
                     $output = $process->mustRun()->getOutput();
                 } catch (ProcessExceptionInterface $e) {
-                    throw new ExtractingDataFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
+                    throw new ConvertingPdfFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
                 yield new ConvertPdfResponse($request->getOutputType(), $output, $page);
@@ -96,7 +96,7 @@ final readonly class PopplerClient implements ClientInterface
                 try {
                     $output = $process->mustRun()->getOutput();
                 } catch (ProcessExceptionInterface $e) {
-                    throw new ExtractingDataFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
+                    throw new ConvertingPdfFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
                 yield new ConvertPdfResponse($request->getOutputType(), $output, $page);

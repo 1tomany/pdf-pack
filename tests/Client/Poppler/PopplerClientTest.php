@@ -2,8 +2,8 @@
 
 namespace OneToMany\PdfPack\Tests\Client\Poppler;
 
-use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
-use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
+use OneToMany\PdfPack\Client\Exception\ConvertingPdfFailedException;
+use OneToMany\PdfPack\Client\Exception\ReadingPdfFailedException;
 use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
@@ -37,7 +37,7 @@ final class PopplerClientTest extends TestCase
 
     public function testReadingFileRequiresValidPdfFile(): void
     {
-        $this->expectException(ReadingFileFailedException::class);
+        $this->expectException(ReadingPdfFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
 
         new PopplerClient()->read(new ReadPdfRequest(__FILE__));
@@ -92,7 +92,7 @@ final class PopplerClientTest extends TestCase
     {
         $request = new ConvertPdfRequest(__FILE__)->toPage(1);
 
-        $this->expectException(ExtractingDataFailedException::class);
+        $this->expectException(ConvertingPdfFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
 
         new PopplerClient()->convert($request)->current();
@@ -102,7 +102,7 @@ final class PopplerClientTest extends TestCase
     {
         $request = new ConvertPdfRequest(__DIR__.'/../../.data/pages-1.pdf')->fromPage(2)->toPage(2);
 
-        $this->expectException(ExtractingDataFailedException::class);
+        $this->expectException(ConvertingPdfFailedException::class);
         $this->expectExceptionMessageMatches('/Wrong page range given/');
 
         new PopplerClient()->convert($request)->current();

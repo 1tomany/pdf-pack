@@ -4,7 +4,7 @@ namespace OneToMany\PdfPack\Client\Exception;
 
 use function sprintf;
 
-final class ReadingFileFailedException extends BinaryProcessFailedException
+final class ReadingPdfFailedException extends BinaryProcessFailedException
 {
     public function __construct(string $path, ?string $error = null, ?\Throwable $previous = null)
     {

@@ -14,7 +14,7 @@ use function random_int;
 
 #[Group('UnitTests')]
 #[Group('ResponseTests')]
-final class ExtractResponseTest extends TestCase
+final class ConvertPdfResponseTest extends TestCase
 {
     public function testToString(): void
     {
