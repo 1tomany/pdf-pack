@@ -8,23 +8,28 @@ use function base64_encode;
 use function hash;
 use function max;
 use function sprintf;
+use function strlen;
 
-final readonly class ConvertPdfResponse implements \Stringable
+final class ConvertPdfResponse implements \Stringable
 {
     /**
-     * @var non-empty-lowercase-string
+     * @var ?non-empty-lowercase-string
      */
-    private string $hash;
+    private ?string $hash = null;
+
+    /**
+     * @var ?non-negative-int
+     */
+    private ?int $size = null;
 
     /**
      * @param positive-int $page
      */
     public function __construct(
-        private OutputType $type,
-        private string $data,
-        private int $page = 1,
+        private readonly OutputType $type,
+        private readonly string $data,
+        private readonly int $page = 1,
     ) {
-        $this->hash = hash('sha256', $data);
     }
 
     public function __toString(): string
@@ -47,7 +52,23 @@ final readonly class ConvertPdfResponse implements \Stringable
      */
     public function getHash(): string
     {
+        if (null === $this->hash) {
+            $this->hash = hash('sha256', $this->getData());
+        }
+
         return $this->hash;
+    }
+
+    /**
+     * @return non-negative-int
+     */
+    public function getSize(): int
+    {
+        if (null === $this->size) {
+            $this->size = strlen($this->getData());
+        }
+
+        return $this->size;
     }
 
     /**
