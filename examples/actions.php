@@ -47,7 +47,7 @@ try {
         printf("Page %d sha-256 hash: %s\n", $page->getPage(), $page->getHash());
     }
 
-    print("\n");
+    echo "\n";
 
     // Extract text from pages 3 and 4
     $convertToTextRequest = new ConvertToTextRequest($path)->fromPage(3)->toPage(4);

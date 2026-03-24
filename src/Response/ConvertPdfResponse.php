@@ -8,6 +8,7 @@ use function base64_encode;
 use function hash;
 use function max;
 use function sprintf;
+use function strlen;
 
 final readonly class ConvertPdfResponse implements \Stringable
 {
@@ -55,7 +56,7 @@ final readonly class ConvertPdfResponse implements \Stringable
      */
     public function getSize(): int
     {
-        return \strlen($this->getData());
+        return strlen($this->getData());
     }
 
     /**
