@@ -7,12 +7,13 @@ use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
+use function sprintf;
+
 final readonly class ClientFactory
 {
     public function __construct(
         private ContainerInterface $container = new ClientContainer(),
-    )
-    {
+    ) {
     }
 
     /**
@@ -26,7 +27,7 @@ final readonly class ClientFactory
         }
 
         if (!isset($client) || !$client instanceof ClientInterface) {
-            throw new InvalidArgumentException(\sprintf('The vendor "%s" does not have a registered client.', $vendor), previous: $e ?? null);
+            throw new InvalidArgumentException(sprintf('The vendor "%s" does not have a registered client.', $vendor), previous: $e ?? null);
         }
 
         return $client;
