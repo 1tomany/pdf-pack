@@ -114,8 +114,7 @@ final class PopplerClientTest extends TestCase
         int $firstPage,
         ?int $lastPage,
         int $responseCount,
-    ): void
-    {
+    ): void {
         $request = new ConvertPdfRequest($path, $firstPage, $lastPage);
 
         /** @var list<ConvertPdfResponse> $responses */

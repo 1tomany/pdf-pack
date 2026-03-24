@@ -4,8 +4,8 @@ namespace OneToMany\PdfPack\Client\Poppler;
 
 use OneToMany\PdfPack\Client\Exception\ExtractingDataFailedException;
 use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
-use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Client\Service\BinaryFinder;
+use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Request\ConvertPdfRequest;
 use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ConvertPdfResponse;
