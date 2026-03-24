@@ -120,7 +120,6 @@ final class PopplerClientTest extends TestCase
         $responses = iterator_to_array(new PopplerClient()->convert($request));
 
         $this->assertCount($responseCount, $responses);
-        $this->assertContainsOnlyInstancesOf(ConvertPdfResponse::class, $responses);
     }
 
     /**
