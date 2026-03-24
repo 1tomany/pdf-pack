@@ -11,17 +11,21 @@ use OneToMany\PdfPack\Request\ReadPdfRequest;
 /** @var non-empty-string $path */
 $path = realpath(__DIR__.'/.data/s3.pdf');
 
-$client = new PopplerClient();
+$popplerClient = new PopplerClient();
 
 try {
-    $response = $client->read(new ReadPdfRequest($path));
+    // Read PDF metadata
+    $response = $popplerClient->read(...[
+        'request' => new ReadPdfRequest($path),
+    ]);
+
     printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 
     // Convert all pages to 150 DPI JPEGs
     $convertToImageRequest = new ConvertToImageRequest($path)->fromPage(1)->atResolution(150)->asJpegOutput();
 
-    foreach ($client->convert($convertToImageRequest) as $page) {
-        printf("Page %d sha-256 hash: %s\n", $page->getPage(), $page->getHash());
+    foreach ($popplerClient->convert($convertToImageRequest) as $page) {
+        printf("Page %d hash: %s\n", $page->getPage(), $page->getHash());
     }
 
     echo "\n";
@@ -29,8 +33,8 @@ try {
     // Extract text from pages 3 and 4
     $convertToTextRequest = new ConvertToTextRequest($path)->fromPage(3)->toPage(4);
 
-    foreach ($client->convert($convertToTextRequest) as $page) {
-        printf("Page %d length: %d\n", $page->getPage(), $page->getSize());
+    foreach ($popplerClient->convert($convertToTextRequest) as $page) {
+        printf("Page %d size: %d bytes\n", $page->getPage(), $page->getSize());
     }
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());
