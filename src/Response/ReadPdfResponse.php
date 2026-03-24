@@ -2,6 +2,7 @@
 
 namespace OneToMany\PdfPack\Response;
 
+use function basename;
 use function max;
 
 final readonly class ReadPdfResponse
@@ -25,7 +26,7 @@ final readonly class ReadPdfResponse
 
     public function getName(): string
     {
-        return \basename($this->getPath());
+        return basename($this->getPath());
     }
 
     /**
