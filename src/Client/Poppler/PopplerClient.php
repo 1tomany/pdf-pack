@@ -28,6 +28,14 @@ final readonly class PopplerClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
+    public static function getVendor(): string
+    {
+        return 'poppler';
+    }
+
+    /**
+     * @see OneToMany\PdfPack\Contract\Client\ClientInterface
+     */
     public function read(ReadPdfRequest $request): ReadPdfResponse
     {
         $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getPath()]);

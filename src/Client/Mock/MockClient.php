@@ -19,6 +19,14 @@ readonly class MockClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
+    public static function getVendor(): string
+    {
+        return 'mock';
+    }
+
+    /**
+     * @see OneToMany\PdfPack\Contract\Client\ClientInterface
+     */
     public function read(ReadPdfRequest $request): ReadPdfResponse
     {
         return new ReadPdfResponse(random_int(1, 100));

@@ -3,26 +3,30 @@
 namespace OneToMany\PdfPack\Factory;
 
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
-use OneToMany\PdfPack\Factory\Exception\CreatingClientFailedServiceNotFoundException;
+use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 final readonly class ClientFactory
 {
-    public function __construct(private ContainerInterface $container)
+    public function __construct(
+        private ContainerInterface $container = new ClientContainer(),
+    )
     {
     }
 
-    public function create(string $service): ClientInterface
+    /**
+     * @throws InvalidArgumentException when a vendor does not have a registered client
+     */
+    public function create(string $vendor): ClientInterface
     {
         try {
-            $client = $this->container->get($service);
-
-            if (!$client instanceof ClientInterface) {
-                throw new CreatingClientFailedServiceNotFoundException($service);
-            }
+            $client = $this->container->get($vendor);
         } catch (ContainerExceptionInterface $e) {
-            throw new CreatingClientFailedServiceNotFoundException($service, $e);
+        }
+
+        if (!isset($client) || !$client instanceof ClientInterface) {
+            throw new InvalidArgumentException(\sprintf('The vendor "%s" does not have a registered client.', $vendor), previous: $e ?? null);
         }
 
         return $client;
