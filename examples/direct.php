@@ -30,7 +30,7 @@ try {
     $convertToTextRequest = new ConvertToTextRequest($path)->fromPage(3)->toPage(4);
 
     foreach ($client->convert($convertToTextRequest) as $page) {
-        printf("Page %d length: %d\n", $page->getPage(), strlen($page->getData()));
+        printf("Page %d length: %d\n", $page->getPage(), $page->getSize());
     }
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());

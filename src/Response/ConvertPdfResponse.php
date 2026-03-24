@@ -51,6 +51,14 @@ final readonly class ConvertPdfResponse implements \Stringable
     }
 
     /**
+     * @return non-negative-int
+     */
+    public function getSize(): int
+    {
+        return \strlen($this->getData());
+    }
+
+    /**
      * @return positive-int
      */
     public function getPage(): int

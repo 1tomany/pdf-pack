@@ -47,13 +47,13 @@ try {
         printf("Page %d sha-256 hash: %s\n", $page->getPage(), $page->getHash());
     }
 
-    echo "\n";
+    print("\n");
 
     // Extract text from pages 3 and 4
     $convertToTextRequest = new ConvertToTextRequest($path)->fromPage(3)->toPage(4);
 
     foreach ($convertPdfAction->act($convertToTextRequest) as $page) {
-        printf("Page %d length: %d\n", $page->getPage(), strlen($page->getData()));
+        printf("Page %d length: %d\n", $page->getPage(), $page->getSize());
     }
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());
