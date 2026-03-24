@@ -3,13 +3,13 @@
 namespace OneToMany\PdfPack\Contract\Client;
 
 use OneToMany\PdfPack\Request\ExtractRequest;
-use OneToMany\PdfPack\Request\ReadRequest;
+use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ExtractResponse;
 use OneToMany\PdfPack\Response\ReadResponse;
 
 interface ClientInterface
 {
-    public function read(ReadRequest $request): ReadResponse;
+    public function read(ReadPdfRequest $request): ReadResponse;
 
     /**
      * @return \Generator<int, ExtractResponse>

@@ -7,7 +7,7 @@ use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Helper\BinaryFinder;
 use OneToMany\PdfPack\Request\ExtractRequest;
-use OneToMany\PdfPack\Request\ReadRequest;
+use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ExtractResponse;
 use OneToMany\PdfPack\Response\ReadResponse;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
@@ -28,7 +28,7 @@ final readonly class PopplerClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function read(ReadRequest $request): ReadResponse
+    public function read(ReadPdfRequest $request): ReadResponse
     {
         $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getPath()]);
 
@@ -58,7 +58,7 @@ final readonly class PopplerClient implements ClientInterface
     {
         // Determine the number of pages to extract
         if (!$lastPage = $request->getLastPage()) {
-            $readRequest = new ReadRequest(...[
+            $readRequest = new ReadPdfRequest(...[
                 'path' => $request->getPath(),
             ]);
 

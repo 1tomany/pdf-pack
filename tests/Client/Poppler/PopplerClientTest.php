@@ -8,7 +8,7 @@ use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use OneToMany\PdfPack\Request\ExtractRequest;
-use OneToMany\PdfPack\Request\ReadRequest;
+use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ExtractResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -32,7 +32,7 @@ final class PopplerClientTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "invalid_pdfinfo_binary" could not be found.');
 
-        new PopplerClient(pdfInfoBinary: 'invalid_pdfinfo_binary')->read(new ReadRequest(__FILE__));
+        new PopplerClient(pdfInfoBinary: 'invalid_pdfinfo_binary')->read(new ReadPdfRequest(__FILE__));
     }
 
     public function testReadingFileRequiresValidPdfFile(): void
@@ -40,14 +40,14 @@ final class PopplerClientTest extends TestCase
         $this->expectException(ReadingFileFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
 
-        new PopplerClient()->read(new ReadRequest(__FILE__));
+        new PopplerClient()->read(new ReadPdfRequest(__FILE__));
     }
 
     #[DataProvider('providerPathAndPages')]
     public function testReadingFile(string $path, int $pages): void
     {
         $response = new PopplerClient()->read(...[
-            'request' => new ReadRequest($path),
+            'request' => new ReadPdfRequest($path),
         ]);
 
         $this->assertEquals($pages, $response->getPages());

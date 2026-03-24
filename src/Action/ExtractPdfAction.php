@@ -6,9 +6,11 @@ use OneToMany\PdfPack\Contract\Action\ExtractActionInterface;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Request\ExtractRequest;
 
-final readonly class ExtractAction implements ExtractActionInterface
+final readonly class ExtractPdfAction implements ExtractActionInterface
 {
-    public function __construct(private ClientInterface $client)
+    public function __construct(
+        private ClientInterface $client,
+    )
     {
     }
 

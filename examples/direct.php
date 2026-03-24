@@ -5,7 +5,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
 use OneToMany\PdfPack\Request\ExtractRequest;
-use OneToMany\PdfPack\Request\ReadRequest;
+use OneToMany\PdfPack\Request\ReadPdfRequest;
 
 /** @var non-empty-string $path */
 $path = realpath(__DIR__.'/.data/s3.pdf');
@@ -14,7 +14,7 @@ assert(is_file($path) && is_readable($path));
 $client = new PopplerClient();
 
 try {
-    $response = $client->read(new ReadRequest($path));
+    $response = $client->read(new ReadPdfRequest($path));
     printf("The PDF '%s' has %d %s.\n\n", basename($path), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 
     // Rasterize all pages as 150 DPI JPEGs
