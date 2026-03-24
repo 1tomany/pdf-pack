@@ -116,7 +116,7 @@ final class PopplerClientTest extends TestCase
     ): void {
         $request = new ConvertPdfRequest($path, $firstPage, $lastPage);
 
-        /** @var list<ConvertPdfResponse> $responses */
+        /** @var non-empty-list<ConvertPdfResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->convert($request));
 
         $this->assertCount($responseCount, $responses);
