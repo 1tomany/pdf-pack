@@ -7,25 +7,8 @@ use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function sprintf;
 
-class RasterizePdfRequest extends BaseRequest
+class ExtractPdfRequest extends BaseRequest
 {
-    /**
-     * @var positive-int
-     */
-    private int $firstPage = 1;
-
-    /**
-     * @var ?positive-int
-     */
-    private ?int $lastPage = null;
-
-    private OutputType $outputType = OutputType::Jpeg;
-
-    /**
-     * @var int<self::MIN_RESOLUTION, self::MAX_RESOLUTION>
-     */
-    private int $resolution = self::DEFAULT_RESOLUTION;
-
     /**
      * The default DPI for rasterized pages.
      *
@@ -47,12 +30,18 @@ class RasterizePdfRequest extends BaseRequest
      */
     public const int MAX_RESOLUTION = 300;
 
+    /**
+     * @param null|string $path
+     * @param positive-int $firstPage
+     * @param ?positive-int $lastPage
+     * @param int<self::MIN_RESOLUTION, self::MAX_RESOLUTION> $resolution
+     */
     public function __construct(
         ?string $path,
-        int $firstPage = 1,
-        ?int $lastPage = null,
-        OutputType $outputType = OutputType::Jpeg,
-        int $resolution = self::DEFAULT_RESOLUTION,
+        private int $firstPage = 1,
+        private ?int $lastPage = null,
+        private OutputType $outputType = OutputType::Jpeg,
+        private int $resolution = self::DEFAULT_RESOLUTION,
     ) {
         parent::__construct($path);
 

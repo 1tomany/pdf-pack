@@ -7,7 +7,7 @@ use OneToMany\PdfPack\Client\Exception\ReadingFileFailedException;
 use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Request\RasterizePdfRequest;
+use OneToMany\PdfPack\Request\ExtractPdfRequest;
 use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ExtractResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -70,7 +70,7 @@ final class PopplerClientTest extends TestCase
 
     public function testExtractingImageDataRequiresValidPdfToPpmBinary(): void
     {
-        $request = new RasterizePdfRequest(__DIR__.'/../../.data/pages-1.pdf')->asJpegOutput();
+        $request = new ExtractPdfRequest(__DIR__.'/../../.data/pages-1.pdf')->asJpegOutput();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "invalid_pdftoppm_binary" could not be found.');
@@ -80,7 +80,7 @@ final class PopplerClientTest extends TestCase
 
     public function testExtractingTextDataRequiresValidPdfToTextBinary(): void
     {
-        $request = new RasterizePdfRequest(__DIR__.'/../../.data/pages-1.pdf')->asTextOutput();
+        $request = new ExtractPdfRequest(__DIR__.'/../../.data/pages-1.pdf')->asTextOutput();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "invalid_pdftotext_binary" could not be found.');
@@ -90,7 +90,7 @@ final class PopplerClientTest extends TestCase
 
     public function testExtractingDataRequiresValidPdfFile(): void
     {
-        $request = new RasterizePdfRequest(__FILE__)->toPage(1);
+        $request = new ExtractPdfRequest(__FILE__)->toPage(1);
 
         $this->expectException(ExtractingDataFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
@@ -100,7 +100,7 @@ final class PopplerClientTest extends TestCase
 
     public function testExtractingDataRequiresValidPage(): void
     {
-        $request = new RasterizePdfRequest(__DIR__.'/../../.data/pages-1.pdf')->fromPage(2)->toPage(2);
+        $request = new ExtractPdfRequest(__DIR__.'/../../.data/pages-1.pdf')->fromPage(2)->toPage(2);
 
         $this->expectException(ExtractingDataFailedException::class);
         $this->expectExceptionMessageMatches('/Wrong page range given/');
@@ -111,7 +111,7 @@ final class PopplerClientTest extends TestCase
     #[DataProvider('providerPathFirstPageLastPageAndResponseCount')]
     public function testExtractingImageDataRange(string $path, int $firstPage, ?int $lastPage, int $responseCount): void
     {
-        $request = new RasterizePdfRequest($path, $firstPage, $lastPage);
+        $request = new ExtractPdfRequest($path, $firstPage, $lastPage);
 
         /** @var list<ExtractResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->extract($request));
@@ -164,7 +164,7 @@ final class PopplerClientTest extends TestCase
     #[DataProvider('providerPathPageAndText')]
     public function testExtractingTextData(string $path, int $page, string $text): void
     {
-        $request = new RasterizePdfRequest($path, $page, $page)->asTextOutput();
+        $request = new ExtractPdfRequest($path, $page, $page)->asTextOutput();
 
         /** @var list<ExtractResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->extract($request));
@@ -193,7 +193,7 @@ final class PopplerClientTest extends TestCase
     #[DataProvider('providerPathFirstPageLastPageOutputTypeResolutionAndMd5Hash')]
     public function testExtractingImageData(string $path, int $firstPage, OutputType $outputType, int $resolution, string $md5Hash): void
     {
-        $request = new RasterizePdfRequest($path, $firstPage, $firstPage, $outputType, $resolution);
+        $request = new ExtractPdfRequest($path, $firstPage, $firstPage, $outputType, $resolution);
 
         /** @var list<ExtractResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->extract($request));
