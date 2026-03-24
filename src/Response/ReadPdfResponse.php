@@ -11,8 +11,7 @@ final readonly class ReadPdfResponse
      */
     public function __construct(
         private int $pages,
-    )
-    {
+    ) {
     }
 
     /**
@@ -20,6 +19,6 @@ final readonly class ReadPdfResponse
      */
     public function getPages(): int
     {
-        return \max(1, $this->pages);
+        return max(1, $this->pages);
     }
 }
