@@ -6,9 +6,6 @@ use function max;
 
 final readonly class ReadPdfResponse
 {
-    /**
-     * @param positive-int $pages
-     */
     public function __construct(
         private int $pages,
     ) {
