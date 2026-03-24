@@ -8,8 +8,8 @@ use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Helper\BinaryFinder;
 use OneToMany\PdfPack\Request\ConvertPdfRequest;
 use OneToMany\PdfPack\Request\ReadPdfRequest;
-use OneToMany\PdfPack\Response\ExtractResponse;
-use OneToMany\PdfPack\Response\ReadResponse;
+use OneToMany\PdfPack\Response\ConvertPdfResponse;
+use OneToMany\PdfPack\Response\ReadPdfResponse;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
 use Symfony\Component\Process\Process;
 
@@ -28,7 +28,7 @@ final readonly class PopplerClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function read(ReadPdfRequest $request): ReadResponse
+    public function read(ReadPdfRequest $request): ReadPdfResponse
     {
         $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getPath()]);
 
@@ -48,7 +48,7 @@ final readonly class PopplerClient implements ClientInterface
             }
         }
 
-        return new ReadResponse($pages ?? 1);
+        return new ReadPdfResponse($pages ?? 1);
     }
 
     /**
@@ -77,7 +77,7 @@ final readonly class PopplerClient implements ClientInterface
                     throw new ExtractingDataFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ExtractResponse($request->getOutputType(), $output, $page);
+                yield new ConvertPdfResponse($request->getOutputType(), $output, $page);
             }
         } else {
             $command = BinaryFinder::find($this->pdfToPpmBinary);
@@ -91,7 +91,7 @@ final readonly class PopplerClient implements ClientInterface
                     throw new ExtractingDataFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ExtractResponse($request->getOutputType(), $output, $page);
+                yield new ConvertPdfResponse($request->getOutputType(), $output, $page);
             }
         }
     }

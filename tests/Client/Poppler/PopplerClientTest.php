@@ -9,7 +9,7 @@ use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use OneToMany\PdfPack\Request\ConvertPdfRequest;
 use OneToMany\PdfPack\Request\ReadPdfRequest;
-use OneToMany\PdfPack\Response\ExtractResponse;
+use OneToMany\PdfPack\Response\ConvertPdfResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Large;
@@ -113,11 +113,11 @@ final class PopplerClientTest extends TestCase
     {
         $request = new ConvertPdfRequest($path, $firstPage, $lastPage);
 
-        /** @var list<ExtractResponse> $responses */
+        /** @var list<ConvertPdfResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->extract($request));
 
         $this->assertCount($responseCount, $responses);
-        $this->assertContainsOnlyInstancesOf(ExtractResponse::class, $responses);
+        $this->assertContainsOnlyInstancesOf(ConvertPdfResponse::class, $responses);
     }
 
     /**
@@ -166,7 +166,7 @@ final class PopplerClientTest extends TestCase
     {
         $request = new ConvertPdfRequest($path, $page, $page)->asTextOutput();
 
-        /** @var list<ExtractResponse> $responses */
+        /** @var list<ConvertPdfResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->extract($request));
 
         $this->assertCount(1, $responses);
@@ -195,7 +195,7 @@ final class PopplerClientTest extends TestCase
     {
         $request = new ConvertPdfRequest($path, $firstPage, $firstPage, $outputType, $resolution);
 
-        /** @var list<ExtractResponse> $responses */
+        /** @var list<ConvertPdfResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->extract($request));
 
         $this->assertCount(1, $responses);

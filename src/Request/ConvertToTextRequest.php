@@ -10,8 +10,7 @@ final class ConvertToTextRequest extends ConvertPdfRequest
         ?string $path,
         int $firstPage = 1,
         ?int $lastPage = null,
-        int $resolution = self::DEFAULT_RESOLUTION,
     ) {
-        parent::__construct($path, $firstPage, $lastPage, OutputType::Text, $resolution);
+        parent::__construct($path, $firstPage, $lastPage, OutputType::Text);
     }
 }

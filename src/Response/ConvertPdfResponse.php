@@ -8,7 +8,7 @@ use function base64_encode;
 use function max;
 use function sprintf;
 
-final readonly class ExtractResponse implements \Stringable
+final readonly class ConvertPdfResponse implements \Stringable
 {
     /**
      * @param positive-int $page

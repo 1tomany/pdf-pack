@@ -5,7 +5,7 @@ namespace OneToMany\PdfPack\Action;
 use OneToMany\PdfPack\Contract\Action\ReadActionInterface;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Request\ReadPdfRequest;
-use OneToMany\PdfPack\Response\ReadResponse;
+use OneToMany\PdfPack\Response\ReadPdfResponse;
 
 final readonly class ReadPdfAction implements ReadActionInterface
 {
@@ -17,7 +17,7 @@ final readonly class ReadPdfAction implements ReadActionInterface
     /**
      * @see OneToMany\PdfPack\Contract\Action\ReadActionInterface
      */
-    public function act(ReadPdfRequest $request): ReadResponse
+    public function act(ReadPdfRequest $request): ReadPdfResponse
     {
         return $this->client->read($request);
     }

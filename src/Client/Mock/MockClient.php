@@ -6,7 +6,7 @@ use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Exception\RuntimeException;
 use OneToMany\PdfPack\Request\ConvertPdfRequest;
 use OneToMany\PdfPack\Request\ReadPdfRequest;
-use OneToMany\PdfPack\Response\ReadResponse;
+use OneToMany\PdfPack\Response\ReadPdfResponse;
 
 use function random_int;
 
@@ -19,9 +19,9 @@ readonly class MockClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function read(ReadPdfRequest $request): ReadResponse
+    public function read(ReadPdfRequest $request): ReadPdfResponse
     {
-        return new ReadResponse(random_int(1, 100));
+        return new ReadPdfResponse(random_int(1, 100));
     }
 
     /**
