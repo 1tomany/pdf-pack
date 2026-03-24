@@ -51,4 +51,19 @@ final class OutputTypeTest extends TestCase
 
         return $provider;
     }
+
+    public function testIsJpeg(): void
+    {
+        $this->assertTrue(OutputType::Jpeg->isJpeg()); // @phpstan-ignore-line
+    }
+
+    public function testIsPng(): void
+    {
+        $this->assertTrue(OutputType::Png->isPng()); // @phpstan-ignore-line
+    }
+
+    public function testIsText(): void
+    {
+        $this->assertTrue(OutputType::Text->isText()); // @phpstan-ignore-line
+    }
 }
