@@ -29,7 +29,7 @@ readonly class MockClient implements ClientInterface
      */
     public function read(ReadPdfRequest $request): ReadPdfResponse
     {
-        return new ReadPdfResponse(random_int(1, 100));
+        return new ReadPdfResponse($request->getPath(), random_int(1, 100));
     }
 
     /**

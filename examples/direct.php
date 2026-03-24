@@ -16,10 +16,10 @@ $client = new PopplerClient();
 
 try {
     $response = $client->read(new ReadPdfRequest($path));
-    printf("The PDF '%s' has %d %s.\n\n", basename($path), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
+    printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 
     // Convert all pages to 150 DPI JPEGs
-    $convertToImageRequest = new ConvertToImageRequest($path)->fromPage(1)->atResolution(150);
+    $convertToImageRequest = new ConvertToImageRequest($path)->fromPage(1)->atResolution(150)->asJpegOutput();
 
     foreach ($client->convert($convertToImageRequest) as $page) {
         printf("Page %d sha-256 hash: %s\n", $page->getPage(), $page->getHash());

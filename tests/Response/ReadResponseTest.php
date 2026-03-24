@@ -14,6 +14,6 @@ final class ReadResponseTest extends TestCase
 {
     public function testConstructorClampsNonPositiveNonZeroPagesValuesToOne(): void
     {
-        $this->assertEquals(1, new ReadPdfResponse(-1 * random_int(1, 100))->getPages());
+        $this->assertEquals(1, new ReadPdfResponse('/path/to/file.pdf', -1 * random_int(1, 100))->getPages());
     }
 }

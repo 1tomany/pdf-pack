@@ -56,7 +56,7 @@ final readonly class PopplerClient implements ClientInterface
             }
         }
 
-        return new ReadPdfResponse($pages ?? 1);
+        return new ReadPdfResponse($request->getPath(), $pages ?? 1);
     }
 
     /**
