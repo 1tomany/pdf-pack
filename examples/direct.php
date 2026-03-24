@@ -10,7 +10,6 @@ use OneToMany\PdfPack\Request\ReadPdfRequest;
 
 /** @var non-empty-string $path */
 $path = realpath(__DIR__.'/.data/s3.pdf');
-assert(is_file($path) && is_readable($path));
 
 $client = new PopplerClient();
 
