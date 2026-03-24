@@ -4,7 +4,7 @@ namespace OneToMany\PdfPack\Client\Mock;
 
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Exception\RuntimeException;
-use OneToMany\PdfPack\Request\ExtractRequest;
+use OneToMany\PdfPack\Request\RasterizePdfRequest;
 use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ReadResponse;
 
@@ -27,7 +27,7 @@ readonly class MockClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function extract(ExtractRequest $request): \Generator
+    public function extract(RasterizePdfRequest $request): \Generator
     {
         throw new RuntimeException('Not implemented!');
     }

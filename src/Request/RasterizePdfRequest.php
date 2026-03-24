@@ -7,7 +7,7 @@ use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function sprintf;
 
-class ExtractRequest extends BaseRequest
+class RasterizePdfRequest extends BaseRequest
 {
     /**
      * @var positive-int
