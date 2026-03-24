@@ -4,8 +4,9 @@ namespace OneToMany\PdfPack\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Exception\RuntimeException;
 
+use function max;
+use function min;
 use function sprintf;
 
 class ConvertPdfRequest extends BaseRequest
@@ -69,7 +70,7 @@ class ConvertPdfRequest extends BaseRequest
      */
     public function getFirstPage(): int
     {
-        return \max(1, $this->firstPage);
+        return max(1, $this->firstPage);
     }
 
     /**
@@ -97,7 +98,7 @@ class ConvertPdfRequest extends BaseRequest
      */
     public function getLastPage(): ?int
     {
-        return null !== $this->lastPage ? \max(1, $this->lastPage) : null;
+        return null !== $this->lastPage ? max(1, $this->lastPage) : null;
     }
 
     public function asJpegOutput(): static
@@ -151,6 +152,6 @@ class ConvertPdfRequest extends BaseRequest
      */
     public function getResolution(): int
     {
-        return \min(\max(self::MIN_RESOLUTION, $this->resolution), self::MAX_RESOLUTION);
+        return min(max(self::MIN_RESOLUTION, $this->resolution), self::MAX_RESOLUTION);
     }
 }
