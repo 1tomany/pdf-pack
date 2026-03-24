@@ -39,7 +39,7 @@ final class ConvertPdfRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The first page must be a positive integer.');
 
-        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', firstPage: 0); // @phpstan-ignore argument.type
+        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', firstPage: 0);
     }
 
     public function testConstructorRequiresPositiveNonZeroLastPage(): void
@@ -47,7 +47,7 @@ final class ConvertPdfRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The last page must be a positive integer.');
 
-        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', lastPage: 0); // @phpstan-ignore argument.type
+        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', lastPage: 0);
     }
 
     public function testConstructorRequiresResolutionToBeLessThanOrEqualToMinimumResolution(): void
@@ -55,7 +55,7 @@ final class ConvertPdfRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The resolution must be 48 DPI or larger.');
 
-        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', resolution: random_int(0, 32)); // @phpstan-ignore argument.type
+        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', resolution: random_int(0, 32));
     }
 
     public function testConstructorRequiresResolutionToBeLessThanOrEqualToMaximumResolution(): void
@@ -63,7 +63,7 @@ final class ConvertPdfRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The resolution must be 300 DPI or smaller.');
 
-        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', resolution: random_int(301, 1000)); // @phpstan-ignore argument.type
+        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', resolution: random_int(301, 1000));
     }
 
     #[DataProvider('providerConstructorArguments')]
@@ -74,7 +74,7 @@ final class ConvertPdfRequestTest extends TestCase
         OutputType $outputType,
         int $resolution,
     ): void {
-        $request = new ConvertPdfRequest($path, $firstPage, $lastPage, $outputType, $resolution); // @phpstan-ignore-line
+        $request = new ConvertPdfRequest($path, $firstPage, $lastPage, $outputType, $resolution);
 
         $this->assertEquals($path, $request->getPath());
         $this->assertEquals($firstPage, $request->getFirstPage());

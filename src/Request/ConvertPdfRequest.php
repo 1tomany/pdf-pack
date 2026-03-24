@@ -4,6 +4,7 @@ namespace OneToMany\PdfPack\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
+use OneToMany\PdfPack\Exception\RuntimeException;
 
 use function sprintf;
 
@@ -31,8 +32,6 @@ class ConvertPdfRequest extends BaseRequest
     public const int MAX_RESOLUTION = 300;
 
     /**
-     * @param positive-int $firstPage
-     * @param ?positive-int $lastPage
      * @param int<self::MIN_RESOLUTION, self::MAX_RESOLUTION> $resolution
      */
     public function __construct(
@@ -73,7 +72,7 @@ class ConvertPdfRequest extends BaseRequest
      */
     public function getFirstPage(): int
     {
-        return $this->firstPage;
+        return \max(1, $this->firstPage);
     }
 
     /**
@@ -101,7 +100,7 @@ class ConvertPdfRequest extends BaseRequest
      */
     public function getLastPage(): ?int
     {
-        return $this->lastPage;
+        return null !== $this->lastPage ? \max(1, $this->lastPage) : null;
     }
 
     public function asJpegOutput(): static
