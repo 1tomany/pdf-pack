@@ -68,53 +68,58 @@ final class PopplerClientTest extends TestCase
         return $provider;
     }
 
-    public function testExtractingImageDataRequiresValidPdfToPpmBinary(): void
+    public function testConvertingPdfToImageRequiresValidPdfToPpmBinary(): void
     {
         $request = new ConvertPdfRequest(__DIR__.'/../../.data/pages-1.pdf')->asJpegOutput();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "invalid_pdftoppm_binary" could not be found.');
 
-        new PopplerClient(pdfToPpmBinary: 'invalid_pdftoppm_binary')->extract($request)->current();
+        new PopplerClient(pdfToPpmBinary: 'invalid_pdftoppm_binary')->convert($request)->current();
     }
 
-    public function testExtractingTextDataRequiresValidPdfToTextBinary(): void
+    public function testConvertingPdfToTextDataRequiresValidPdfToTextBinary(): void
     {
         $request = new ConvertPdfRequest(__DIR__.'/../../.data/pages-1.pdf')->asTextOutput();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The binary "invalid_pdftotext_binary" could not be found.');
 
-        new PopplerClient(pdfToTextBinary: 'invalid_pdftotext_binary')->extract($request)->current();
+        new PopplerClient(pdfToTextBinary: 'invalid_pdftotext_binary')->convert($request)->current();
     }
 
-    public function testExtractingDataRequiresValidPdfFile(): void
+    public function testConvertingPdfRequiresValidPdfFile(): void
     {
         $request = new ConvertPdfRequest(__FILE__)->toPage(1);
 
         $this->expectException(ExtractingDataFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
 
-        new PopplerClient()->extract($request)->current();
+        new PopplerClient()->convert($request)->current();
     }
 
-    public function testExtractingDataRequiresValidPage(): void
+    public function testConvertingPdfRequiresValidPage(): void
     {
         $request = new ConvertPdfRequest(__DIR__.'/../../.data/pages-1.pdf')->fromPage(2)->toPage(2);
 
         $this->expectException(ExtractingDataFailedException::class);
         $this->expectExceptionMessageMatches('/Wrong page range given/');
 
-        new PopplerClient()->extract($request)->current();
+        new PopplerClient()->convert($request)->current();
     }
 
     #[DataProvider('providerPathFirstPageLastPageAndResponseCount')]
-    public function testExtractingImageDataRange(string $path, int $firstPage, ?int $lastPage, int $responseCount): void
+    public function testConvertingOneOrMorePdfPagesToEqualNumberOfImages(
+        string $path,
+        int $firstPage,
+        ?int $lastPage,
+        int $responseCount,
+    ): void
     {
         $request = new ConvertPdfRequest($path, $firstPage, $lastPage);
 
         /** @var list<ConvertPdfResponse> $responses */
-        $responses = iterator_to_array(new PopplerClient()->extract($request));
+        $responses = iterator_to_array(new PopplerClient()->convert($request));
 
         $this->assertCount($responseCount, $responses);
         $this->assertContainsOnlyInstancesOf(ConvertPdfResponse::class, $responses);
@@ -162,12 +167,12 @@ final class PopplerClientTest extends TestCase
     }
 
     #[DataProvider('providerPathPageAndText')]
-    public function testExtractingTextData(string $path, int $page, string $text): void
+    public function testConvertingPdfToText(string $path, int $page, string $text): void
     {
         $request = new ConvertPdfRequest($path, $page, $page)->asTextOutput();
 
         /** @var list<ConvertPdfResponse> $responses */
-        $responses = iterator_to_array(new PopplerClient()->extract($request));
+        $responses = iterator_to_array(new PopplerClient()->convert($request));
 
         $this->assertCount(1, $responses);
         $this->assertEquals($page, $responses[0]->getPage());
@@ -191,12 +196,12 @@ final class PopplerClientTest extends TestCase
     }
 
     #[DataProvider('providerPathFirstPageLastPageOutputTypeResolutionAndMd5Hash')]
-    public function testExtractingImageData(string $path, int $firstPage, OutputType $outputType, int $resolution, string $md5Hash): void
+    public function testConvertingPdfToImage(string $path, int $firstPage, OutputType $outputType, int $resolution, string $md5Hash): void
     {
         $request = new ConvertPdfRequest($path, $firstPage, $firstPage, $outputType, $resolution);
 
         /** @var list<ConvertPdfResponse> $responses */
-        $responses = iterator_to_array(new PopplerClient()->extract($request));
+        $responses = iterator_to_array(new PopplerClient()->convert($request));
 
         $this->assertCount(1, $responses);
         $this->assertNotEmpty($responses[0]->getData());

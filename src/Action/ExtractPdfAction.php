@@ -18,6 +18,6 @@ final readonly class ExtractPdfAction implements ExtractActionInterface
      */
     public function act(ConvertPdfRequest $request): \Generator
     {
-        return $this->client->extract($request);
+        return $this->client->convert($request);
     }
 }

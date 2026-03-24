@@ -35,7 +35,7 @@ readonly class MockClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function extract(ConvertPdfRequest $request): \Generator
+    public function convert(ConvertPdfRequest $request): \Generator
     {
         throw new RuntimeException('Not implemented!');
     }

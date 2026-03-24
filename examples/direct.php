@@ -21,7 +21,7 @@ try {
     // Convert all pages to 150 DPI JPEGs
     $convertToImageRequest = new ConvertToImageRequest($path)->fromPage(1)->atResolution(150);
 
-    foreach ($client->extract($convertToImageRequest) as $page) {
+    foreach ($client->convert($convertToImageRequest) as $page) {
         printf("Page %d MD5 hash: %s\n", $page->getPage(), md5($page->getData()));
     }
 
@@ -30,7 +30,7 @@ try {
     // Extract text from pages 3 and 4
     $convertToTextRequest = new ConvertToTextRequest($path)->fromPage(3)->toPage(4);
 
-    foreach ($client->extract($convertToTextRequest) as $page) {
+    foreach ($client->convert($convertToTextRequest) as $page) {
         printf("Page %d length: %d\n", $page->getPage(), strlen($page->getData()));
     }
 } catch (PdfPackExceptionInterface $e) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\PdfPack\Helper;
+namespace OneToMany\PdfPack\Client\Service;
 
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use Symfony\Component\Process\ExecutableFinder;

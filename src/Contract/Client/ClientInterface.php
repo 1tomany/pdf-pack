@@ -19,5 +19,5 @@ interface ClientInterface
     /**
      * @return \Generator<int, ConvertPdfResponse>
      */
-    public function extract(ConvertPdfRequest $request): \Generator;
+    public function convert(ConvertPdfRequest $request): \Generator;
 }
