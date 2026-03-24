@@ -31,9 +31,6 @@ class ConvertPdfRequest extends BaseRequest
      */
     public const int MAX_RESOLUTION = 300;
 
-    /**
-     * @param int<self::MIN_RESOLUTION, self::MAX_RESOLUTION> $resolution
-     */
     public function __construct(
         ?string $path,
         private int $firstPage = 1,
@@ -154,6 +151,6 @@ class ConvertPdfRequest extends BaseRequest
      */
     public function getResolution(): int
     {
-        return $this->resolution;
+        return \min(\max(self::MIN_RESOLUTION, $this->resolution), self::MAX_RESOLUTION);
     }
 }
