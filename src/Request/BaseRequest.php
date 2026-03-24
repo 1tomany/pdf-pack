@@ -4,6 +4,10 @@ namespace OneToMany\PdfPack\Request;
 
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
+use function is_file;
+use function is_readable;
+use function sprintf;
+
 class BaseRequest
 {
     /**
@@ -36,8 +40,8 @@ class BaseRequest
             throw new InvalidArgumentException('The path cannot be empty.');
         }
 
-        if (!\is_file($path) || !\is_readable($path)) {
-            throw new InvalidArgumentException(\sprintf('The file "%s" is not readable.', $path));
+        if (!is_file($path) || !is_readable($path)) {
+            throw new InvalidArgumentException(sprintf('The file "%s" is not readable.', $path));
         }
 
         return $path;

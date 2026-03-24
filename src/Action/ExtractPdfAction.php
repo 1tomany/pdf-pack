@@ -10,8 +10,7 @@ final readonly class ExtractPdfAction implements ExtractActionInterface
 {
     public function __construct(
         private ClientInterface $client,
-    )
-    {
+    ) {
     }
 
     /**

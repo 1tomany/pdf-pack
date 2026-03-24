@@ -11,8 +11,7 @@ final readonly class ReadPdfAction implements ReadActionInterface
 {
     public function __construct(
         private ClientInterface $client,
-    )
-    {
+    ) {
     }
 
     /**
