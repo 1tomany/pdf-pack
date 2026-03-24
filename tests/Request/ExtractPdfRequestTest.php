@@ -74,7 +74,7 @@ final class ExtractPdfRequestTest extends TestCase
         OutputType $outputType,
         int $resolution,
     ): void {
-        $request = new ExtractPdfRequest($path, $firstPage, $lastPage, $outputType, $resolution);
+        $request = new ExtractPdfRequest($path, $firstPage, $lastPage, $outputType, $resolution); // @phpstan-ignore argument.type
 
         $this->assertEquals($path, $request->getPath());
         $this->assertEquals($firstPage, $request->getFirstPage());

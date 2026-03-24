@@ -31,7 +31,6 @@ class ExtractPdfRequest extends BaseRequest
     public const int MAX_RESOLUTION = 300;
 
     /**
-     * @param null|string $path
      * @param positive-int $firstPage
      * @param ?positive-int $lastPage
      * @param int<self::MIN_RESOLUTION, self::MAX_RESOLUTION> $resolution
