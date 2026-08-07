@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
+use function base64_encode;
 use function hash;
 use function random_bytes;
 use function random_int;
@@ -65,13 +66,29 @@ final class PageRecordTest extends TestCase
      */
     public static function providerTypePageAndName(): array
     {
+        $page = random_int(1, 100);
+
         $provider = [
-            [OutputType::Jpeg, 1, 'page-1.jpeg'],
-            [OutputType::Jpeg, 10, 'page-10.jpeg'],
-            [OutputType::Png, 5, 'page-5.png'],
-            [OutputType::Text, 5, 'page-5.txt'],
+            [OutputType::Jpeg, $page, "page-{$page}.jpeg"],
+            [OutputType::Png, $page, "page-{$page}.png"],
+            [OutputType::Text, $page, "page-{$page}.txt"],
         ];
 
         return $provider;
+    }
+
+    public function testToDataUri(): void
+    {
+        $path = __DIR__.'/../../../config/files/label.jpeg';
+        $this->assertFileExists($path);
+
+        $data = file_get_contents($path);
+        $this->assertIsString($data);
+
+        $pageRecord = PageRecord::asJpeg($data);
+        $this->assertSame($data, $pageRecord->getData());
+
+        $dataUri = 'data:image/jpeg;base64,'.base64_encode($data);
+        $this->assertEquals($dataUri, $pageRecord->toDataUri());
     }
 }
