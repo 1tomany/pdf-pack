@@ -8,6 +8,7 @@ use OneToMany\PdfPack\Client\Service\BinaryFinder;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Response\ConvertResponse;
 use OneToMany\PdfPack\Response\ReadPdfResponse;
+use OneToMany\PdfPack\Transfer\Record\PdfRecord;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
@@ -38,7 +39,7 @@ final readonly class PopplerClient implements ClientInterface
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
     #[\Override]
-    public function read(ReadRequest $request): ReadPdfResponse
+    public function read(ReadRequest $request): PdfRecord
     {
         $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getPath()]);
 
@@ -49,16 +50,16 @@ final readonly class PopplerClient implements ClientInterface
         }
 
         foreach (explode("\n", $output) as $infoBit) {
-            if (str_contains($infoBit, ':')) {
-                $bits = explode(':', $infoBit);
+            if (true === str_contains($infoBit, ':')) {
+                $infoBits = explode(':', $infoBit);
 
-                if ('Pages' === $bits[0]) {
-                    $pages = (int) $bits[1];
+                if ('Pages' === $infoBits[0]) {
+                    $pageCount = (int) $infoBits[1];
                 }
             }
         }
 
-        return new ReadPdfResponse($request->getPath(), $pages ?? 1);
+        return new PdfRecord($request->getPath(), $pageCount ?? 1);
     }
 
     /**

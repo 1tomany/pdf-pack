@@ -5,7 +5,7 @@ namespace OneToMany\PdfPack\Contract\Action;
 use OneToMany\PdfPack\Response\ConvertResponse;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
 
-interface ConvertPdfActionInterface
+interface ConvertActionInterface
 {
     /**
      * @return \Generator<int, ConvertResponse>

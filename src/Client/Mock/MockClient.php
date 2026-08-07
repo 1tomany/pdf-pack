@@ -4,7 +4,7 @@ namespace OneToMany\PdfPack\Client\Mock;
 
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Exception\RuntimeException;
-use OneToMany\PdfPack\Response\ReadPdfResponse;
+use OneToMany\PdfPack\Transfer\Record\PdfRecord;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
@@ -27,9 +27,9 @@ readonly class MockClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function read(ReadRequest $request): ReadPdfResponse
+    public function read(ReadRequest $request): PdfRecord
     {
-        return new ReadPdfResponse($request->getPath(), random_int(1, 100));
+        return new PdfRecord($request->getPath(), random_int(1, 100));
     }
 
     /**
