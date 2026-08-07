@@ -38,9 +38,7 @@ try {
     ]);
 
     // Read PDF metadata
-    $response = $readPdfAction->act(...[
-        'request' => new ReadPdfRequest($path),
-    ]);
+    $response = $readPdfAction->act(new ReadPdfRequest($path));
 
     printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 
