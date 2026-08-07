@@ -8,8 +8,8 @@ use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use OneToMany\PdfPack\Response\ConvertPdfResponse;
-use OneToMany\PdfPack\Transfer\Request\ConvertPdfRequest;
-use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Large;
@@ -31,7 +31,7 @@ final class PopplerClientTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('The binary "invalid_pdfinfo_binary" could not be found.');
 
-        new PopplerClient(pdfInfoBinary: 'invalid_pdfinfo_binary')->read(new ReadPdfRequest(__FILE__));
+        new PopplerClient(pdfInfoBinary: 'invalid_pdfinfo_binary')->read(new ReadRequest(__FILE__));
     }
 
     public function testReadingFileRequiresValidPdfFile(): void
@@ -39,14 +39,14 @@ final class PopplerClientTest extends TestCase
         $this->expectException(ReadingPdfFailedException::class);
         $this->expectExceptionMessageIsOrContains('May not be a PDF file');
 
-        new PopplerClient()->read(new ReadPdfRequest(__FILE__));
+        new PopplerClient()->read(new ReadRequest(__FILE__));
     }
 
     #[DataProvider('providerPathAndPages')]
     public function testReadingFile(string $path, int $pages): void
     {
         $response = new PopplerClient()->read(...[
-            'request' => new ReadPdfRequest($path),
+            'request' => new ReadRequest($path),
         ]);
 
         $this->assertEquals($pages, $response->getPages());
@@ -69,7 +69,7 @@ final class PopplerClientTest extends TestCase
 
     public function testConvertingPdfToImageRequiresValidPdfToPpmBinary(): void
     {
-        $request = new ConvertPdfRequest(__DIR__.'/../../../config/files/pages-1.pdf')->asJpegOutput();
+        $request = new ConvertRequest(__DIR__.'/../../../config/files/pages-1.pdf')->asJpegOutput();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('The binary "invalid_pdftoppm_binary" could not be found.');
@@ -79,7 +79,7 @@ final class PopplerClientTest extends TestCase
 
     public function testConvertingPdfToTextDataRequiresValidPdfToTextBinary(): void
     {
-        $request = new ConvertPdfRequest(__DIR__.'/../../../config/files/pages-1.pdf')->asTextOutput();
+        $request = new ConvertRequest(__DIR__.'/../../../config/files/pages-1.pdf')->asTextOutput();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('The binary "invalid_pdftotext_binary" could not be found.');
@@ -89,7 +89,7 @@ final class PopplerClientTest extends TestCase
 
     public function testConvertingPdfRequiresValidPdfFile(): void
     {
-        $request = new ConvertPdfRequest(__FILE__)->toPage(1);
+        $request = new ConvertRequest(__FILE__)->toPage(1);
 
         $this->expectException(ConvertingPdfFailedException::class);
         $this->expectExceptionMessageMatches('/May not be a PDF file/');
@@ -99,7 +99,7 @@ final class PopplerClientTest extends TestCase
 
     public function testConvertingPdfRequiresValidPage(): void
     {
-        $request = new ConvertPdfRequest(__DIR__.'/../../../config/files/pages-1.pdf')->fromPage(2)->toPage(2);
+        $request = new ConvertRequest(__DIR__.'/../../../config/files/pages-1.pdf')->fromPage(2)->toPage(2);
 
         $this->expectException(ConvertingPdfFailedException::class);
         $this->expectExceptionMessageMatches('/Wrong page range given/');
@@ -114,7 +114,7 @@ final class PopplerClientTest extends TestCase
         ?int $lastPage,
         int $responseCount,
     ): void {
-        $request = new ConvertPdfRequest($path, $firstPage, $lastPage);
+        $request = new ConvertRequest($path, $firstPage, $lastPage);
 
         /** @var non-empty-list<ConvertPdfResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->convert($request));
@@ -169,7 +169,7 @@ final class PopplerClientTest extends TestCase
         int $page,
         string $text,
     ): void {
-        $request = new ConvertPdfRequest($path, $page, $page)->asTextOutput();
+        $request = new ConvertRequest($path, $page, $page)->asTextOutput();
 
         /** @var list<ConvertPdfResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->convert($request));
@@ -203,7 +203,7 @@ final class PopplerClientTest extends TestCase
         int $resolution,
         string $hash,
     ): void {
-        $request = new ConvertPdfRequest($path, $firstPage, $firstPage, $outputType, $resolution);
+        $request = new ConvertRequest($path, $firstPage, $firstPage, $outputType, $resolution);
 
         /** @var list<ConvertPdfResponse> $responses */
         $responses = iterator_to_array(new PopplerClient()->convert($request));

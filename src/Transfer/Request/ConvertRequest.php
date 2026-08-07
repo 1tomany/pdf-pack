@@ -9,7 +9,7 @@ use function max;
 use function min;
 use function sprintf;
 
-class ConvertPdfRequest extends BaseRequest
+class ConvertRequest extends AbstractRequest
 {
     /**
      * The default DPI for rasterized pages.

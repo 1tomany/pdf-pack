@@ -8,8 +8,8 @@ use OneToMany\PdfPack\Client\Service\BinaryFinder;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Response\ConvertPdfResponse;
 use OneToMany\PdfPack\Response\ReadPdfResponse;
-use OneToMany\PdfPack\Transfer\Request\ConvertPdfRequest;
-use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
 use Symfony\Component\Process\Process;
 
@@ -38,7 +38,7 @@ final readonly class PopplerClient implements ClientInterface
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
     #[\Override]
-    public function read(ReadPdfRequest $request): ReadPdfResponse
+    public function read(ReadRequest $request): ReadPdfResponse
     {
         $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getPath()]);
 
@@ -67,11 +67,11 @@ final readonly class PopplerClient implements ClientInterface
      * @throws ConvertingPdfFailedException when converting one or more pages of a PDF to an image fails
      */
     #[\Override]
-    public function convert(ConvertPdfRequest $request): \Generator
+    public function convert(ConvertRequest $request): \Generator
     {
         // Determine the number of pages to extract
         if (!$lastPage = $request->getLastPage()) {
-            $readRequest = new ReadPdfRequest(...[
+            $readRequest = new ReadRequest(...[
                 'path' => $request->getPath(),
             ]);
 

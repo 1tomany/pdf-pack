@@ -11,7 +11,7 @@ use OneToMany\PdfPack\Factory\ClientContainer;
 use OneToMany\PdfPack\Factory\ClientFactory;
 use OneToMany\PdfPack\Transfer\Request\ConvertToImageRequest;
 use OneToMany\PdfPack\Transfer\Request\ConvertToTextRequest;
-use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
 // Changing this to 'mock' would use the
 // MockClient with *no* further changes
@@ -38,7 +38,7 @@ try {
     ]);
 
     // Read PDF metadata
-    $response = $readPdfAction->act(new ReadPdfRequest($path));
+    $response = $readPdfAction->act(new ReadRequest($path));
 
     printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 

@@ -5,7 +5,7 @@ namespace OneToMany\PdfPack\Transfer\Request;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
-final class ConvertToImageRequest extends ConvertPdfRequest
+final class ConvertToImageRequest extends ConvertRequest
 {
     /**
      * @return void

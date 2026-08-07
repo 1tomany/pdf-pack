@@ -6,7 +6,7 @@ use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
 use OneToMany\PdfPack\Transfer\Request\ConvertToImageRequest;
 use OneToMany\PdfPack\Transfer\Request\ConvertToTextRequest;
-use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
 /** @var non-empty-string $path */
 $path = realpath(__DIR__.'/../config/files/s3.pdf');
@@ -15,9 +15,7 @@ $popplerClient = new PopplerClient();
 
 try {
     // Read PDF metadata
-    $response = $popplerClient->read(...[
-        'request' => new ReadPdfRequest($path),
-    ]);
+    $response = $popplerClient->read(new ReadRequest($path));
 
     printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 

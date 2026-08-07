@@ -9,7 +9,7 @@ use function is_file;
 use function is_readable;
 use function sprintf;
 
-class BaseRequest implements RequestInterface
+abstract class AbstractRequest implements RequestInterface
 {
     /**
      * @var non-empty-string

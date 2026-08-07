@@ -4,8 +4,8 @@ namespace OneToMany\PdfPack\Contract\Client;
 
 use OneToMany\PdfPack\Response\ConvertPdfResponse;
 use OneToMany\PdfPack\Response\ReadPdfResponse;
-use OneToMany\PdfPack\Transfer\Request\ConvertPdfRequest;
-use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
 interface ClientInterface
 {
@@ -14,10 +14,10 @@ interface ClientInterface
      */
     public static function getVendor(): string;
 
-    public function read(ReadPdfRequest $request): ReadPdfResponse;
+    public function read(ReadRequest $request): ReadPdfResponse;
 
     /**
      * @return \Generator<int, ConvertPdfResponse>
      */
-    public function convert(ConvertPdfRequest $request): \Generator;
+    public function convert(ConvertRequest $request): \Generator;
 }
