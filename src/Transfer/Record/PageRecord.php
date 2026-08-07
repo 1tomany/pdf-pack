@@ -4,33 +4,59 @@ namespace OneToMany\PdfPack\Transfer\Record;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Contract\Transfer\Record\RecordInterface;
+use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function base64_encode;
 use function hash;
-use function max;
 use function sprintf;
 use function strlen;
 
-final class PageRecord implements \Stringable, RecordInterface
+final readonly class PageRecord implements \Stringable, RecordInterface
 {
-    /**
-     * @var ?non-empty-lowercase-string
-     */
-    private ?string $hash = null;
+    private OutputType $type;
+    private string $data;
 
     /**
-     * @var ?non-negative-int
+     * @var non-empty-lowercase-string
      */
-    private ?int $size = null;
+    private string $hash;
 
     /**
-     * @param positive-int $page
+     * @var positive-int
+     */
+    private int $page;
+
+    /**
+     * @var non-negative-int
+     */
+    private int $size;
+
+    /**
+     * @throws InvalidArgumentException when $page is not greater than 0
      */
     public function __construct(
-        private readonly OutputType $type,
-        private readonly string $data,
-        private readonly int $page = 1,
+        OutputType $type,
+        string $data,
+        int $page = 1,
     ) {
+        $this->type = $type;
+        $this->data = $data;
+
+        $this->hash = hash('sha256', $data);
+
+        if ($page < 1) {
+            throw new InvalidArgumentException('The page must be greater than 0.');
+        }
+
+        $this->page = $page;
+        $this->size = strlen($data);
+    }
+
+    public static function asJpeg(
+        string $data,
+        int $page = 1,
+    ): static {
+        return new static(OutputType::Jpeg, $data, $page);
     }
 
     public function __toString(): string
@@ -53,23 +79,7 @@ final class PageRecord implements \Stringable, RecordInterface
      */
     public function getHash(): string
     {
-        if (null === $this->hash) {
-            $this->hash = hash('sha256', $this->getData());
-        }
-
         return $this->hash;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function getSize(): int
-    {
-        if (null === $this->size) {
-            $this->size = strlen($this->getData());
-        }
-
-        return $this->size;
     }
 
     /**
@@ -77,7 +87,15 @@ final class PageRecord implements \Stringable, RecordInterface
      */
     public function getPage(): int
     {
-        return max(1, $this->page);
+        return $this->page;
+    }
+
+    /**
+     * @return non-negative-int
+     */
+    public function getSize(): int
+    {
+        return $this->size;
     }
 
     /**
