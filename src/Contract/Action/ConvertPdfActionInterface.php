@@ -10,5 +10,5 @@ interface ConvertPdfActionInterface
     /**
      * @return \Generator<int, ConvertPdfResponse>
      */
-    public function act(ConvertPdfRequest $request): \Generator;
+    public function act(ConvertPdfRequest $convertPdfRequest): \Generator;
 }

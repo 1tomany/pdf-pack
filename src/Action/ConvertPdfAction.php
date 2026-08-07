@@ -16,8 +16,8 @@ final readonly class ConvertPdfAction implements ConvertPdfActionInterface
     /**
      * @see OneToMany\PdfPack\Contract\Action\ConvertPdfActionInterface
      */
-    public function act(ConvertPdfRequest $request): \Generator
+    public function act(ConvertPdfRequest $convertPdfRequest): \Generator
     {
-        return $this->client->convert($request);
+        return $this->client->convert($convertPdfRequest);
     }
 }

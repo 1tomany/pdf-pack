@@ -36,6 +36,8 @@ final class ClientContainer implements ContainerInterface
 
     /**
      * @see Psr\Container\ContainerInterface
+     *
+     * @throws ContainerEntryNotFoundException when an entry was not found in the container
      */
     public function get(string $id): ClientInterface
     {

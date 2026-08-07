@@ -28,6 +28,7 @@ final readonly class PopplerClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
+    #[\Override]
     public static function getVendor(): string
     {
         return 'poppler';
@@ -36,6 +37,7 @@ final readonly class PopplerClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
+    #[\Override]
     public function read(ReadPdfRequest $request): ReadPdfResponse
     {
         $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getPath()]);
@@ -61,7 +63,10 @@ final readonly class PopplerClient implements ClientInterface
 
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
+     *
+     * @throws ConvertingPdfFailedException when converting one or more pages of a PDF to an image fails
      */
+    #[\Override]
     public function convert(ConvertPdfRequest $request): \Generator
     {
         // Determine the number of pages to extract

@@ -7,5 +7,5 @@ use OneToMany\PdfPack\Response\ReadPdfResponse;
 
 interface ReadPdfActionInterface
 {
-    public function act(ReadPdfRequest $request): ReadPdfResponse;
+    public function act(ReadPdfRequest $readPdfRequest): ReadPdfResponse;
 }

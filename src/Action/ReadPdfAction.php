@@ -17,8 +17,8 @@ final readonly class ReadPdfAction implements ReadPdfActionInterface
     /**
      * @see OneToMany\PdfPack\Contract\Action\ReadPdfActionInterface
      */
-    public function act(ReadPdfRequest $request): ReadPdfResponse
+    public function act(ReadPdfRequest $readPdfRequest): ReadPdfResponse
     {
-        return $this->client->read($request);
+        return $this->client->read($readPdfRequest);
     }
 }
