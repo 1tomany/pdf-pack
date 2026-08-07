@@ -2,8 +2,8 @@
 
 namespace OneToMany\PdfPack\Contract\Action;
 
-use OneToMany\PdfPack\Request\ConvertPdfRequest;
 use OneToMany\PdfPack\Response\ConvertPdfResponse;
+use OneToMany\PdfPack\Transfer\Request\ConvertPdfRequest;
 
 interface ConvertPdfActionInterface
 {

@@ -3,7 +3,7 @@
 namespace OneToMany\PdfPack\Tests\Request;
 
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 

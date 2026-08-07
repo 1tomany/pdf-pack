@@ -9,9 +9,9 @@ use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
 use OneToMany\PdfPack\Factory\ClientContainer;
 use OneToMany\PdfPack\Factory\ClientFactory;
-use OneToMany\PdfPack\Request\ConvertToImageRequest;
-use OneToMany\PdfPack\Request\ConvertToTextRequest;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertToImageRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertToTextRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
 
 // Changing this to 'mock' would use the
 // MockClient with *no* further changes

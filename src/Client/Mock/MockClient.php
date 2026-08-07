@@ -4,9 +4,9 @@ namespace OneToMany\PdfPack\Client\Mock;
 
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Exception\RuntimeException;
-use OneToMany\PdfPack\Request\ConvertPdfRequest;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ReadPdfResponse;
+use OneToMany\PdfPack\Transfer\Request\ConvertPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
 
 use function random_int;
 

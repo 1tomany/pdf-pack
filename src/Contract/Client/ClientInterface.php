@@ -2,10 +2,10 @@
 
 namespace OneToMany\PdfPack\Contract\Client;
 
-use OneToMany\PdfPack\Request\ConvertPdfRequest;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ConvertPdfResponse;
 use OneToMany\PdfPack\Response\ReadPdfResponse;
+use OneToMany\PdfPack\Transfer\Request\ConvertPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
 
 interface ClientInterface
 {

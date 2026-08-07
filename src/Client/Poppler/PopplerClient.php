@@ -6,10 +6,10 @@ use OneToMany\PdfPack\Client\Exception\ConvertingPdfFailedException;
 use OneToMany\PdfPack\Client\Exception\ReadingPdfFailedException;
 use OneToMany\PdfPack\Client\Service\BinaryFinder;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
-use OneToMany\PdfPack\Request\ConvertPdfRequest;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ConvertPdfResponse;
 use OneToMany\PdfPack\Response\ReadPdfResponse;
+use OneToMany\PdfPack\Transfer\Request\ConvertPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
 use Symfony\Component\Process\Process;
 

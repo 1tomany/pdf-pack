@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\PdfPack\Request;
+namespace OneToMany\PdfPack\Transfer\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;

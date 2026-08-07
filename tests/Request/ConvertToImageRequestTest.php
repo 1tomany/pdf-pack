@@ -4,7 +4,7 @@ namespace OneToMany\PdfPack\Tests\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Request\ConvertToImageRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertToImageRequest;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 

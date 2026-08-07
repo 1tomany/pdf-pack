@@ -2,8 +2,8 @@
 
 namespace OneToMany\PdfPack\Contract\Action;
 
-use OneToMany\PdfPack\Request\ReadPdfRequest;
 use OneToMany\PdfPack\Response\ReadPdfResponse;
+use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
 
 interface ReadPdfActionInterface
 {

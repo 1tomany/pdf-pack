@@ -4,7 +4,7 @@ namespace OneToMany\PdfPack\Action;
 
 use OneToMany\PdfPack\Contract\Action\ConvertPdfActionInterface;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
-use OneToMany\PdfPack\Request\ConvertPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertPdfRequest;
 
 final readonly class ConvertPdfAction implements ConvertPdfActionInterface
 {

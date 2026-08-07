@@ -4,9 +4,9 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
-use OneToMany\PdfPack\Request\ConvertToImageRequest;
-use OneToMany\PdfPack\Request\ConvertToTextRequest;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertToImageRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertToTextRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadPdfRequest;
 
 /** @var non-empty-string $path */
 $path = realpath(__DIR__.'/../config/files/s3.pdf');
