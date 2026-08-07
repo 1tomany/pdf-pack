@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 use function random_int;
 
 #[Group('UnitTests')]
+#[Group('TransferTests')]
 #[Group('RequestTests')]
 final class ConvertRequestTest extends TestCase
 {

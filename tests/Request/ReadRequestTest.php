@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 #[Group('UnitTests')]
+#[Group('TransferTests')]
 #[Group('RequestTests')]
 final class ReadRequestTest extends TestCase
 {
