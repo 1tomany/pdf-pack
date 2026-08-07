@@ -4,7 +4,6 @@ namespace OneToMany\PdfPack\Action;
 
 use OneToMany\PdfPack\Contract\Action\ReadActionInterface;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
-use OneToMany\PdfPack\Response\ReadPdfResponse;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 use OneToMany\PdfPack\Transfer\Response\ReadResponse;
 

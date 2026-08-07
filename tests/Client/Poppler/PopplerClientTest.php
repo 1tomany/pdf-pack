@@ -42,20 +42,22 @@ final class PopplerClientTest extends TestCase
         new PopplerClient()->read(new ReadRequest(__FILE__));
     }
 
-    #[DataProvider('providerPathAndPages')]
-    public function testReadingFile(string $path, int $pages): void
-    {
-        $response = new PopplerClient()->read(...[
+    #[DataProvider('providerPathAndPageCount')]
+    public function testReadingFile(
+        string $path,
+        int $pageCount,
+    ): void {
+        $record = new PopplerClient()->read(...[
             'request' => new ReadRequest($path),
         ]);
 
-        $this->assertEquals($pages, $response->getPages());
+        $this->assertEquals($pageCount, $record->getPageCount());
     }
 
     /**
      * @return list<list<int|non-empty-string|OutputType>>
      */
-    public static function providerPathAndPages(): array
+    public static function providerPathAndPageCount(): array
     {
         $provider = [
             [__DIR__.'/../../../config/files/pages-1.pdf', 1],

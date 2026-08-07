@@ -14,14 +14,14 @@ $popplerClient = new PopplerClient();
 
 try {
     // Read PDF metadata
-    $response = $popplerClient->read(new ReadRequest($path));
+    $record = $popplerClient->read(new ReadRequest($path));
 
-    printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
+    printf("The PDF '%s' has %d %s.\n\n", $record->getName(), $record->getPageCount(), 1 === $record->getPageCount() ? 'page' : 'pages');
 
     // Convert all pages to 150 DPI JPEGs
-    $convertToImageRequest = ConvertRequest::toImage($path)->fromPage(1)->atResolution(150)->asJpegOutput();
+    $convertRequest = ConvertRequest::toImage($path)->atResolution(150)->asJpegOutput();
 
-    foreach ($popplerClient->convert($convertToImageRequest) as $page) {
+    foreach ($popplerClient->convert($convertRequest) as $page) {
         printf("Page %d hash: %s\n", $page->getPage(), $page->getHash());
     }
 

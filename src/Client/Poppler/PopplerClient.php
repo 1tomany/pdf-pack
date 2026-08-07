@@ -7,7 +7,6 @@ use OneToMany\PdfPack\Client\Exception\ReadingPdfFailedException;
 use OneToMany\PdfPack\Client\Service\BinaryFinder;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
 use OneToMany\PdfPack\Response\ConvertResponse;
-use OneToMany\PdfPack\Response\ReadPdfResponse;
 use OneToMany\PdfPack\Transfer\Record\PdfRecord;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
@@ -76,7 +75,7 @@ final readonly class PopplerClient implements ClientInterface
                 'path' => $request->getPath(),
             ]);
 
-            $lastPage = $this->read($readRequest)->getPages();
+            $lastPage = $this->read($readRequest)->getPageCount();
         }
 
         if ($request->getOutputType()->isText()) {

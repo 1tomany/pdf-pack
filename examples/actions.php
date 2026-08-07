@@ -40,7 +40,6 @@ try {
 
     printf("The PDF '%s' has %d %s.\n\n", $record->getName(), $record->getPageCount(), 1 === $record->getPageCount() ? 'page' : 'pages');
 
-    exit;
     // Convert all pages to 150 DPI JPEGs
     $convertRequest = ConvertRequest::toImage($path)->atResolution(150)->asJpegOutput();
 
