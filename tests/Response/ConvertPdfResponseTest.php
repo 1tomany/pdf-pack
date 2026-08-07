@@ -48,7 +48,7 @@ final class ConvertPdfResponseTest extends TestCase
 
     public function testToDataUri(): void
     {
-        $path = __DIR__.'/../.data/label.jpeg';
+        $path = __DIR__.'/../../config/files/label.jpeg';
         $this->assertFileExists($path);
 
         $data = file_get_contents($path);

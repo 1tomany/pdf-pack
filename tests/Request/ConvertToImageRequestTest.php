@@ -17,6 +17,6 @@ final class ConvertToImageRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('The output type must be an image.');
 
-        new ConvertToImageRequest(__DIR__.'/../.data/label.pdf', 1, 1, OutputType::Text);
+        new ConvertToImageRequest(__DIR__.'/../../config/files/label.pdf', 1, 1, OutputType::Text);
     }
 }

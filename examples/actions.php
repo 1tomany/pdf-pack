@@ -18,7 +18,7 @@ use OneToMany\PdfPack\Request\ReadPdfRequest;
 $vendor = 'poppler';
 
 /** @var non-empty-string $path */
-$path = realpath(__DIR__.'/.data/s3.pdf');
+$path = realpath(__DIR__.'/../config/files/s3.pdf');
 
 $clientContainer = new ClientContainer([
     new MockClient(),

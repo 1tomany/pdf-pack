@@ -39,7 +39,7 @@ final class ConvertPdfRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('The page must be greater than 0.');
 
-        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', firstPage: 0);
+        new ConvertPdfRequest(__DIR__.'/../../config/files/label.pdf', firstPage: 0);
     }
 
     public function testConstructorRequiresPositiveNonZeroLastPage(): void
@@ -47,7 +47,7 @@ final class ConvertPdfRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('The page must be greater than 0.');
 
-        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', lastPage: 0);
+        new ConvertPdfRequest(__DIR__.'/../../config/files/label.pdf', lastPage: 0);
     }
 
     public function testConstructorRequiresResolutionToBeLessThanOrEqualToMinimumResolution(): void
@@ -55,7 +55,7 @@ final class ConvertPdfRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('The resolution must be 48 DPI or larger.');
 
-        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', resolution: random_int(0, 32));
+        new ConvertPdfRequest(__DIR__.'/../../config/files/label.pdf', resolution: random_int(0, 32));
     }
 
     public function testConstructorRequiresResolutionToBeLessThanOrEqualToMaximumResolution(): void
@@ -63,7 +63,7 @@ final class ConvertPdfRequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('The resolution must be 300 DPI or smaller.');
 
-        new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', resolution: random_int(301, 1000));
+        new ConvertPdfRequest(__DIR__.'/../../config/files/label.pdf', resolution: random_int(301, 1000));
     }
 
     #[DataProvider('providerConstructorArguments')]
@@ -88,7 +88,7 @@ final class ConvertPdfRequestTest extends TestCase
      */
     public static function providerConstructorArguments(): array
     {
-        $path = __DIR__.'/../.data/label.pdf';
+        $path = __DIR__.'/../../config/files/label.pdf';
 
         $resolution = random_int(
             ConvertPdfRequest::MIN_RESOLUTION,
@@ -106,7 +106,7 @@ final class ConvertPdfRequestTest extends TestCase
 
     public function testSettingFirstPageGreaterThanLastPageClampsLastPageToFirstPageWhenLastPageIsNotNull(): void
     {
-        $request = new ConvertPdfRequest(__DIR__.'/../.data/label.pdf');
+        $request = new ConvertPdfRequest(__DIR__.'/../../config/files/label.pdf');
 
         $this->assertSame(1, $request->getFirstPage());
         $this->assertSame(null, $request->getLastPage());
@@ -122,7 +122,7 @@ final class ConvertPdfRequestTest extends TestCase
     {
         $page = random_int(2, 10);
 
-        $request = new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', $page, $page);
+        $request = new ConvertPdfRequest(__DIR__.'/../../config/files/label.pdf', $page, $page);
         $this->assertEquals($request->getLastPage(), $request->getFirstPage());
 
         $request->toPage($request->getLastPage() - 1);

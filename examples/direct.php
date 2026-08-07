@@ -9,7 +9,7 @@ use OneToMany\PdfPack\Request\ConvertToTextRequest;
 use OneToMany\PdfPack\Request\ReadPdfRequest;
 
 /** @var non-empty-string $path */
-$path = realpath(__DIR__.'/.data/s3.pdf');
+$path = realpath(__DIR__.'/../config/files/s3.pdf');
 
 $popplerClient = new PopplerClient();
 
