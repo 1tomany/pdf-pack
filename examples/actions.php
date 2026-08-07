@@ -48,13 +48,13 @@ try {
         printf("Page %d hash: %s\n", $page->getPage(), $page->getHash());
     }
 
-    echo "\n";
+    printf("\n");
 
     // Extract text from pages 3 and 4
     $convertToTextRequest = ConvertRequest::toText($path)->fromPage(3)->toPage(4);
 
     foreach ($convertPdfAction->act($convertToTextRequest) as $page) {
-        printf("Page %d size: %d bytes\n", $page->getPage(), $page->getSize());
+        printf("Page %d size: %d %s\n", $page->getPage(), $page->getSize(), 1 === $page->getSize() ? 'byte' : 'bytes');
     }
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());
