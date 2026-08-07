@@ -18,7 +18,7 @@ final class ConvertPdfRequestTest extends TestCase
     public function testConstructorRequiresNonEmptyPath(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The path cannot be empty.');
+        $this->expectExceptionMessageIs('The path cannot be empty.');
 
         new ConvertPdfRequest('');
     }
@@ -29,7 +29,7 @@ final class ConvertPdfRequestTest extends TestCase
         $this->assertFileDoesNotExist($path);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The file "'.$path.'" is not readable.');
+        $this->expectExceptionMessageIs('The file "'.$path.'" is not readable.');
 
         new ConvertPdfRequest($path);
     }
@@ -37,7 +37,7 @@ final class ConvertPdfRequestTest extends TestCase
     public function testConstructorRequiresPositiveNonZeroFirstPage(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The first page must be a positive integer.');
+        $this->expectExceptionMessageIs('The page must be greater than 0.');
 
         new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', firstPage: 0);
     }
@@ -45,7 +45,7 @@ final class ConvertPdfRequestTest extends TestCase
     public function testConstructorRequiresPositiveNonZeroLastPage(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The last page must be a positive integer.');
+        $this->expectExceptionMessageIs('The page must be greater than 0.');
 
         new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', lastPage: 0);
     }
@@ -53,7 +53,7 @@ final class ConvertPdfRequestTest extends TestCase
     public function testConstructorRequiresResolutionToBeLessThanOrEqualToMinimumResolution(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The resolution must be 48 DPI or larger.');
+        $this->expectExceptionMessageIs('The resolution must be 48 DPI or larger.');
 
         new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', resolution: random_int(0, 32));
     }
@@ -61,7 +61,7 @@ final class ConvertPdfRequestTest extends TestCase
     public function testConstructorRequiresResolutionToBeLessThanOrEqualToMaximumResolution(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The resolution must be 300 DPI or smaller.');
+        $this->expectExceptionMessageIs('The resolution must be 300 DPI or smaller.');
 
         new ConvertPdfRequest(__DIR__.'/../.data/label.pdf', resolution: random_int(301, 1000));
     }

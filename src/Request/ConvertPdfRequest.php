@@ -48,12 +48,12 @@ class ConvertPdfRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the first page is not a positive integer
+     * @throws InvalidArgumentException when $page is not greater than 0
      */
     public function fromPage(int $page): static
     {
         if ($page < 1) {
-            throw new InvalidArgumentException('The first page must be a positive integer.');
+            throw new InvalidArgumentException('The page must be greater than 0.');
         }
 
         $this->firstPage = $page;
@@ -74,13 +74,13 @@ class ConvertPdfRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the last page is not a positive integer
+     * @throws InvalidArgumentException when $page is not greater than 0
      */
     public function toPage(?int $page): static
     {
         if (null !== $page) {
             if ($page < 1) {
-                throw new InvalidArgumentException('The last page must be a positive integer.');
+                throw new InvalidArgumentException('The page must be greater than 0.');
             }
 
             if ($page < $this->firstPage) {
