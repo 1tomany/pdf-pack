@@ -9,7 +9,7 @@ use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
 use OneToMany\PdfPack\Factory\ClientContainer;
 use OneToMany\PdfPack\Factory\ClientFactory;
-use OneToMany\PdfPack\Transfer\Request\ConvertToImageRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
 use OneToMany\PdfPack\Transfer\Request\ConvertToTextRequest;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
@@ -43,7 +43,7 @@ try {
     printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 
     // Convert all pages to 150 DPI JPEGs
-    $convertToImageRequest = new ConvertToImageRequest($path)->fromPage(1)->atResolution(150)->asJpegOutput();
+    $convertToImageRequest = ConvertRequest::toImage($path)->fromPage(1)->atResolution(150)->asJpegOutput();
 
     foreach ($convertPdfAction->act($convertToImageRequest) as $page) {
         printf("Page %d hash: %s\n", $page->getPage(), $page->getHash());

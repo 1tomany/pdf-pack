@@ -48,6 +48,30 @@ class ConvertRequest extends AbstractRequest
     }
 
     /**
+     * @throws InvalidArgumentException when $outputType is not an image
+     */
+    public static function toImage(
+        ?string $path,
+        int $firstPage = 1,
+        ?int $lastPage = null,
+        OutputType $outputType = OutputType::Jpeg,
+    ) {
+        if ($outputType->isText()) {
+            throw new InvalidArgumentException('The output type must be an image.');
+        }
+
+        return new self($path, $firstPage, $lastPage, $outputType);
+    }
+
+    public static function toText(
+        ?string $path,
+        int $firstPage = 1,
+        ?int $lastPage = null,
+    ) {
+        return new self($path, $firstPage, $lastPage, OutputType::Text);
+    }
+
+    /**
      * @throws InvalidArgumentException when $page is not greater than 0
      */
     public function fromPage(int $page): static

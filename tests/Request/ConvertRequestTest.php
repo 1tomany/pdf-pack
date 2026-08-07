@@ -13,7 +13,7 @@ use function random_int;
 
 #[Group('UnitTests')]
 #[Group('RequestTests')]
-final class ConvertPdfRequestTest extends TestCase
+final class ConvertRequestTest extends TestCase
 {
     public function testConstructorRequiresNonEmptyPath(): void
     {
@@ -102,6 +102,19 @@ final class ConvertPdfRequestTest extends TestCase
         ];
 
         return $provider;
+    }
+
+    public function testToImageRequiresOutputTypeToBeImage(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageIs('The output type must be an image.');
+
+        ConvertRequest::toImage(__DIR__.'/../../config/files/label.pdf', 1, 1, OutputType::Text);
+    }
+
+    public function testToTextSetsOutputTypeToText(): void
+    {
+        $this->assertSame(OutputType::Text, ConvertRequest::toText(__DIR__.'/../../config/files/label.pdf')->getOutputType());
     }
 
     public function testSettingFirstPageGreaterThanLastPageClampsLastPageToFirstPageWhenLastPageIsNotNull(): void

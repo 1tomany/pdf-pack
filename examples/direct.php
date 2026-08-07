@@ -4,7 +4,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
-use OneToMany\PdfPack\Transfer\Request\ConvertToImageRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
 use OneToMany\PdfPack\Transfer\Request\ConvertToTextRequest;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
@@ -20,7 +20,7 @@ try {
     printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
 
     // Convert all pages to 150 DPI JPEGs
-    $convertToImageRequest = new ConvertToImageRequest($path)->fromPage(1)->atResolution(150)->asJpegOutput();
+    $convertToImageRequest = ConvertRequest::toImage($path)->fromPage(1)->atResolution(150)->asJpegOutput();
 
     foreach ($popplerClient->convert($convertToImageRequest) as $page) {
         printf("Page %d hash: %s\n", $page->getPage(), $page->getHash());

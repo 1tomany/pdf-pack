@@ -8,8 +8,6 @@ use OneToMany\PdfPack\Exception\InvalidArgumentException;
 final class ConvertToImageRequest extends ConvertRequest
 {
     /**
-     * @return void
-     *
      * @throws InvalidArgumentException when $outputType is not an image
      */
     public function __construct(
