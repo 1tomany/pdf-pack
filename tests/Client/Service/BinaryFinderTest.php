@@ -19,7 +19,7 @@ final class BinaryFinderTest extends TestCase
         $binary = uniqid('binary_');
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The binary "'.$binary.'" could not be found.');
+        $this->expectExceptionMessageIs('The binary "'.$binary.'" could not be found.');
 
         BinaryFinder::find($binary);
     }

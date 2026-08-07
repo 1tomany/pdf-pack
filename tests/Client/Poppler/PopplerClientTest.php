@@ -29,7 +29,7 @@ final class PopplerClientTest extends TestCase
     public function testReadingFileRequiresValidPdfInfoBinary(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The binary "invalid_pdfinfo_binary" could not be found.');
+        $this->expectExceptionMessageIs('The binary "invalid_pdfinfo_binary" could not be found.');
 
         new PopplerClient(pdfInfoBinary: 'invalid_pdfinfo_binary')->read(new ReadPdfRequest(__FILE__));
     }
@@ -72,7 +72,7 @@ final class PopplerClientTest extends TestCase
         $request = new ConvertPdfRequest(__DIR__.'/../../.data/pages-1.pdf')->asJpegOutput();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The binary "invalid_pdftoppm_binary" could not be found.');
+        $this->expectExceptionMessageIs('The binary "invalid_pdftoppm_binary" could not be found.');
 
         new PopplerClient(pdfToPpmBinary: 'invalid_pdftoppm_binary')->convert($request)->current();
     }
@@ -82,7 +82,7 @@ final class PopplerClientTest extends TestCase
         $request = new ConvertPdfRequest(__DIR__.'/../../.data/pages-1.pdf')->asTextOutput();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The binary "invalid_pdftotext_binary" could not be found.');
+        $this->expectExceptionMessageIs('The binary "invalid_pdftotext_binary" could not be found.');
 
         new PopplerClient(pdfToTextBinary: 'invalid_pdftotext_binary')->convert($request)->current();
     }

@@ -14,7 +14,7 @@ final class ReadPdfRequestTest extends TestCase
     public function testConstructorRequiresNonEmptyPath(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The path cannot be empty.');
+        $this->expectExceptionMessageIs('The path cannot be empty.');
 
         new ReadPdfRequest('');
     }
@@ -25,7 +25,7 @@ final class ReadPdfRequestTest extends TestCase
         $this->assertFileDoesNotExist($path);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The file "'.$path.'" is not readable.');
+        $this->expectExceptionMessageIs('The file "'.$path.'" is not readable.');
 
         new ReadPdfRequest($path);
     }

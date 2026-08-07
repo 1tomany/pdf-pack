@@ -15,7 +15,7 @@ final class ConvertToImageRequestTest extends TestCase
     public function testConstructorRequiresOutputTypeToBeImage(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The output type must be an image.');
+        $this->expectExceptionMessageIs('The output type must be an image.');
 
         new ConvertToImageRequest(__DIR__.'/../.data/label.pdf', 1, 1, OutputType::Text);
     }

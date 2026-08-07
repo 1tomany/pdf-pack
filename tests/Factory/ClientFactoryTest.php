@@ -18,7 +18,7 @@ final class ClientFactoryTest extends TestCase
         $vendor = uniqid('vendor_');
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The vendor "'.$vendor.'" does not have a registered client.');
+        $this->expectExceptionMessageIs('The vendor "'.$vendor.'" does not have a registered client.');
 
         new ClientFactory()->create($vendor);
     }
