@@ -15,7 +15,7 @@ final readonly class BinaryFinder
 
     /**
      * @throws InvalidArgumentException when the binary could not be found
-    */
+     */
     public static function find(string $binary): string
     {
         if (is_executable($binary)) {
