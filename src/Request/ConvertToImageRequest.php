@@ -7,6 +7,11 @@ use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 final class ConvertToImageRequest extends ConvertPdfRequest
 {
+    /**
+     * @return void
+     *
+     * @throws InvalidArgumentException when $outputType is not an image
+     */
     public function __construct(
         ?string $path,
         int $firstPage = 1,

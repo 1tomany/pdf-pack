@@ -58,7 +58,10 @@ class ConvertPdfRequest extends BaseRequest
 
         $this->firstPage = $page;
 
-        if (null !== $this->lastPage && $page > $this->lastPage) {
+        if (
+            null !== $this->lastPage
+            && $page > $this->lastPage
+        ) {
             $this->toPage($page);
         }
 
