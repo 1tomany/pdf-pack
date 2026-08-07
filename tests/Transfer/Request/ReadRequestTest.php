@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\PdfPack\Tests\Request;
+namespace OneToMany\PdfPack\Tests\Transfer\Request;
 
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
