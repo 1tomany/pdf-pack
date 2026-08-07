@@ -10,7 +10,7 @@ use function max;
 use function sprintf;
 use function strlen;
 
-final class ConvertPdfResponse implements \Stringable
+final class ConvertResponse implements \Stringable
 {
     /**
      * @var ?non-empty-lowercase-string

@@ -6,7 +6,7 @@ use OneToMany\PdfPack\Client\Exception\ConvertingPdfFailedException;
 use OneToMany\PdfPack\Client\Exception\ReadingPdfFailedException;
 use OneToMany\PdfPack\Client\Service\BinaryFinder;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
-use OneToMany\PdfPack\Response\ConvertPdfResponse;
+use OneToMany\PdfPack\Response\ConvertResponse;
 use OneToMany\PdfPack\Response\ReadPdfResponse;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
@@ -90,7 +90,7 @@ final readonly class PopplerClient implements ClientInterface
                     throw new ConvertingPdfFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ConvertPdfResponse($request->getOutputType(), $output, $page);
+                yield new ConvertResponse($request->getOutputType(), $output, $page);
             }
         } else {
             $command = BinaryFinder::find($this->pdfToPpmBinary);
@@ -104,7 +104,7 @@ final readonly class PopplerClient implements ClientInterface
                     throw new ConvertingPdfFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ConvertPdfResponse($request->getOutputType(), $output, $page);
+                yield new ConvertResponse($request->getOutputType(), $output, $page);
             }
         }
     }
