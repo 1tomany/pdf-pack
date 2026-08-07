@@ -22,7 +22,7 @@ final readonly class PageRecord implements \Stringable, RecordInterface
     private string $hash;
 
     /**
-     * @var positive-int
+     * @var non-negative-int
      */
     private int $page;
 
@@ -32,7 +32,7 @@ final readonly class PageRecord implements \Stringable, RecordInterface
     private int $size;
 
     /**
-     * @throws InvalidArgumentException when $page is not greater than 0
+     * @throws InvalidArgumentException when $page is negative
      */
     public function __construct(
         OutputType $type,
@@ -44,8 +44,8 @@ final readonly class PageRecord implements \Stringable, RecordInterface
 
         $this->hash = hash('sha256', $data);
 
-        if ($page < 1) {
-            throw new InvalidArgumentException('The page must be greater than 0.');
+        if ($page < 0) {
+            throw new InvalidArgumentException('The page cannot be negative.');
         }
 
         $this->page = $page;
@@ -83,7 +83,7 @@ final readonly class PageRecord implements \Stringable, RecordInterface
     }
 
     /**
-     * @return positive-int
+     * @return non-negative-int
      */
     public function getPage(): int
     {

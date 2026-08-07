@@ -19,12 +19,15 @@ use function strlen;
 #[Group('RecordTests')]
 final class PageRecordTest extends TestCase
 {
-    public function testConstructorRequiresStrictlyPositivePage(): void
+    public function testConstructorRequiresNonNegativePage(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageIs('The page must be greater than 0.');
+        $page = random_int(-100, -1);
+        $this->assertLessThan(0, $page);
 
-        new PageRecord(OutputType::Text, 'PDF Page', 0);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageIs('The page cannot be negative.');
+
+        new PageRecord(OutputType::Text, 'PDF Page', $page);
     }
 
     public function testConstructorCalculatesPageHash(): void

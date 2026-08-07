@@ -21,7 +21,8 @@ final readonly class PdfRecord implements RecordInterface
     private int $pageCount;
 
     /**
-     * @return void
+     * @throws InvalidArgumentException when $path is empty
+     * @throws InvalidArgumentException when $pageCount is negative
      */
     public function __construct(
         string $path,
