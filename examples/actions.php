@@ -10,7 +10,6 @@ use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionI
 use OneToMany\PdfPack\Factory\ClientContainer;
 use OneToMany\PdfPack\Factory\ClientFactory;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
-use OneToMany\PdfPack\Transfer\Request\ConvertToTextRequest;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
 // Changing this to 'mock' would use the
@@ -52,7 +51,7 @@ try {
     echo "\n";
 
     // Extract text from pages 3 and 4
-    $convertToTextRequest = new ConvertToTextRequest($path)->fromPage(3)->toPage(4);
+    $convertToTextRequest = ConvertRequest::toText($path)->fromPage(3)->toPage(4);
 
     foreach ($convertPdfAction->act($convertToTextRequest) as $page) {
         printf("Page %d size: %d bytes\n", $page->getPage(), $page->getSize());

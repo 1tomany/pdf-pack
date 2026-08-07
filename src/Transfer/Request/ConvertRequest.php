@@ -9,7 +9,7 @@ use function max;
 use function min;
 use function sprintf;
 
-class ConvertRequest extends AbstractRequest
+final class ConvertRequest extends AbstractRequest
 {
     /**
      * The default DPI for rasterized pages.
@@ -55,20 +55,20 @@ class ConvertRequest extends AbstractRequest
         int $firstPage = 1,
         ?int $lastPage = null,
         OutputType $outputType = OutputType::Jpeg,
-    ) {
+    ): static {
         if ($outputType->isText()) {
             throw new InvalidArgumentException('The output type must be an image.');
         }
 
-        return new self($path, $firstPage, $lastPage, $outputType);
+        return new static($path, $firstPage, $lastPage, $outputType);
     }
 
     public static function toText(
         ?string $path,
         int $firstPage = 1,
         ?int $lastPage = null,
-    ) {
-        return new self($path, $firstPage, $lastPage, OutputType::Text);
+    ): static {
+        return new static($path, $firstPage, $lastPage, OutputType::Text);
     }
 
     /**
