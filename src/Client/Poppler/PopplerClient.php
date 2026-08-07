@@ -14,8 +14,8 @@ use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionIn
 use Symfony\Component\Process\Process;
 
 use function explode;
-use function str_replace;
 use function str_starts_with;
+use function substr;
 use function trim;
 
 final readonly class PopplerClient implements ClientInterface
@@ -52,7 +52,7 @@ final readonly class PopplerClient implements ClientInterface
 
         foreach (explode("\n", $output) as $line) {
             if (str_starts_with($line, 'Pages:')) {
-                $pageCount = trim(\substr($line, 6));
+                $pageCount = trim(substr($line, 6));
             }
         }
 
