@@ -77,7 +77,7 @@ class ConvertPdfRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when $page is not greater than 0
+     * @throws InvalidArgumentException when $page is not null and not greater than 0
      */
     public function toPage(?int $page): static
     {
