@@ -14,7 +14,9 @@ use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionIn
 use Symfony\Component\Process\Process;
 
 use function explode;
-use function str_contains;
+use function str_replace;
+use function str_starts_with;
+use function trim;
 
 final readonly class PopplerClient implements ClientInterface
 {
@@ -48,17 +50,13 @@ final readonly class PopplerClient implements ClientInterface
             throw new ReadingPdfFailedException($request->getPath(), $process->getErrorOutput(), $e);
         }
 
-        foreach (explode("\n", $output) as $infoBit) {
-            if (true === str_contains($infoBit, ':')) {
-                $infoBits = explode(':', $infoBit);
-
-                if ('Pages' === $infoBits[0]) {
-                    $pageCount = (int) $infoBits[1];
-                }
+        foreach (explode("\n", $output) as $line) {
+            if (true === str_starts_with($line, 'Pages:')) {
+                $pageCount = str_replace('Pages:', '', $line);
             }
         }
 
-        return new PdfRecord($request->getPath(), $pageCount ?? 1);
+        return new PdfRecord($request->getPath(), isset($pageCount) ? (int) trim($pageCount) : 1);
     }
 
     /**
