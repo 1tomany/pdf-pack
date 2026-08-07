@@ -51,12 +51,12 @@ final readonly class PopplerClient implements ClientInterface
         }
 
         foreach (explode("\n", $output) as $line) {
-            if (true === str_starts_with($line, 'Pages:')) {
-                $pageCount = str_replace('Pages:', '', $line);
+            if (str_starts_with($line, 'Pages:')) {
+                $pageCount = trim(\substr($line, 6));
             }
         }
 
-        return new PdfRecord($request->getPath(), isset($pageCount) ? (int) trim($pageCount) : 1);
+        return new PdfRecord($request->getPath(), isset($pageCount) ? (int) $pageCount : 1);
     }
 
     /**
