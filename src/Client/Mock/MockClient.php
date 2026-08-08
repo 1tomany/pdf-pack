@@ -3,6 +3,7 @@
 namespace OneToMany\PdfPack\Client\Mock;
 
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
+use OneToMany\PdfPack\Contract\Enum\Vendor;
 use OneToMany\PdfPack\Exception\RuntimeException;
 use OneToMany\PdfPack\Transfer\Record\PdfRecord;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
@@ -19,9 +20,9 @@ readonly class MockClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public static function getVendor(): string
+    public static function getVendor(): Vendor
     {
-        return 'mock';
+        return Vendor::Mock;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace OneToMany\PdfPack\Contract\Client;
 
+use OneToMany\PdfPack\Contract\Enum\Vendor;
 use OneToMany\PdfPack\Transfer\Record\PageRecord;
 use OneToMany\PdfPack\Transfer\Record\PdfRecord;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
@@ -9,10 +10,7 @@ use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
 interface ClientInterface
 {
-    /**
-     * @return non-empty-lowercase-string
-     */
-    public static function getVendor(): string;
+    public static function getVendor(): Vendor;
 
     public function read(ReadRequest $request): PdfRecord;
 

@@ -29,7 +29,7 @@ final class ClientContainer implements ContainerInterface
 
     public function addClient(ClientInterface $client): static
     {
-        $this->clients[$client::getVendor()] = $client;
+        $this->clients[$client::getVendor()->getValue()] = $client;
 
         return $this;
     }
