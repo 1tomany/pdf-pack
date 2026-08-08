@@ -2,23 +2,23 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use OneToMany\PdfPack\Action\ConvertPdfAction;
-use OneToMany\PdfPack\Action\ReadPdfAction;
+use OneToMany\PdfPack\Action\ConvertAction;
+use OneToMany\PdfPack\Action\ReadAction;
 use OneToMany\PdfPack\Client\Mock\MockClient;
 use OneToMany\PdfPack\Client\Poppler\PopplerClient;
+use OneToMany\PdfPack\Contract\Enum\Vendor;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
 use OneToMany\PdfPack\Factory\ClientContainer;
 use OneToMany\PdfPack\Factory\ClientFactory;
-use OneToMany\PdfPack\Request\ConvertToImageRequest;
-use OneToMany\PdfPack\Request\ConvertToTextRequest;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
-// Changing this to 'mock' would use the
-// MockClient with *no* further changes
-$vendor = 'poppler';
+// Changing this to Vendor::Mock would use
+// the MockClient with no further changes
+$vendor = Vendor::Poppler;
 
 /** @var non-empty-string $path */
-$path = realpath(__DIR__.'/.data/s3.pdf');
+$path = realpath(__DIR__.'/../config/files/s3.pdf');
 
 $clientContainer = new ClientContainer([
     new MockClient(),
@@ -28,36 +28,33 @@ $clientContainer = new ClientContainer([
 $clientFactory = new ClientFactory($clientContainer);
 
 try {
-    // Create read and extract actions
-    $readPdfAction = new ReadPdfAction(...[
-        'client' => $clientFactory->create($vendor),
-    ]);
+    $client = $clientFactory->create($vendor);
 
-    $convertPdfAction = new ConvertPdfAction(...[
-        'client' => $clientFactory->create($vendor),
-    ]);
+    // Read action to read PDF metadata
+    $readAction = new ReadAction($client);
+
+    // Convert action to convert PDF pages
+    $convertAction = new ConvertAction($client);
 
     // Read PDF metadata
-    $response = $readPdfAction->act(...[
-        'request' => new ReadPdfRequest($path),
-    ]);
+    $record = $readAction->act(new ReadRequest($path))->getRecord();
 
-    printf("The PDF '%s' has %d %s.\n\n", $response->getName(), $response->getPages(), 1 === $response->getPages() ? 'page' : 'pages');
+    printf("The PDF '%s' has %d %s.\n\n", $record->getName(), $record->getPageCount(), 1 === $record->getPageCount() ? 'page' : 'pages');
 
     // Convert all pages to 150 DPI JPEGs
-    $convertToImageRequest = new ConvertToImageRequest($path)->fromPage(1)->atResolution(150)->asJpegOutput();
+    $convertRequest = ConvertRequest::toImage($path)->atResolution(150)->asJpegOutput();
 
-    foreach ($convertPdfAction->act($convertToImageRequest) as $page) {
-        printf("Page %d hash: %s\n", $page->getPage(), $page->getHash());
+    foreach ($convertAction->act($convertRequest) as $response) {
+        printf("Page %d hash: %s\n", $response->getRecord()->getPage(), $response->getRecord()->getHash());
     }
 
-    echo "\n";
+    printf("\n");
 
     // Extract text from pages 3 and 4
-    $convertToTextRequest = new ConvertToTextRequest($path)->fromPage(3)->toPage(4);
+    $convertToTextRequest = ConvertRequest::toText($path)->fromPage(3)->toPage(4);
 
-    foreach ($convertPdfAction->act($convertToTextRequest) as $page) {
-        printf("Page %d size: %d bytes\n", $page->getPage(), $page->getSize());
+    foreach ($convertAction->act($convertToTextRequest) as $response) {
+        printf("Page %d size: %d %s\n", $response->getRecord()->getPage(), $response->getRecord()->getSize(), 1 === $response->getRecord()->getSize() ? 'byte' : 'bytes');
     }
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());

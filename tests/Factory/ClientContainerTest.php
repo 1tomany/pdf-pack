@@ -11,7 +11,7 @@ final class ClientContainerTest extends TestCase
     public function testGettingEntryRequiresEntryToExist(): void
     {
         $this->expectException(ContainerEntryNotFoundException::class);
-        $this->expectExceptionMessage('The entry "invalid" was not found in the container.');
+        $this->expectExceptionMessageIs('The entry "invalid" was not found in the container.');
 
         new ClientContainer()->get('invalid');
     }

@@ -10,10 +10,10 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[{*.css,*.html,*.js,*.json,*.jsonl,*.xml}]
+[{*.css,*.html,*.js,*.json,*.xml}]
 indent_size = 2
 
-[{*.json,*.jsonc,*.jsonl}]
+[*.json]
 insert_final_newline = false
 
 [*.md]

@@ -3,10 +3,11 @@
 namespace OneToMany\PdfPack\Client\Mock;
 
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
+use OneToMany\PdfPack\Contract\Enum\Vendor;
 use OneToMany\PdfPack\Exception\RuntimeException;
-use OneToMany\PdfPack\Request\ConvertPdfRequest;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
-use OneToMany\PdfPack\Response\ReadPdfResponse;
+use OneToMany\PdfPack\Transfer\Record\PdfRecord;
+use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
 use function random_int;
 
@@ -19,23 +20,23 @@ readonly class MockClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public static function getVendor(): string
+    public static function getVendor(): Vendor
     {
-        return 'mock';
+        return Vendor::Mock;
     }
 
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function read(ReadPdfRequest $request): ReadPdfResponse
+    public function read(ReadRequest $request): PdfRecord
     {
-        return new ReadPdfResponse($request->getPath(), random_int(1, 100));
+        return new PdfRecord($request->getPath(), random_int(1, 100));
     }
 
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function convert(ConvertPdfRequest $request): \Generator
+    public function convert(ConvertRequest $request): \Generator
     {
         throw new RuntimeException('Not implemented!');
     }

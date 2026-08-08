@@ -2,22 +2,20 @@
 
 namespace OneToMany\PdfPack\Contract\Client;
 
-use OneToMany\PdfPack\Request\ConvertPdfRequest;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
-use OneToMany\PdfPack\Response\ConvertPdfResponse;
-use OneToMany\PdfPack\Response\ReadPdfResponse;
+use OneToMany\PdfPack\Contract\Enum\Vendor;
+use OneToMany\PdfPack\Transfer\Record\PageRecord;
+use OneToMany\PdfPack\Transfer\Record\PdfRecord;
+use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
 interface ClientInterface
 {
-    /**
-     * @return non-empty-lowercase-string
-     */
-    public static function getVendor(): string;
+    public static function getVendor(): Vendor;
 
-    public function read(ReadPdfRequest $request): ReadPdfResponse;
+    public function read(ReadRequest $request): PdfRecord;
 
     /**
-     * @return \Generator<int, ConvertPdfResponse>
+     * @return \Generator<int, PageRecord>
      */
-    public function convert(ConvertPdfRequest $request): \Generator;
+    public function convert(ConvertRequest $request): \Generator;
 }

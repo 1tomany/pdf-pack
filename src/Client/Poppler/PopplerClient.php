@@ -6,15 +6,18 @@ use OneToMany\PdfPack\Client\Exception\ConvertingPdfFailedException;
 use OneToMany\PdfPack\Client\Exception\ReadingPdfFailedException;
 use OneToMany\PdfPack\Client\Service\BinaryFinder;
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
-use OneToMany\PdfPack\Request\ConvertPdfRequest;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
-use OneToMany\PdfPack\Response\ConvertPdfResponse;
-use OneToMany\PdfPack\Response\ReadPdfResponse;
+use OneToMany\PdfPack\Contract\Enum\Vendor;
+use OneToMany\PdfPack\Transfer\Record\PageRecord;
+use OneToMany\PdfPack\Transfer\Record\PdfRecord;
+use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
 use Symfony\Component\Process\Process;
 
 use function explode;
-use function str_contains;
+use function str_starts_with;
+use function substr;
+use function trim;
 
 final readonly class PopplerClient implements ClientInterface
 {
@@ -28,15 +31,17 @@ final readonly class PopplerClient implements ClientInterface
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public static function getVendor(): string
+    #[\Override]
+    public static function getVendor(): Vendor
     {
-        return 'poppler';
+        return Vendor::Poppler;
     }
 
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
      */
-    public function read(ReadPdfRequest $request): ReadPdfResponse
+    #[\Override]
+    public function read(ReadRequest $request): PdfRecord
     {
         $process = new Process([BinaryFinder::find($this->pdfInfoBinary), $request->getPath()]);
 
@@ -46,38 +51,37 @@ final readonly class PopplerClient implements ClientInterface
             throw new ReadingPdfFailedException($request->getPath(), $process->getErrorOutput(), $e);
         }
 
-        foreach (explode("\n", $output) as $infoBit) {
-            if (str_contains($infoBit, ':')) {
-                $bits = explode(':', $infoBit);
-
-                if ('Pages' === $bits[0]) {
-                    $pages = (int) $bits[1];
-                }
+        foreach (explode("\n", $output) as $line) {
+            if (str_starts_with($line, 'Pages:')) {
+                $pageCount = trim(substr($line, 6));
             }
         }
 
-        return new ReadPdfResponse($request->getPath(), $pages ?? 1);
+        return new PdfRecord($request->getPath(), isset($pageCount) ? (int) $pageCount : 1);
     }
 
     /**
      * @see OneToMany\PdfPack\Contract\Client\ClientInterface
+     *
+     * @throws ConvertingPdfFailedException when converting one or more pages of a PDF to an image fails
      */
-    public function convert(ConvertPdfRequest $request): \Generator
+    #[\Override]
+    public function convert(ConvertRequest $request): \Generator
     {
         // Determine the number of pages to extract
         if (!$lastPage = $request->getLastPage()) {
-            $readRequest = new ReadPdfRequest(...[
+            $readRequest = new ReadRequest(...[
                 'path' => $request->getPath(),
             ]);
 
-            $lastPage = $this->read($readRequest)->getPages();
+            $lastPage = $this->read($readRequest)->getPageCount();
         }
 
         if ($request->getOutputType()->isText()) {
-            $command = BinaryFinder::find($this->pdfToTextBinary);
+            $binary = BinaryFinder::find($this->pdfToTextBinary);
 
             for ($page = $request->getFirstPage(); $page <= $lastPage; ++$page) {
-                $process = new Process([$command, '-nodiag', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath(), '-']);
+                $process = new Process([$binary, '-nodiag', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath(), '-']); // @phpstan-ignore-line
 
                 try {
                     $output = $process->mustRun()->getOutput();
@@ -85,13 +89,13 @@ final readonly class PopplerClient implements ClientInterface
                     throw new ConvertingPdfFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ConvertPdfResponse($request->getOutputType(), $output, $page);
+                yield new PageRecord($request->getOutputType(), $output, $page);
             }
         } else {
-            $command = BinaryFinder::find($this->pdfToPpmBinary);
+            $binary = BinaryFinder::find($this->pdfToPpmBinary);
 
             for ($page = $request->getFirstPage(); $page <= $lastPage; ++$page) {
-                $process = new Process([$command, $request->getOutputType()->isJpeg() ? '-jpeg' : '-png', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath()]);
+                $process = new Process([$binary, $request->getOutputType()->isJpeg() ? '-jpeg' : '-png', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath()]); // @phpstan-ignore-line
 
                 try {
                     $output = $process->mustRun()->getOutput();
@@ -99,7 +103,7 @@ final readonly class PopplerClient implements ClientInterface
                     throw new ConvertingPdfFailedException($request->getPath(), $page, $process->getErrorOutput(), $e);
                 }
 
-                yield new ConvertPdfResponse($request->getOutputType(), $output, $page);
+                yield new PageRecord($request->getOutputType(), $output, $page);
             }
         }
     }

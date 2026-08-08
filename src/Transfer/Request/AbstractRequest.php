@@ -1,14 +1,15 @@
 <?php
 
-namespace OneToMany\PdfPack\Request;
+namespace OneToMany\PdfPack\Transfer\Request;
 
+use OneToMany\PdfPack\Contract\Transfer\Request\RequestInterface;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 
 use function is_file;
 use function is_readable;
 use function sprintf;
 
-class BaseRequest
+abstract class AbstractRequest implements RequestInterface
 {
     /**
      * @var non-empty-string
@@ -31,12 +32,12 @@ class BaseRequest
     /**
      * @return non-empty-string
      *
-     * @throws InvalidArgumentException when the trimmed path is empty
-     * @throws InvalidArgumentException when the file is not a readable file
+     * @throws InvalidArgumentException when $path is empty
+     * @throws InvalidArgumentException when $path is not a readable file
      */
     private function validatePath(?string $path): string
     {
-        if (!$path = trim((string) $path)) {
+        if ('' === $path = trim((string) $path)) {
             throw new InvalidArgumentException('The path cannot be empty.');
         }
 

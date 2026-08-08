@@ -1,6 +1,6 @@
 <?php
 
-namespace OneToMany\PdfPack\Request;
+namespace OneToMany\PdfPack\Transfer\Request;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
@@ -9,7 +9,7 @@ use function max;
 use function min;
 use function sprintf;
 
-class ConvertPdfRequest extends BaseRequest
+final class ConvertRequest extends AbstractRequest
 {
     /**
      * The default DPI for rasterized pages.
@@ -48,17 +48,44 @@ class ConvertPdfRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the first page is not a positive integer
+     * @throws InvalidArgumentException when $outputType is not an image
+     */
+    public static function toImage(
+        ?string $path,
+        int $firstPage = 1,
+        ?int $lastPage = null,
+        OutputType $outputType = OutputType::Jpeg,
+    ): static {
+        if ($outputType->isText()) {
+            throw new InvalidArgumentException('The output type must be an image.');
+        }
+
+        return new static($path, $firstPage, $lastPage, $outputType);
+    }
+
+    public static function toText(
+        ?string $path,
+        int $firstPage = 1,
+        ?int $lastPage = null,
+    ): static {
+        return new static($path, $firstPage, $lastPage, OutputType::Text);
+    }
+
+    /**
+     * @throws InvalidArgumentException when $page is not greater than 0
      */
     public function fromPage(int $page): static
     {
         if ($page < 1) {
-            throw new InvalidArgumentException('The first page must be a positive integer.');
+            throw new InvalidArgumentException('The page must be greater than 0.');
         }
 
         $this->firstPage = $page;
 
-        if (null !== $this->lastPage && $page > $this->lastPage) {
+        if (
+            null !== $this->lastPage
+            && $page > $this->lastPage
+        ) {
             $this->toPage($page);
         }
 
@@ -74,13 +101,13 @@ class ConvertPdfRequest extends BaseRequest
     }
 
     /**
-     * @throws InvalidArgumentException when the last page is not a positive integer
+     * @throws InvalidArgumentException when $page is not null and not greater than 0
      */
     public function toPage(?int $page): static
     {
         if (null !== $page) {
             if ($page < 1) {
-                throw new InvalidArgumentException('The last page must be a positive integer.');
+                throw new InvalidArgumentException('The page must be greater than 0.');
             }
 
             if ($page < $this->firstPage) {

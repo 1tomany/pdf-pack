@@ -29,13 +29,15 @@ final class ClientContainer implements ContainerInterface
 
     public function addClient(ClientInterface $client): static
     {
-        $this->clients[$client::getVendor()] = $client;
+        $this->clients[$client::getVendor()->getValue()] = $client;
 
         return $this;
     }
 
     /**
      * @see Psr\Container\ContainerInterface
+     *
+     * @throws ContainerEntryNotFoundException when an entry was not found in the container
      */
     public function get(string $id): ClientInterface
     {

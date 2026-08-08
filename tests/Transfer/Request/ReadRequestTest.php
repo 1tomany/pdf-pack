@@ -1,22 +1,23 @@
 <?php
 
-namespace OneToMany\PdfPack\Tests\Request;
+namespace OneToMany\PdfPack\Tests\Transfer\Request;
 
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Request\ReadPdfRequest;
+use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 #[Group('UnitTests')]
+#[Group('TransferTests')]
 #[Group('RequestTests')]
-final class ReadPdfRequestTest extends TestCase
+final class ReadRequestTest extends TestCase
 {
     public function testConstructorRequiresNonEmptyPath(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The path cannot be empty.');
+        $this->expectExceptionMessageIs('The path cannot be empty.');
 
-        new ReadPdfRequest('');
+        new ReadRequest('');
     }
 
     public function testConstructorRequiresReadableFile(): void
@@ -25,8 +26,8 @@ final class ReadPdfRequestTest extends TestCase
         $this->assertFileDoesNotExist($path);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The file "'.$path.'" is not readable.');
+        $this->expectExceptionMessageIs('The file "'.$path.'" is not readable.');
 
-        new ReadPdfRequest($path);
+        new ReadRequest($path);
     }
 }
