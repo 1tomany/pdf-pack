@@ -21,17 +21,17 @@ try {
     // Convert all pages to 150 DPI JPEGs
     $convertRequest = ConvertRequest::toImage($path)->atResolution(150)->asJpegOutput();
 
-    foreach ($popplerClient->convert($convertRequest) as $page) {
-        printf("Page %d hash: %s\n", $page->getPage(), $page->getHash());
+    foreach ($popplerClient->convert($convertRequest) as $record) {
+        printf("Page %d hash: %s\n", $record->getPage(), $record->getHash());
     }
 
     echo "\n";
 
     // Extract text from pages 3 and 4
-    $convertToTextRequest = ConvertRequest::toText($path)->fromPage(3)->toPage(4);
+    $convertRequest = ConvertRequest::toText($path)->fromPage(3)->toPage(4);
 
-    foreach ($popplerClient->convert($convertToTextRequest) as $page) {
-        printf("Page %d size: %d bytes\n", $page->getPage(), $page->getSize());
+    foreach ($popplerClient->convert($convertRequest) as $record) {
+        printf("Page %d size: %d bytes\n", $record->getPage(), $record->getSize());
     }
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());

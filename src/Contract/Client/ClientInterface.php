@@ -2,7 +2,6 @@
 
 namespace OneToMany\PdfPack\Contract\Client;
 
-use OneToMany\PdfPack\Response\ConvertResponse;
 use OneToMany\PdfPack\Transfer\Record\PageRecord;
 use OneToMany\PdfPack\Transfer\Record\PdfRecord;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;

@@ -7,7 +7,7 @@ use OneToMany\PdfPack\Client\Exception\ReadingPdfFailedException;
 use OneToMany\PdfPack\Client\Poppler\PopplerClient;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
-use OneToMany\PdfPack\Response\ConvertResponse;
+use OneToMany\PdfPack\Transfer\Record\PageRecord;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -55,7 +55,7 @@ final class PopplerClientTest extends TestCase
     }
 
     /**
-     * @return list<list<int|non-empty-string|OutputType>>
+     * @return list<array{string,int}>
      */
     public static function providerPathAndPageCount(): array
     {
@@ -94,7 +94,7 @@ final class PopplerClientTest extends TestCase
         $request = new ConvertRequest(__FILE__)->toPage(1);
 
         $this->expectException(ConvertingPdfFailedException::class);
-        $this->expectExceptionMessageMatches('/May not be a PDF file/');
+        $this->expectExceptionMessageIsOrContains('May not be a PDF file');
 
         new PopplerClient()->convert($request)->current();
     }
@@ -104,30 +104,30 @@ final class PopplerClientTest extends TestCase
         $request = new ConvertRequest(__DIR__.'/../../../config/files/pages-1.pdf')->fromPage(2)->toPage(2);
 
         $this->expectException(ConvertingPdfFailedException::class);
-        $this->expectExceptionMessageMatches('/Wrong page range given/');
+        $this->expectExceptionMessageIsOrContains('Wrong page range given');
 
         new PopplerClient()->convert($request)->current();
     }
 
-    #[DataProvider('providerPathFirstPageLastPageAndResponseCount')]
+    #[DataProvider('providerPathFirstPageLastPageAndRecordCount')]
     public function testConvertingOneOrMorePdfPagesToEqualNumberOfImages(
         string $path,
         int $firstPage,
         ?int $lastPage,
-        int $responseCount,
+        int $recordCount,
     ): void {
         $request = new ConvertRequest($path, $firstPage, $lastPage);
 
-        /** @var non-empty-list<ConvertResponse> $responses */
-        $responses = iterator_to_array(new PopplerClient()->convert($request));
+        /** @var non-empty-list<PageRecord> $records */
+        $records = iterator_to_array(new PopplerClient()->convert($request));
 
-        $this->assertCount($responseCount, $responses);
+        $this->assertCount($recordCount, $records);
     }
 
     /**
-     * @return list<list<int|string|null>>
+     * @return list<array{string,int,?int,int}>
      */
-    public static function providerPathFirstPageLastPageAndResponseCount(): array
+    public static function providerPathFirstPageLastPageAndRecordCount(): array
     {
         $provider = [
             [__DIR__.'/../../../config/files/pages-1.pdf', 1, 1, 1],
@@ -173,16 +173,16 @@ final class PopplerClientTest extends TestCase
     ): void {
         $request = new ConvertRequest($path, $page, $page)->asTextOutput();
 
-        /** @var list<ConvertResponse> $responses */
-        $responses = iterator_to_array(new PopplerClient()->convert($request));
+        /** @var list<PageRecord> $records */
+        $records = iterator_to_array(new PopplerClient()->convert($request));
 
-        $this->assertCount(1, $responses);
-        $this->assertEquals($page, $responses[0]->getPage());
-        $this->assertStringContainsString($text, $responses[0]);
+        $this->assertCount(1, $records);
+        $this->assertEquals($page, $records[0]->getPage());
+        $this->assertStringContainsString($text, $records[0]);
     }
 
     /**
-     * @return list<list<int|string>>
+     * @return list<array{string,int,string}>
      */
     public static function providerPathPageAndText(): array
     {
@@ -207,21 +207,21 @@ final class PopplerClientTest extends TestCase
     ): void {
         $request = new ConvertRequest($path, $firstPage, $firstPage, $outputType, $resolution);
 
-        /** @var list<ConvertResponse> $responses */
-        $responses = iterator_to_array(new PopplerClient()->convert($request));
+        /** @var list<PageRecord> $records */
+        $records = iterator_to_array(new PopplerClient()->convert($request));
 
-        $this->assertCount(1, $responses);
-        $this->assertNotEmpty($responses[0]->getData());
-        $this->assertEquals($hash, $responses[0]->getHash());
+        $this->assertCount(1, $records);
+        $this->assertNotEmpty($records[0]->getData());
+        $this->assertEquals($hash, $records[0]->getHash());
 
-        $image = imagecreatefromstring($responses[0]);
+        $image = imagecreatefromstring($records[0]);
         $this->assertInstanceOf(\GdImage::class, $image);
         $this->assertGreaterThan(0, imagesx($image));
         $this->assertGreaterThan(0, imagesy($image));
     }
 
     /**
-     * @return list<list<int|non-empty-string|OutputType>>
+     * @return list<array{string,int,OutputType,int,string}>
      */
     public static function providerPathFirstPageLastPageOutputTypeResolutionAndHash(): array
     {

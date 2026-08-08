@@ -19,6 +19,8 @@ final readonly class ConvertAction implements ConvertActionInterface
      */
     public function act(ConvertRequest $convertRequest): \Generator
     {
-        yield new ConvertResponse($this->client->convert($convertRequest));
+        foreach ($this->client->convert($convertRequest) as $key => $record) {
+            yield $key => new ConvertResponse($record);
+        }
     }
 }

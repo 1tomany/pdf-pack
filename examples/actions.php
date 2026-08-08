@@ -43,8 +43,8 @@ try {
     // Convert all pages to 150 DPI JPEGs
     $convertRequest = ConvertRequest::toImage($path)->atResolution(150)->asJpegOutput();
 
-    foreach ($convertAction->act($convertRequest) as $page) {
-        printf("Page %d hash: %s\n", $page->getRecord()->getPage(), $page->getRecord()->getHash());
+    foreach ($convertAction->act($convertRequest) as $response) {
+        printf("Page %d hash: %s\n", $response->getRecord()->getPage(), $response->getRecord()->getHash());
     }
 
     printf("\n");
@@ -52,8 +52,8 @@ try {
     // Extract text from pages 3 and 4
     $convertToTextRequest = ConvertRequest::toText($path)->fromPage(3)->toPage(4);
 
-    foreach ($convertAction->act($convertToTextRequest) as $page) {
-        printf("Page %d size: %d %s\n", $page->getRecord()->getPage(), $page->getRecord()->getSize(), 1 === $page->getRecord()->getSize() ? 'byte' : 'bytes');
+    foreach ($convertAction->act($convertToTextRequest) as $response) {
+        printf("Page %d size: %d %s\n", $response->getRecord()->getPage(), $response->getRecord()->getSize(), 1 === $response->getRecord()->getSize() ? 'byte' : 'bytes');
     }
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());
