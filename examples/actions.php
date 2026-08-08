@@ -44,7 +44,7 @@ try {
     $convertRequest = ConvertRequest::toImage($path)->atResolution(150)->asJpegOutput();
 
     foreach ($convertAction->act($convertRequest) as $page) {
-        printf("Page %d hash: %s\n", $page->getPage(), $page->getHash());
+        printf("Page %d hash: %s\n", $page->getRecord()->getPage(), $page->getRecord()->getHash());
     }
 
     printf("\n");
@@ -53,7 +53,7 @@ try {
     $convertToTextRequest = ConvertRequest::toText($path)->fromPage(3)->toPage(4);
 
     foreach ($convertAction->act($convertToTextRequest) as $page) {
-        printf("Page %d size: %d %s\n", $page->getPage(), $page->getSize(), 1 === $page->getSize() ? 'byte' : 'bytes');
+        printf("Page %d size: %d %s\n", $page->getRecord()->getPage(), $page->getRecord()->getSize(), 1 === $page->getRecord()->getSize() ? 'byte' : 'bytes');
     }
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());
