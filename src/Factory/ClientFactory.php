@@ -3,6 +3,7 @@
 namespace OneToMany\PdfPack\Factory;
 
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
+use OneToMany\PdfPack\Contract\Enum\Vendor;
 use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -19,8 +20,12 @@ final readonly class ClientFactory
     /**
      * @throws InvalidArgumentException when a vendor does not have a registered client
      */
-    public function create(string $vendor): ClientInterface
+    public function create(string|Vendor $vendor): ClientInterface
     {
+        if ($vendor instanceof Vendor) {
+            $vendor = $vendor->getValue();
+        }
+
         try {
             $client = $this->container->get($vendor);
         } catch (ContainerExceptionInterface $e) {

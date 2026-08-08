@@ -6,15 +6,16 @@ use OneToMany\PdfPack\Action\ConvertAction;
 use OneToMany\PdfPack\Action\ReadAction;
 use OneToMany\PdfPack\Client\Mock\MockClient;
 use OneToMany\PdfPack\Client\Poppler\PopplerClient;
+use OneToMany\PdfPack\Contract\Enum\Vendor;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
 use OneToMany\PdfPack\Factory\ClientContainer;
 use OneToMany\PdfPack\Factory\ClientFactory;
 use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
 use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
-// Changing this to 'mock' would use the
-// MockClient with *no* further changes
-$vendor = 'poppler';
+// Changing this to Vendor::Mock would use
+// the MockClient with no further changes
+$vendor = Vendor::Poppler;
 
 /** @var non-empty-string $path */
 $path = realpath(__DIR__.'/../config/files/s3.pdf');
