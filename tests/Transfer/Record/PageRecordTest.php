@@ -52,19 +52,19 @@ final class PageRecordTest extends TestCase
         $this->assertSame($size, $pageRecord->getSize());
     }
 
-    #[DataProvider('providerTypePageAndName')]
+    #[DataProvider('providerOutputTypePageAndName')]
     public function testGettingName(
-        OutputType $type,
+        OutputType $outputType,
         int $page,
         string $name,
     ): void {
-        $this->assertEquals($name, new PageRecord($type, random_bytes(1024), $page)->getName());
+        $this->assertEquals($name, new PageRecord($outputType, random_bytes(1024), $page)->getName());
     }
 
     /**
      * @return list<array{OutputType,int,string}>
      */
-    public static function providerTypePageAndName(): array
+    public static function providerOutputTypePageAndName(): array
     {
         $page = random_int(1, 100);
 

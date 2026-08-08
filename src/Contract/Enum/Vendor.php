@@ -2,7 +2,7 @@
 
 namespace OneToMany\PdfPack\Contract\Enum;
 
-enum Client: string
+enum Vendor: string
 {
     case Mock = 'mock';
     case Poppler = 'poppler';

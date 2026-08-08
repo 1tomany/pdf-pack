@@ -13,7 +13,7 @@ use function strlen;
 
 final readonly class PageRecord implements \Stringable, RecordInterface
 {
-    private OutputType $type;
+    private OutputType $outputType;
     private string $data;
 
     /**
@@ -35,13 +35,13 @@ final readonly class PageRecord implements \Stringable, RecordInterface
      * @throws InvalidArgumentException when $page is negative
      */
     public function __construct(
-        OutputType $type,
+        OutputType $outputType,
         string $data,
         int $page = 1,
     ) {
-        $this->type = $type;
-        $this->data = $data;
+        $this->outputType = $outputType;
 
+        $this->data = $data;
         $this->hash = hash('sha256', $data);
 
         if ($page < 0) {
@@ -52,6 +52,11 @@ final readonly class PageRecord implements \Stringable, RecordInterface
         $this->size = strlen($data);
     }
 
+    public function __toString(): string
+    {
+        return $this->data;
+    }
+
     public static function asJpeg(
         string $data,
         int $page = 1,
@@ -59,14 +64,9 @@ final readonly class PageRecord implements \Stringable, RecordInterface
         return new static(OutputType::Jpeg, $data, $page);
     }
 
-    public function __toString(): string
+    public function getOutputType(): OutputType
     {
-        return $this->data;
-    }
-
-    public function getType(): OutputType
-    {
-        return $this->type;
+        return $this->outputType;
     }
 
     public function getData(): string
@@ -103,7 +103,7 @@ final readonly class PageRecord implements \Stringable, RecordInterface
      */
     public function getName(): string
     {
-        return sprintf('page-%d.%s', $this->getPage(), $this->getType()->getExtension());
+        return sprintf('page-%d.%s', $this->getPage(), $this->getOutputType()->getExtension());
     }
 
     /**
@@ -111,6 +111,6 @@ final readonly class PageRecord implements \Stringable, RecordInterface
      */
     public function toDataUri(): string
     {
-        return sprintf('data:%s;base64,%s', $this->type->getFormat(), base64_encode($this->getData()));
+        return sprintf('data:%s;base64,%s', $this->outputType->getFormat(), base64_encode($this->getData()));
     }
 }

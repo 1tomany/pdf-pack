@@ -77,10 +77,10 @@ final readonly class PopplerClient implements ClientInterface
         }
 
         if ($request->getOutputType()->isText()) {
-            $command = BinaryFinder::find($this->pdfToTextBinary);
+            $binary = BinaryFinder::find($this->pdfToTextBinary);
 
             for ($page = $request->getFirstPage(); $page <= $lastPage; ++$page) {
-                $process = new Process([$command, '-nodiag', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath(), '-']); // @phpstan-ignore-line
+                $process = new Process([$binary, '-nodiag', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath(), '-']); // @phpstan-ignore-line
 
                 try {
                     $output = $process->mustRun()->getOutput();
@@ -91,10 +91,10 @@ final readonly class PopplerClient implements ClientInterface
                 yield new PageRecord($request->getOutputType(), $output, $page);
             }
         } else {
-            $command = BinaryFinder::find($this->pdfToPpmBinary);
+            $binary = BinaryFinder::find($this->pdfToPpmBinary);
 
             for ($page = $request->getFirstPage(); $page <= $lastPage; ++$page) {
-                $process = new Process([$command, $request->getOutputType()->isJpeg() ? '-jpeg' : '-png', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath()]); // @phpstan-ignore-line
+                $process = new Process([$binary, $request->getOutputType()->isJpeg() ? '-jpeg' : '-png', '-f', $page, '-l', $page, '-r', $request->getResolution(), $request->getPath()]); // @phpstan-ignore-line
 
                 try {
                     $output = $process->mustRun()->getOutput();
