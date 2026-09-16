@@ -13,11 +13,6 @@ use function strlen;
 final readonly class Page implements \Stringable
 {
     /**
-     * @var non-empty-lowercase-string
-     */
-    public string $hash;
-
-    /**
      * @var positive-int
      */
     public int $page;
@@ -28,6 +23,11 @@ final readonly class Page implements \Stringable
     public int $size;
 
     /**
+     * @var non-empty-lowercase-string
+     */
+    public string $hash;
+
+    /**
      * @throws DomainException when the page is less than 0
      */
     public function __construct(
@@ -35,14 +35,14 @@ final readonly class Page implements \Stringable
         public string $data,
         int $page = 1,
     ) {
-        $this->hash = hash('sha256', $data);
-
         if ($page <= 0) {
             throw new DomainException('The page must be greater than 0.');
         }
 
         $this->page = $page;
+
         $this->size = strlen($data);
+        $this->hash = hash('sha256', $data);
     }
 
     public function __toString(): string

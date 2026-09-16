@@ -23,17 +23,24 @@ $pdfClient = new PdfClient(Vendor::Poppler, $providers);
 try {
     $file = $pdfClient->files->read($path);
 
-    printf("The PDF file \"%s\" has %d %s.\n\n", $file->getName(), $file->getPageCount(), 1 === $file->getPageCount() ? 'page' : 'pages');
+    vprintf("The PDF file \"%s\" has %d pages.\n\n", [
+        $file->getName(), $file->getPageCount(),
+    ]);
+
+    printf("Converting all pages to 150 DPI JPEG images:\n\n");
 
     // The generator converts each page only as it is requested.
-    foreach ($pdfClient->files->convert($path, outputType: OutputType::Jpeg, resolution: 150) as $page) {
-        printf("Page %d hash: %s\n", $page->getPage(), $page->getHash());
+    $pages = $pdfClient->files->convert($path, 1, resolution: 150);
+
+    foreach ($pages as $page) {
+        printf("Page #%d hash: %s\n", $page->getPage(), $page->getHash());
     }
 
     printf("\n");
+    printf("Extracting text from pages 3 and 4:\n\n");
 
     foreach ($pdfClient->files->convert($path, 3, 4, OutputType::Text) as $page) {
-        printf("Page %d size: %d bytes\n", $page->getPage(), $page->getSize());
+        printf("Page #%d text size: %d bytes\n", $page->getPage(), $page->getSize());
     }
 
     // Switch the facade to another registered provider.

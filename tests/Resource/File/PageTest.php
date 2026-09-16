@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 use function base64_encode;
 use function hash;
+use function strlen;
 
 #[Group('UnitTests')]
 #[Group('ResourceTests')]
@@ -18,11 +19,16 @@ final class PageTest extends TestCase
 {
     public function testConstructingPageCalculatesMetadata(): void
     {
-        $page = new Page(OutputType::Text, 'PDF Page', 3);
+        $text = 'PDF Page';
 
-        $this->assertSame(hash('sha256', 'PDF Page'), $page->hash);
-        $this->assertSame(8, $page->size);
+        $size = strlen($text);
+        $hash = hash('sha256', $text);
+
+        $page = new Page(OutputType::Text, $text, 3);
+
         $this->assertSame(3, $page->page);
+        $this->assertSame($size, $page->size);
+        $this->assertSame($hash, $page->hash);
         $this->assertSame('page-3.txt', $page->getName());
     }
 
@@ -34,18 +40,18 @@ final class PageTest extends TestCase
         new Page(OutputType::Text, '', -1);
     }
 
-    #[DataProvider('providerOutputTypeAndDataUri')]
-    public function testConvertingToDataUri(OutputType $outputType, string $mimeType): void
-    {
-        $page = new Page($outputType, 'data');
-
-        $this->assertSame('data:'.$mimeType.';base64,'.base64_encode('data'), $page->toDataUri());
+    #[DataProvider('providerOutputTypeAndFormat')]
+    public function testConvertingToDataUri(
+        OutputType $outputType,
+        string $format,
+    ): void {
+        $this->assertSame('data:'.$format.';base64,'.base64_encode('data'), new Page($outputType, 'data')->toDataUri());
     }
 
     /**
-     * @return list<array{OutputType, string}>
+     * @return list<array{OutputType, non-empty-lowercase-string}>
      */
-    public static function providerOutputTypeAndDataUri(): array
+    public static function providerOutputTypeAndFormat(): array
     {
         return [
             [OutputType::Jpeg, 'image/jpeg'],
