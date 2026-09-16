@@ -28,7 +28,7 @@ final readonly class Page implements \Stringable
     public int $size;
 
     /**
-     * @throws DomainException when the page is empty
+     * @throws DomainException when the page is less than 0
      */
     public function __construct(
         public OutputType $outputType,
@@ -37,8 +37,8 @@ final readonly class Page implements \Stringable
     ) {
         $this->hash = hash('sha256', $data);
 
-        if ($page < 0) {
-            throw new DomainException('The page cannot be negative.');
+        if ($page <= 0) {
+            throw new DomainException('The page must be greater than 0.');
         }
 
         $this->page = $page;

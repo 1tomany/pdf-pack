@@ -29,7 +29,7 @@ final class PageTest extends TestCase
     public function testPageCannotBeNegative(): void
     {
         $this->expectException(DomainException::class);
-        $this->expectExceptionMessageIs('The page cannot be negative.');
+        $this->expectExceptionMessageIs('The page must be greater than 0.');
 
         new Page(OutputType::Text, '', -1);
     }
