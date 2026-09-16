@@ -6,11 +6,13 @@ use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Contract\Resource\FilesInterface;
 use OneToMany\PdfPack\Resource\File\File;
 use OneToMany\PdfPack\Resource\File\Page;
-use OneToMany\PdfPack\Vendor;
 
 interface ProviderInterface
 {
-    public static function getVendor(): Vendor;
+    /**
+     * @return non-empty-lowercase-string
+     */
+    public static function getProvider(): string;
 
     /**
      * @return \Generator<int, Page>

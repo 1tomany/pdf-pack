@@ -1,6 +1,6 @@
 # PDF Extraction Library for PHP
 
-`pdf-pack` is a simple PHP library that makes page rasterization and text extraction from PDFs easy. It uses a single dependency, the [Symfony Process Component](https://symfony.com/doc/current/components/process.html), to interface with the [Poppler command line tools from the xpdf library](https://poppler.freedesktop.org/).
+`pdf-pack` is a simple PHP library that makes page rasterization and text extraction from PDFs easy. It uses the [Symfony Process Component](https://symfony.com/doc/current/components/process.html) to interface with the [Poppler command line tools from the xpdf library](https://poppler.freedesktop.org/) and includes Symfony bundle integration for autowiring and configuration.
 
 ## Installation
 
@@ -49,13 +49,12 @@ use OneToMany\PdfPack\Bridge\Poppler\PopplerProvider;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\PdfClient;
 use OneToMany\PdfPack\Resource\Registry;
-use OneToMany\PdfPack\Vendor;
 
 $providers = new Registry([
     new PopplerProvider(),
 ]);
 
-$pdfClient = new PdfClient(Vendor::Poppler, $providers);
+$pdfClient = new PdfClient('poppler', $providers);
 
 $pdf = $pdfClient->files->read('/path/to/file.pdf');
 
@@ -94,25 +93,26 @@ Poppler is the default provider. Its configuration can be changed in `config/pac
 
 ```yaml
 onetomany_pdfpack:
-    vendor: poppler
+    provider: poppler
     poppler_provider:
         pdfinfo_binary: pdfinfo
         pdftoppm_binary: pdftoppm
         pdftotext_binary: pdftotext
 ```
 
-The Symfony integration is optional at runtime: constructing `Registry` and `PdfClient` directly does not require a Symfony application or service container.
-
 ### Extensibility
 
-This library uses the Poppler command line tools by default, but writing your own provider is simple.
+This library uses the Poppler command line tools by default, but provider names are strings, so writing your own integration is simple.
 
 ```php
 <?php
 
 use OneToMany\PdfPack\Contract\Bridge\ProviderInterface;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Contract\Resource\FilesInterface;
+use OneToMany\PdfPack\Resource\File\File;
 
-final readonly class ImageMagickProvider implements ProviderInterface
+final readonly class ImagickProvider implements ProviderInterface
 {
     /**
      * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
@@ -124,30 +124,18 @@ final readonly class ImageMagickProvider implements ProviderInterface
         return 'imagick';
     }
 
-    /**
-     * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
-     */
-    #[\Override]
-    public function convert(
-        string $path,
-        int $fromPage = 1,
-        ?int $toPage = null,
-        OutputType $outputType = OutputType::Jpeg,
-        int $resolution = FilesInterface::DEFAULT_RESOLUTION,
-    ): \Generator {
-        // Use ImageMagick to rasterize pages and extract text
-    }
-
-    /**
-     * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
-     */
-    #[\Override]
-    public function read(string $path): File
-    {
-        // Use ImageMagick to count the number of pages
-    }
+    // Implement the convert() and read() methods to satisfy the interface
 }
 ```
+
+Services implementing `ProviderInterface` are tagged automatically in Symfony applications. The custom provider can then be selected normally:
+
+```yaml
+onetomany_pdfpack:
+    provider: imagick
+```
+
+The Symfony integration is optional at runtime: constructing `Registry` and `PdfClient` directly does not require a Symfony application or service container.
 
 ## Credits
 

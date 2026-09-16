@@ -9,6 +9,7 @@ use OneToMany\PdfPack\Contract\PdfClientInterface;
 use OneToMany\PdfPack\PdfClient;
 use OneToMany\PdfPack\PdfPackBundle;
 use OneToMany\PdfPack\Resource\Registry;
+use OneToMany\PdfPack\Tests\Fixture\Bridge\ImagickProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -31,14 +32,14 @@ final class PdfPackBundleTest extends TestCase
         $this->assertTrue($container->hasDefinition(Registry::class));
         $this->assertTrue($container->hasDefinition(PdfClient::class));
         $this->assertTrue($container->hasAlias(PdfClientInterface::class));
-        $this->assertSame(PdfClient::class, (string) $container->getAlias(PdfClientInterface::class));
-        $this->assertSame('poppler', $container->getDefinition(PdfClient::class)->getArgument('$defaultVendor'));
+        $this->assertSame(PdfClient::class, $container->getAlias(PdfClientInterface::class)->__toString());
+        $this->assertSame('poppler', $container->getDefinition(PdfClient::class)->getArgument('$defaultProvider'));
         $this->assertTrue($container->getAutoconfiguredInstanceof()[ProviderInterface::class]->hasTag('onetomany.pdfpack.provider'));
     }
 
-    public function testConfiguredVendorIsUsedByAutowiredClient(): void
+    public function testConfiguredProviderIsUsedByAutowiredClient(): void
     {
-        $container = $this->loadExtension(['vendor' => 'mock']);
+        $container = $this->loadExtension(['provider' => 'mock']);
         $container->getAlias(PdfClientInterface::class)->setPublic(true);
         $container->compile();
 
@@ -48,11 +49,33 @@ final class PdfPackBundleTest extends TestCase
         $this->assertSame(__FILE__, $client->files->read(__FILE__)->path);
     }
 
-    public function testConfiguredVendorMustBeSupported(): void
+    public function testConfiguredProviderCannotBeEmpty(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $this->loadExtension(['vendor' => 'invalid']);
+        $this->loadExtension(['provider' => '']);
+    }
+
+    public function testConfiguredThirdPartyProviderIsAutowired(): void
+    {
+        $container = $this->loadExtension([
+            'provider' => 'imagick',
+        ]);
+
+        $container
+            ->register(ImagickProvider::class)
+            ->setAutoconfigured(true);
+
+        $container
+            ->getAlias(PdfClientInterface::class)
+            ->setPublic(true);
+
+        $container->compile();
+
+        $client = $container->get(PdfClientInterface::class);
+
+        $this->assertInstanceOf(PdfClient::class, $client);
+        $this->assertSame(1, $client->files->read(__FILE__)->pageCount);
     }
 
     public function testConfiguringPopplerBinaries(): void

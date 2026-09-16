@@ -8,7 +8,6 @@ use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
 use OneToMany\PdfPack\PdfClient;
 use OneToMany\PdfPack\Resource\Registry;
-use OneToMany\PdfPack\Vendor;
 
 /** @var non-empty-string $path */
 $path = realpath(__DIR__.'/../data/files/s3.pdf');
@@ -18,7 +17,7 @@ $providers = new Registry([
     new PopplerProvider(),
 ]);
 
-$pdfClient = new PdfClient(Vendor::Poppler, $providers);
+$pdfClient = new PdfClient('poppler', $providers);
 
 try {
     $file = $pdfClient->files->read($path);
@@ -44,7 +43,7 @@ try {
     }
 
     // Switch the facade to another registered provider.
-    $file = $pdfClient->use(Vendor::Mock)->files->read($path);
+    $file = $pdfClient->use('mock')->files->read($path);
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());
 }

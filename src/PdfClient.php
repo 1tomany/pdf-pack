@@ -4,6 +4,7 @@ namespace OneToMany\PdfPack;
 
 use OneToMany\PdfPack\Contract\PdfClientInterface;
 use OneToMany\PdfPack\Contract\Resource\FilesInterface;
+use OneToMany\PdfPack\Exception\DomainException;
 use OneToMany\PdfPack\Resource\Files;
 use OneToMany\PdfPack\Resource\Registry;
 
@@ -21,24 +22,24 @@ final class PdfClient implements PdfClientInterface
     public private(set) FilesInterface $files;
 
     public function __construct(
-        string|Vendor $defaultVendor,
+        string $defaultProvider,
         private readonly Registry $providers,
     ) {
-        $this->use($defaultVendor);
+        $this->use($defaultProvider);
     }
 
     #[\Override]
-    public function use(string|Vendor $vendor): static
+    public function use(string $provider): static
     {
-        $vendor = Vendor::create($vendor);
+        $provider = DomainException::validateProvider($provider);
 
-        if (!isset($this->facades['files'][$vendor->value])) {
-            $this->facades['files'][$vendor->value] = new Files(...[
-                'provider' => $this->providers->get($vendor),
+        if (!isset($this->facades['files'][$provider])) {
+            $this->facades['files'][$provider] = new Files(...[
+                'provider' => $this->providers->get($provider),
             ]);
         }
 
-        $this->files = $this->facades['files'][$vendor->value];
+        $this->files = $this->facades['files'][$provider];
 
         return $this;
     }

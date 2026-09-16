@@ -7,10 +7,23 @@ use OneToMany\PdfPack\Contract\Exception\ExceptionInterface;
 use function is_file;
 use function is_readable;
 use function sprintf;
+use function strtolower;
 use function trim;
 
 class DomainException extends \DomainException implements ExceptionInterface
 {
+    /**
+     * @return non-empty-lowercase-string
+     */
+    public static function validateProvider(string $provider): string
+    {
+        if ('' === $provider = strtolower(trim($provider))) {
+            throw new self('The provider cannot be empty.');
+        }
+
+        return $provider;
+    }
+
     /**
      * @return non-empty-string
      */

@@ -6,7 +6,7 @@ use OneToMany\PdfPack\Bridge\Mock\MockProvider;
 use OneToMany\PdfPack\Bridge\Poppler\PopplerProvider;
 use OneToMany\PdfPack\Exception\DomainException;
 use OneToMany\PdfPack\Resource\Registry;
-use OneToMany\PdfPack\Vendor;
+use OneToMany\PdfPack\Tests\Fixture\Bridge\ImagickProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +18,14 @@ final class RegistryTest extends TestCase
     {
         $provider = new PopplerProvider();
 
-        $this->assertSame($provider, new Registry([$provider])->get(Vendor::Poppler));
+        $this->assertSame($provider, new Registry([$provider])->get('poppler'));
+    }
+
+    public function testGettingThirdPartyProvider(): void
+    {
+        $provider = new ImagickProvider();
+
+        $this->assertSame($provider, new Registry([$provider])->get(' IMAGICK '));
     }
 
     public function testGettingProviderRequiresRegistration(): void
@@ -26,7 +33,7 @@ final class RegistryTest extends TestCase
         $this->expectException(DomainException::class);
         $this->expectExceptionMessageIs('The "poppler" provider is not registered.');
 
-        new Registry([])->get(Vendor::Poppler);
+        new Registry([])->get('poppler');
     }
 
     public function testRegisteringDuplicateProviderFails(): void

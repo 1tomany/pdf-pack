@@ -4,7 +4,6 @@ namespace OneToMany\PdfPack\Resource;
 
 use OneToMany\PdfPack\Contract\Bridge\ProviderInterface;
 use OneToMany\PdfPack\Exception\DomainException;
-use OneToMany\PdfPack\Vendor;
 
 use function sprintf;
 
@@ -25,13 +24,13 @@ final readonly class Registry
         $indexedProviders = [];
 
         foreach ($providers as $provider) {
-            $vendor = $provider::getVendor()->getValue();
+            $name = DomainException::validateProvider($provider::getProvider());
 
-            if (isset($indexedProviders[$vendor])) {
-                throw new DomainException(sprintf('The "%s" provider is already registered.', $vendor));
+            if (isset($indexedProviders[$name])) {
+                throw new DomainException(sprintf('The "%s" provider is already registered.', $name));
             }
 
-            $indexedProviders[$vendor] = $provider;
+            $indexedProviders[$name] = $provider;
         }
 
         $this->providers = $indexedProviders;
@@ -40,9 +39,11 @@ final readonly class Registry
     /**
      * @throws DomainException when a provider is not registered
      */
-    public function get(Vendor $vendor): ProviderInterface
+    public function get(string $provider): ProviderInterface
     {
-        return $this->providers[$vendor->getValue()]
-            ?? throw new DomainException(sprintf('The "%s" provider is not registered.', $vendor->getValue()));
+        $provider = DomainException::validateProvider($provider);
+
+        return $this->providers[$provider]
+            ?? throw new DomainException(sprintf('The "%s" provider is not registered.', $provider));
     }
 }

@@ -9,7 +9,6 @@ use OneToMany\PdfPack\Contract\Resource\FilesInterface;
 use OneToMany\PdfPack\Exception\RuntimeException;
 use OneToMany\PdfPack\Resource\File\File;
 use OneToMany\PdfPack\Resource\File\Page;
-use OneToMany\PdfPack\Vendor;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessExceptionInterface;
 use Symfony\Component\Process\Process;
 
@@ -31,11 +30,13 @@ final readonly class PopplerProvider implements ProviderInterface
 
     /**
      * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
+     *
+     * @return 'poppler'
      */
     #[\Override]
-    public static function getVendor(): Vendor
+    public static function getProvider(): string
     {
-        return Vendor::Poppler;
+        return 'poppler';
     }
 
     /**

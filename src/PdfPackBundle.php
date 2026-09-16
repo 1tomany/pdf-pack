@@ -12,7 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-use function array_column;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
@@ -33,9 +32,9 @@ final class PdfPackBundle extends AbstractBundle
         $definition
             ->rootNode()
                 ->children()
-                    ->enumNode('vendor')
-                        ->values(array_column(Vendor::cases(), 'value'))
-                        ->defaultValue(Vendor::Poppler->value)
+                    ->stringNode('provider')
+                        ->cannotBeEmpty()
+                        ->defaultValue('poppler')
                     ->end()
                     ->arrayNode('poppler_provider')
                         ->addDefaultsIfNotSet()
@@ -62,7 +61,7 @@ final class PdfPackBundle extends AbstractBundle
      * @see Symfony\Component\DependencyInjection\Extension\ConfigurableExtensionInterface
      *
      * @param array{
-     *   vendor: non-empty-string,
+     *   provider: non-empty-string,
      *   poppler_provider: array{
      *     pdfinfo_binary: non-empty-string,
      *     pdftoppm_binary: non-empty-string,
@@ -95,7 +94,7 @@ final class PdfPackBundle extends AbstractBundle
                     ->arg('$providers', tagged_iterator(self::PROVIDER_TAG))
 
                 ->set(PdfClient::class)
-                    ->arg('$defaultVendor', $config['vendor'])
+                    ->arg('$defaultProvider', $config['provider'])
                     ->arg('$providers', service(Registry::class))
                     ->alias(PdfClientInterface::class, service(PdfClient::class))
         ;
