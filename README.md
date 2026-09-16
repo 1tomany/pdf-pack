@@ -36,16 +36,39 @@ This library has three main features:
 
 Extracted data is stored in memory and can be written to the filesystem or converted to a `data:` URI. Because extracted data is stored in memory, this library returns a `\Generator` object for each page that is extracted or rasterized.
 
-Using the library is easy, and you have two ways to interact with it:
-
-1. **Direct** Instantiate the `OneToMany\PdfPack\Client\Poppler\PopplerClient` class and call the methods directly. This method is easier to use, but comes with the cost that your application will be less flexible and testable.
-2. **Actions** Create a container of `OneToMany\PdfPack\Contract\Client\ClientInterface` objects, and use the `OneToMany\PdfPack\Factory\ClientFactory` class to instantiate them.
+The primary API is the `OneToMany\PdfPack\PdfClient` facade. It exposes PDF operations through its `files` resource and returns records directly, without request, action, or response objects. `convert()` always returns a `Generator`, so page conversion remains lazy.
 
 **Note:** A [Symfony bundle](https://github.com/1tomany/pdf-pack-bundle) is available if you wish to integrate this library into your Symfony applications with autowiring and configuration support.
 
-### Direct usage
+### Facade usage
 
-See [`examples/direct.php`](https://github.com/1tomany/pdf-pack/blob/master/examples/direct.php).
+```php
+use OneToMany\PdfPack\Client\Poppler\PopplerClient;
+use OneToMany\PdfPack\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Factory\ClientContainer;
+use OneToMany\PdfPack\Factory\ClientFactory;
+use OneToMany\PdfPack\PdfClient;
+
+$clients = new ClientFactory(new ClientContainer([
+    new PopplerClient(),
+]));
+
+$pdfClient = new PdfClient($clients, 'poppler');
+
+$pdf = $pdfClient->files->read('/path/to/file.pdf');
+
+foreach ($pdfClient->files->convert('/path/to/file.pdf', outputType: OutputType::Png, resolution: 150) as $page) {
+    // $page is converted only when the generator advances.
+}
+```
+
+The configured client can be changed for one chain without mutating the original facade:
+
+```php
+$pages = $pdfClient->use('imagick')->files->convert('/path/to/file.pdf');
+```
+
+The direct `$pdfClient->read()` and `$pdfClient->convert()` methods are convenience aliases for the corresponding `files` methods. See [`examples/facade.php`](https://github.com/1tomany/pdf-pack/blob/master/examples/facade.php) for a complete example.
 
 ## Credits
 

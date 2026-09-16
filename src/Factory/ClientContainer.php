@@ -3,11 +3,15 @@
 namespace OneToMany\PdfPack\Factory;
 
 use OneToMany\PdfPack\Contract\Client\ClientInterface;
+use OneToMany\PdfPack\Contract\Enum\Vendor;
+use OneToMany\PdfPack\Exception\InvalidArgumentException;
 use OneToMany\PdfPack\Factory\Exception\ContainerEntryNotFoundException;
 use Psr\Container\ContainerInterface;
 
 use function array_key_exists;
 use function sprintf;
+use function strtolower;
+use function trim;
 
 final class ClientContainer implements ContainerInterface
 {
@@ -29,7 +33,14 @@ final class ClientContainer implements ContainerInterface
 
     public function addClient(ClientInterface $client): static
     {
-        $this->clients[$client::getVendor()->getValue()] = $client;
+        $vendor = $client::getVendor();
+        $vendor = $vendor instanceof Vendor ? $vendor->getValue() : strtolower(trim($vendor));
+
+        if ('' === $vendor) {
+            throw new InvalidArgumentException('The client vendor cannot be empty.');
+        }
+
+        $this->clients[$vendor] = $client;
 
         return $this;
     }

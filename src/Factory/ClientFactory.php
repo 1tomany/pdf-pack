@@ -9,6 +9,8 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 use function sprintf;
+use function strtolower;
+use function trim;
 
 final readonly class ClientFactory
 {
@@ -24,6 +26,8 @@ final readonly class ClientFactory
     {
         if ($vendor instanceof Vendor) {
             $vendor = $vendor->getValue();
+        } else {
+            $vendor = strtolower(trim($vendor));
         }
 
         try {

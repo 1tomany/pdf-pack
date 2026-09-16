@@ -10,7 +10,7 @@ use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 
 interface ClientInterface
 {
-    public static function getVendor(): Vendor;
+    public static function getVendor(): string|Vendor;
 
     public function read(ReadRequest $request): PdfRecord;
 
