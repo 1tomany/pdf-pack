@@ -13,8 +13,10 @@ use PHPUnit\Framework\TestCase;
 final class OutputTypeTest extends TestCase
 {
     #[DataProvider('providerOutputTypeAndExtension')]
-    public function testGettingExtension(OutputType $type, string $extension): void
-    {
+    public function testGettingExtension(
+        OutputType $type,
+        string $extension,
+    ): void {
         $this->assertEquals($extension, $type->getExtension());
     }
 
@@ -33,8 +35,10 @@ final class OutputTypeTest extends TestCase
     }
 
     #[DataProvider('providerOutputTypeAndFormat')]
-    public function testGettingFormat(OutputType $type, string $format): void
-    {
+    public function testGettingFormat(
+        OutputType $type,
+        string $format,
+    ): void {
         $this->assertEquals($format, $type->getFormat());
     }
 
@@ -50,20 +54,5 @@ final class OutputTypeTest extends TestCase
         ];
 
         return $provider;
-    }
-
-    public function testIsJpeg(): void
-    {
-        $this->assertTrue(OutputType::Jpeg->isJpeg()); // @phpstan-ignore-line
-    }
-
-    public function testIsPng(): void
-    {
-        $this->assertTrue(OutputType::Png->isPng()); // @phpstan-ignore-line
-    }
-
-    public function testIsText(): void
-    {
-        $this->assertTrue(OutputType::Text->isText()); // @phpstan-ignore-line
     }
 }

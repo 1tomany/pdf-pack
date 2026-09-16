@@ -4,18 +4,16 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 use PhpCsFixer\Runner\Parallel\ParallelConfig;
 
-$finder = new Finder();
-
-$finder->in([
-    './examples/',
-    './src/',
-    './tests/',
-]);
+$finder = Finder::create()
+    ->in([__DIR__])
+    ->append([__FILE__])
+    ->ignoreVCSIgnored(true)
+;
 
 $config = new Config()
     ->setFinder($finder)
     ->setParallelConfig(new ParallelConfig(4))
-    ->setCacheFile('./.build/php-cs-fixer.cache')
+    ->setCacheFile('var/php-cs-fixer/files.cache')
     ->setRules([
         '@Symfony' => true,
         'global_namespace_import' => [

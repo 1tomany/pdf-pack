@@ -35,13 +35,13 @@ enum OutputType
      */
     public function getFormat(): string
     {
-        $mimeType = match ($this) {
+        $format = match ($this) {
             self::Jpeg => 'image/jpeg',
             self::Png => 'image/png',
             self::Text => 'text/plain',
         };
 
-        return $mimeType;
+        return $format;
     }
 
     /**
