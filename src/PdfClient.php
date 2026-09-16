@@ -37,7 +37,7 @@ final readonly class PdfClient implements PdfClientInterface
         int $fromPage = 1,
         ?int $toPage = null,
         OutputType $outputType = OutputType::Jpeg,
-        int $resolution = 72,
+        int $resolution = self::DEFAULT_RESOLUTION,
     ): \Generator {
         return $this->files->convert($path, $fromPage, $toPage, $outputType, $resolution);
     }

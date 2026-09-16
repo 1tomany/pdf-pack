@@ -23,8 +23,7 @@ $pdfClient = new PdfClient($providers, Vendor::Poppler);
 try {
     $file = $pdfClient->files->read($path);
 
-    printf('The PDF file "%s" has %d %s.', $file->getName(), $file->getPageCount(), 1 === $file->getPageCount() ? 'page' : 'pages');
-    printf("\n\n");
+    printf("The PDF file \"%s\" has %d %s.\n\n", $file->getName(), $file->getPageCount(), 1 === $file->getPageCount() ? 'page' : 'pages');
 
     // The generator converts each page only as it is requested.
     foreach ($pdfClient->files->convert($path, outputType: OutputType::Jpeg, resolution: 150) as $page) {
@@ -38,7 +37,7 @@ try {
     }
 
     // Select another registered provider without changing the default facade.
-    $mockPdf = $pdfClient->use(Vendor::Mock)->files->read($path);
+    // $file = $pdfClient->use(Vendor::Mock)->files->read($path);
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());
 }
