@@ -2,17 +2,16 @@
 
 namespace OneToMany\PdfPack\Resource;
 
-use OneToMany\PdfPack\Contract\Client\ClientInterface;
+use OneToMany\PdfPack\Contract\Bridge\ProviderInterface;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Contract\Resource\FilesInterface;
-use OneToMany\PdfPack\Transfer\Record\PdfRecord;
-use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
-use OneToMany\PdfPack\Transfer\Request\ReadRequest;
+use OneToMany\PdfPack\Exception\DomainException;
+use OneToMany\PdfPack\Resource\File\File;
 
 final readonly class Files implements FilesInterface
 {
     public function __construct(
-        private ClientInterface $client,
+        private ProviderInterface $provider,
     ) {
     }
 
@@ -25,23 +24,27 @@ final readonly class Files implements FilesInterface
         int $fromPage = 1,
         ?int $toPage = null,
         OutputType $outputType = OutputType::Jpeg,
-        int $resolution = ConvertRequest::DEFAULT_RESOLUTION,
+        int $resolution = 72,
     ): \Generator {
-        return $this->client->convert(new ConvertRequest(
+        $path = DomainException::validatePath($path);
+        DomainException::validatePageRange($fromPage, $toPage);
+        $resolution = DomainException::validateResolution($resolution);
+
+        return $this->provider->convert(
             $path,
             $fromPage,
             $toPage,
             $outputType,
             $resolution,
-        ));
+        );
     }
 
     /**
      * @see OneToMany\PdfPack\Contract\Resource\FilesInterface
      */
     #[\Override]
-    public function read(string $path): PdfRecord
+    public function read(string $path): File
     {
-        return $this->client->read(new ReadRequest($path));
+        return $this->provider->read(DomainException::validatePath($path));
     }
 }

@@ -3,13 +3,13 @@
 namespace OneToMany\PdfPack\Contract\Resource;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
-use OneToMany\PdfPack\Transfer\Record\PageRecord;
-use OneToMany\PdfPack\Transfer\Record\PdfRecord;
+use OneToMany\PdfPack\Resource\File\File;
+use OneToMany\PdfPack\Resource\File\Page;
 
 interface FilesInterface
 {
     /**
-     * @return \Generator<int, PageRecord>
+     * @return \Generator<int, Page>
      */
     public function convert(
         string $path,
@@ -19,5 +19,5 @@ interface FilesInterface
         int $resolution = 72,
     ): \Generator;
 
-    public function read(string $path): PdfRecord;
+    public function read(string $path): File;
 }

@@ -2,120 +2,79 @@
 
 namespace OneToMany\PdfPack\Tests;
 
-use OneToMany\PdfPack\Contract\Client\ClientInterface;
+use OneToMany\PdfPack\Contract\Bridge\ProviderInterface;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
-use OneToMany\PdfPack\Contract\Enum\Vendor;
-use OneToMany\PdfPack\Factory\ClientContainer;
-use OneToMany\PdfPack\Factory\ClientFactory;
 use OneToMany\PdfPack\PdfClient;
-use OneToMany\PdfPack\Transfer\Record\PageRecord;
-use OneToMany\PdfPack\Transfer\Record\PdfRecord;
-use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
-use OneToMany\PdfPack\Transfer\Request\ReadRequest;
+use OneToMany\PdfPack\Resource\File\File;
+use OneToMany\PdfPack\Resource\File\Page;
+use OneToMany\PdfPack\Resource\Registry;
+use OneToMany\PdfPack\Vendor;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-
-use function array_values;
 
 #[Group('UnitTests')]
 final class PdfClientTest extends TestCase
 {
-    public function testUsingClientReturnsScopedFacadeWithoutChangingDefault(): void
+    public function testUsingProviderReturnsScopedFacadeWithoutChangingDefault(): void
     {
-        $poppler = new PopplerTestClient();
-        $imagick = new ImagickTestClient();
-        $client = $this->createPdfClient($poppler, $imagick);
+        $client = $this->createPdfClient(new PopplerTestProvider(), new MockTestProvider());
 
-        $this->assertSame(1, $client->files->read(__FILE__)->getPageCount());
-        $this->assertSame(2, $client->use(' IMAGICK ')->files->read(__FILE__)->getPageCount());
-        $this->assertSame(1, $client->files->read(__FILE__)->getPageCount());
+        $this->assertSame(1, $client->files->read(__FILE__)->pageCount);
+        $this->assertSame(2, $client->use(' MOCK ')->files->read(__FILE__)->pageCount);
+        $this->assertSame(1, $client->files->read(__FILE__)->pageCount);
     }
 
-    public function testReadIsAvailableAsConvenienceAlias(): void
+    public function testDirectMethodsAreAliasesForFilesResource(): void
     {
-        $client = $this->createPdfClient(new PopplerTestClient());
+        $client = $this->createPdfClient(new PopplerTestProvider());
 
         $this->assertEquals($client->files->read(__FILE__), $client->read(__FILE__));
+        $this->assertEquals($client->files->convert(__FILE__)->current(), $client->convert(__FILE__)->current());
     }
 
-    public function testConvertReturnsGeneratorAndConvertsPagesOnDemand(): void
+    private function createPdfClient(ProviderInterface ...$providers): PdfClient
     {
-        $poppler = new PopplerTestClient();
-        $client = $this->createPdfClient($poppler);
-
-        $pages = $client->files->convert(__FILE__, 2, 3, OutputType::Png, 150);
-
-        $this->assertInstanceOf(\Generator::class, $pages);
-        $this->assertSame(0, $poppler->convertCalls);
-
-        $page = $pages->current();
-        $request = $poppler->getConvertRequest();
-
-        $this->assertSame(1, $poppler->convertCalls);
-        $this->assertInstanceOf(PageRecord::class, $page);
-        $this->assertSame(2, $request->getFirstPage());
-        $this->assertSame(3, $request->getLastPage());
-        $this->assertSame(OutputType::Png, $request->getOutputType());
-        $this->assertSame(150, $request->getResolution());
-    }
-
-    public function testConvertIsAvailableAsConvenienceAlias(): void
-    {
-        $client = $this->createPdfClient(new PopplerTestClient());
-
-        $this->assertInstanceOf(PageRecord::class, $client->convert(__FILE__)->current());
-    }
-
-    private function createPdfClient(ClientInterface ...$clients): PdfClient
-    {
-        return new PdfClient(new ClientFactory(new ClientContainer(array_values($clients))));
+        return new PdfClient(new Registry($providers));
     }
 }
 
-class PopplerTestClient implements ClientInterface
+class PopplerTestProvider implements ProviderInterface
 {
-    public int $convertCalls = 0;
-
-    public ?ConvertRequest $convertRequest = null;
-
     #[\Override]
-    public static function getVendor(): string|Vendor
+    public static function getVendor(): Vendor
     {
         return Vendor::Poppler;
     }
 
     #[\Override]
-    public function read(ReadRequest $request): PdfRecord
-    {
-        return new PdfRecord($request->getPath(), 1);
+    public function convert(
+        string $path,
+        int $fromPage = 1,
+        ?int $toPage = null,
+        OutputType $outputType = OutputType::Jpeg,
+        int $resolution = 72,
+    ): \Generator {
+        yield new Page($outputType, 'page', $fromPage);
     }
 
     #[\Override]
-    public function convert(ConvertRequest $request): \Generator
+    public function read(string $path): File
     {
-        ++$this->convertCalls;
-        $this->convertRequest = $request;
-
-        yield new PageRecord($request->getOutputType(), 'page', $request->getFirstPage());
-    }
-
-    public function getConvertRequest(): ConvertRequest
-    {
-        return $this->convertRequest ?? throw new \LogicException('No conversion was requested.');
+        return new File($path, 1);
     }
 }
 
-final class ImagickTestClient extends PopplerTestClient
+final class MockTestProvider extends PopplerTestProvider
 {
     #[\Override]
-    public static function getVendor(): string
+    public static function getVendor(): Vendor
     {
-        return 'imagick';
+        return Vendor::Mock;
     }
 
     #[\Override]
-    public function read(ReadRequest $request): PdfRecord
+    public function read(string $path): File
     {
-        return new PdfRecord($request->getPath(), 2);
+        return new File($path, 2);
     }
 }

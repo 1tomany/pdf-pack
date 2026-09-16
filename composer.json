@@ -21,7 +21,6 @@
     ],
     "require": {
         "php": ">=8.5",
-        "psr/container": "^2.0",
         "symfony/process": "^7.2|^8.0|^8.1"
     },
     "require-dev": {

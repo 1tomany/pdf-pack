@@ -1,18 +1,15 @@
 <?php
 
-namespace OneToMany\PdfPack\Contract;
+namespace OneToMany\PdfPack\Contract\Bridge;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
-use OneToMany\PdfPack\Contract\Resource\FilesInterface;
 use OneToMany\PdfPack\Resource\File\File;
 use OneToMany\PdfPack\Resource\File\Page;
 use OneToMany\PdfPack\Vendor;
 
-interface PdfClientInterface
+interface ProviderInterface
 {
-    public FilesInterface $files { get; }
-
-    public function use(string|Vendor $vendor): static;
+    public static function getVendor(): Vendor;
 
     /**
      * @return \Generator<int, Page>

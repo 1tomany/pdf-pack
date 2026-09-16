@@ -2,24 +2,23 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use OneToMany\PdfPack\Client\Mock\MockClient;
-use OneToMany\PdfPack\Client\Poppler\PopplerClient;
+use OneToMany\PdfPack\Bridge\Mock\MockProvider;
+use OneToMany\PdfPack\Bridge\Poppler\PopplerProvider;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
-use OneToMany\PdfPack\Contract\Enum\Vendor;
 use OneToMany\PdfPack\Contract\Exception\ExceptionInterface as PdfPackExceptionInterface;
-use OneToMany\PdfPack\Factory\ClientContainer;
-use OneToMany\PdfPack\Factory\ClientFactory;
 use OneToMany\PdfPack\PdfClient;
+use OneToMany\PdfPack\Resource\Registry;
+use OneToMany\PdfPack\Vendor;
 
 /** @var non-empty-string $path */
 $path = realpath(__DIR__.'/../data/files/s3.pdf');
 
-$clients = new ClientFactory(new ClientContainer([
-    new MockClient(),
-    new PopplerClient(),
-]));
+$providers = new Registry([
+    new MockProvider(),
+    new PopplerProvider(),
+]);
 
-$pdfClient = new PdfClient($clients, Vendor::Poppler);
+$pdfClient = new PdfClient($providers, Vendor::Poppler);
 
 try {
     $pdf = $pdfClient->files->read($path);
@@ -37,7 +36,7 @@ try {
         printf("Page %d size: %d bytes\n", $page->getPage(), $page->getSize());
     }
 
-    // Select another registered client without changing the default facade.
+    // Select another registered provider without changing the default facade.
     $mockPdf = $pdfClient->use(Vendor::Mock)->files->read($path);
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());

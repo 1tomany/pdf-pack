@@ -3,29 +3,27 @@
 namespace OneToMany\PdfPack;
 
 use OneToMany\PdfPack\Contract\Enum\OutputType;
-use OneToMany\PdfPack\Contract\Enum\Vendor;
 use OneToMany\PdfPack\Contract\PdfClientInterface;
 use OneToMany\PdfPack\Contract\Resource\FilesInterface;
-use OneToMany\PdfPack\Factory\ClientFactory;
+use OneToMany\PdfPack\Resource\File\File;
 use OneToMany\PdfPack\Resource\Files;
-use OneToMany\PdfPack\Transfer\Record\PdfRecord;
-use OneToMany\PdfPack\Transfer\Request\ConvertRequest;
+use OneToMany\PdfPack\Resource\Registry;
 
 final readonly class PdfClient implements PdfClientInterface
 {
     public FilesInterface $files;
 
     public function __construct(
-        private ClientFactory $clientFactory,
-        string|Vendor $client = Vendor::Poppler,
+        private Registry $providers,
+        string|Vendor $vendor = Vendor::Poppler,
     ) {
-        $this->files = new Files($this->clientFactory->create($client));
+        $this->files = new Files($this->providers->get(Vendor::create($vendor)));
     }
 
     #[\Override]
-    public function use(string|Vendor $client): static
+    public function use(string|Vendor $vendor): static
     {
-        return new self($this->clientFactory, $client);
+        return new self($this->providers, $vendor);
     }
 
     /**
@@ -39,7 +37,7 @@ final readonly class PdfClient implements PdfClientInterface
         int $fromPage = 1,
         ?int $toPage = null,
         OutputType $outputType = OutputType::Jpeg,
-        int $resolution = ConvertRequest::DEFAULT_RESOLUTION,
+        int $resolution = 72,
     ): \Generator {
         return $this->files->convert($path, $fromPage, $toPage, $outputType, $resolution);
     }
@@ -50,7 +48,7 @@ final readonly class PdfClient implements PdfClientInterface
      * @see OneToMany\PdfPack\Contract\PdfClientInterface
      */
     #[\Override]
-    public function read(string $path): PdfRecord
+    public function read(string $path): File
     {
         return $this->files->read($path);
     }
