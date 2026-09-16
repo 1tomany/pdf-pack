@@ -24,8 +24,10 @@ use function iterator_to_array;
 final class PopplerProviderTest extends TestCase
 {
     #[DataProvider('providerInvalidBinaryAndOperation')]
-    public function testOperationsRequireValidBinaries(string $binary, ?OutputType $outputType): void
-    {
+    public function testOperationsRequireValidBinaries(
+        string $binary,
+        ?OutputType $outputType,
+    ): void {
         $this->expectException(DomainException::class);
         $this->expectExceptionMessageIs('The binary "'.$binary.'" could not be found.');
 
@@ -41,7 +43,7 @@ final class PopplerProviderTest extends TestCase
             return;
         }
 
-        $provider->convert(__DIR__.'/../../../data/files/pages-1.pdf', toPage: 1, outputType: $outputType)->current();
+        $provider->convert(__DIR__.'/../../../data/files/pages-1.pdf', fromPage: 1, toPage: 1, outputType: $outputType)->current();
     }
 
     /**
@@ -120,12 +122,19 @@ final class PopplerProviderTest extends TestCase
     }
 
     #[DataProvider('providerPathPageAndText')]
-    public function testConvertingPdfToText(string $path, int $pageNumber, string $text): void
-    {
-        $pages = iterator_to_array(new PopplerProvider()->convert($path, $pageNumber, $pageNumber, OutputType::Text));
+    public function testConvertingPdfToText(
+        string $path,
+        int $page,
+        string $text,
+    ): void {
+        $pages = new PopplerProvider()->convert(
+            $path, $page, $page, OutputType::Text,
+        );
+
+        $pages = iterator_to_array($pages);
 
         $this->assertCount(1, $pages);
-        $this->assertSame($pageNumber, $pages[0]->page);
+        $this->assertSame($page, $pages[0]->page);
         $this->assertStringContainsString($text, $pages[0]->data);
     }
 
@@ -145,12 +154,12 @@ final class PopplerProviderTest extends TestCase
     #[DataProvider('providerImageArgumentsAndHash')]
     public function testConvertingPdfToImage(
         string $path,
-        int $pageNumber,
+        int $page,
         OutputType $outputType,
         int $resolution,
         string $hash,
     ): void {
-        $page = new PopplerProvider()->convert($path, $pageNumber, $pageNumber, $outputType, $resolution)->current();
+        $page = new PopplerProvider()->convert($path, $page, $page, $outputType, $resolution)->current();
 
         $this->assertInstanceOf(Page::class, $page);
         $this->assertSame($hash, $page->hash);

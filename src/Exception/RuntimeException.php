@@ -17,11 +17,8 @@ class RuntimeException extends \RuntimeException implements ExceptionInterface
         ?\Throwable $previous = null,
     ): self {
         $error = trim(explode("\n", $error ?? '')[0]) ?: null;
-        $message = null === $error
-            ? $message
-            : sprintf('%s: %s.', rtrim($message, '.'), rtrim($error, '.'));
 
-        return new self($message, previous: $previous);
+        return new self(null === $error ? $message : sprintf('%s: %s.', rtrim($message, '.'), rtrim($error, '.')), previous: $previous);
     }
 
     public static function convertingPdfFailed(
@@ -30,11 +27,7 @@ class RuntimeException extends \RuntimeException implements ExceptionInterface
         ?string $error = null,
         ?\Throwable $previous = null,
     ): self {
-        return self::binaryProcessFailed(
-            sprintf('Converting page %d of the file "%s" failed.', $page, $path),
-            $error,
-            $previous,
-        );
+        return self::binaryProcessFailed(sprintf('Converting page %d of the file "%s" failed.', $page, $path), $error, $previous);
     }
 
     public static function readingPdfFailed(
@@ -42,10 +35,6 @@ class RuntimeException extends \RuntimeException implements ExceptionInterface
         ?string $error = null,
         ?\Throwable $previous = null,
     ): self {
-        return self::binaryProcessFailed(
-            sprintf('Reading the file "%s" failed.', $path),
-            $error,
-            $previous,
-        );
+        return self::binaryProcessFailed(sprintf('Reading the file "%s" failed.', $path), $error, $previous);
     }
 }

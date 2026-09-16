@@ -5,6 +5,7 @@ namespace OneToMany\PdfPack\Bridge\Poppler;
 use OneToMany\PdfPack\Bridge\Trait\BinaryTrait;
 use OneToMany\PdfPack\Contract\Bridge\ProviderInterface;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
+use OneToMany\PdfPack\Contract\Resource\FilesInterface;
 use OneToMany\PdfPack\Exception\RuntimeException;
 use OneToMany\PdfPack\Resource\File\File;
 use OneToMany\PdfPack\Resource\File\Page;
@@ -68,7 +69,7 @@ final readonly class PopplerProvider implements ProviderInterface
         int $fromPage = 1,
         ?int $toPage = null,
         OutputType $outputType = OutputType::Jpeg,
-        int $resolution = 72,
+        int $resolution = FilesInterface::DEFAULT_RESOLUTION,
     ): \Generator {
         $toPage ??= $this->read($path)->getPageCount();
 

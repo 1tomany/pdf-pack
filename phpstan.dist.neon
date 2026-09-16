@@ -7,3 +7,4 @@ parameters:
         - tests/
 
     tmpDir: var/phpstan/
+    treatPhpDocTypesAsCertain: false

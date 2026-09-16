@@ -35,7 +35,7 @@ final class FilesTest extends TestCase
         $this->expectException(DomainException::class);
         $this->expectExceptionMessageIs($message);
 
-        new Files(new RecordingProvider())->convert(__FILE__, $fromPage, $toPage, resolution: $resolution);
+        new Files(new RecordingProvider())->convert(__FILE__, $fromPage, $toPage, resolution: $resolution); // @phpstan-ignore-line
     }
 
     /**
@@ -44,9 +44,9 @@ final class FilesTest extends TestCase
     public static function providerInvalidConversionArguments(): array
     {
         return [
-            [0, null, 72, 'The page must be greater than 0.'],
-            [1, 0, 72, 'The page must be greater than 0.'],
-            [2, 1, 72, 'The ending page must be greater than or equal to the starting page.'],
+            [0, null, 72, 'The first page must be greater than 0.'],
+            [1, 0, 72, 'The last page must be greater than 0.'],
+            [2, 1, 72, 'The last page must be greater than or equal to the first page.'],
             [1, null, 47, 'The resolution must be 48 DPI or larger.'],
             [1, null, 301, 'The resolution must be 300 DPI or smaller.'],
         ];
