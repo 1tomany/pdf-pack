@@ -3,14 +3,9 @@
 namespace OneToMany\PdfPack\Tests\Resource;
 
 use OneToMany\PdfPack\Bridge\Mock\MockProvider;
-use OneToMany\PdfPack\Contract\Bridge\ProviderInterface;
-use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\DomainException;
 use OneToMany\PdfPack\Exception\RangeException;
-use OneToMany\PdfPack\Resource\File\File;
-use OneToMany\PdfPack\Resource\File\Page;
 use OneToMany\PdfPack\Resource\Files;
-use OneToMany\PdfPack\Vendor;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
