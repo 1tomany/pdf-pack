@@ -16,8 +16,7 @@ final class OutputTypeTest extends TestCase
     public function testGettingExtension(
         OutputType $type,
         string $extension,
-    ): void
-    {
+    ): void {
         $this->assertEquals($extension, $type->getExtension());
     }
 
@@ -39,8 +38,7 @@ final class OutputTypeTest extends TestCase
     public function testGettingFormat(
         OutputType $type,
         string $format,
-    ): void
-    {
+    ): void {
         $this->assertEquals($format, $type->getFormat());
     }
 
