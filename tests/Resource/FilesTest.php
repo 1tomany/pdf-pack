@@ -5,6 +5,7 @@ namespace OneToMany\PdfPack\Tests\Resource;
 use OneToMany\PdfPack\Contract\Bridge\ProviderInterface;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\DomainException;
+use OneToMany\PdfPack\Exception\RangeException;
 use OneToMany\PdfPack\Resource\File\File;
 use OneToMany\PdfPack\Resource\File\Page;
 use OneToMany\PdfPack\Resource\Files;
@@ -25,14 +26,18 @@ final class FilesTest extends TestCase
         new Files(new RecordingProvider())->read('');
     }
 
+    /**
+     * @param class-string<DomainException|RangeException> $exceptionType
+     */
     #[DataProvider('providerInvalidConversionArguments')]
     public function testConvertingValidatesArguments(
         int $fromPage,
         ?int $toPage,
         int $resolution,
+        string $exceptionType,
         string $message,
     ): void {
-        $this->expectException(DomainException::class);
+        $this->expectException($exceptionType);
         $this->expectExceptionMessageIs($message);
 
         new Files(new RecordingProvider())->convert(__FILE__, $fromPage, $toPage, resolution: $resolution); // @phpstan-ignore-line
@@ -44,11 +49,11 @@ final class FilesTest extends TestCase
     public static function providerInvalidConversionArguments(): array
     {
         return [
-            [0, null, 72, 'The first page must be greater than 0.'],
-            [1, 0, 72, 'The last page must be greater than 0.'],
-            [2, 1, 72, 'The last page must be greater than or equal to the first page.'],
-            [1, null, 47, 'The resolution must be 48 DPI or larger.'],
-            [1, null, 301, 'The resolution must be 300 DPI or smaller.'],
+            [0, null, 72, DomainException::class, 'The first page must be greater than 0.'],
+            [1, 0, 72, DomainException::class, 'The last page must be greater than 0.'],
+            [2, 1, 72, DomainException::class, 'The last page must be greater than or equal to the first page.'],
+            [1, null, 47, RangeException::class, 'The resolution must be 48 DPI or larger.'],
+            [1, null, 301, RangeException::class, 'The resolution must be 300 DPI or smaller.'],
         ];
     }
 
