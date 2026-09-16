@@ -30,16 +30,18 @@ final readonly class File
             throw new DomainException('The path cannot be empty.');
         }
 
-        if ($pageCount < 0) {
-            throw new DomainException('The page count cannot be negative.');
-        }
+        $this->path = $path;
 
         if ('' === $name = basename($path)) {
             throw new DomainException('The file name cannot be empty.');
         }
 
-        $this->path = $path;
         $this->name = $name;
+
+        if ($pageCount < 0) {
+            throw new DomainException('The page count cannot be negative.');
+        }
+
         $this->pageCount = $pageCount;
     }
 

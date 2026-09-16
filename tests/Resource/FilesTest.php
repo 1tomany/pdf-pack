@@ -14,14 +14,6 @@ use PHPUnit\Framework\TestCase;
 #[Group('ResourceTests')]
 final class FilesTest extends TestCase
 {
-    public function testReadingRequiresReadablePath(): void
-    {
-        $this->expectException(DomainException::class);
-        $this->expectExceptionMessageIs('The path cannot be empty.');
-
-        new Files(new MockProvider())->read('');
-    }
-
     /**
      * @param class-string<DomainException|RangeException> $exceptionType
      */
@@ -51,5 +43,13 @@ final class FilesTest extends TestCase
             [1, null, 47, RangeException::class, 'The resolution must be 48 DPI or larger.'],
             [1, null, 301, RangeException::class, 'The resolution must be 300 DPI or smaller.'],
         ];
+    }
+
+    public function testReadingRequiresReadablePath(): void
+    {
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessageIs('The path cannot be empty.');
+
+        new Files(new MockProvider())->read('');
     }
 }

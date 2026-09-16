@@ -29,6 +29,9 @@ final readonly class PopplerProvider implements ProviderInterface
     ) {
     }
 
+    /**
+     * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
+     */
     #[\Override]
     public static function getVendor(): Vendor
     {
@@ -36,30 +39,7 @@ final readonly class PopplerProvider implements ProviderInterface
     }
 
     /**
-     * @throws RuntimeException when reading the PDF fails
-     */
-    #[\Override]
-    public function read(string $path): File
-    {
-        $process = new Process([$this->findBinary($this->pdfInfoBinary), $path]);
-
-        try {
-            $output = $process->mustRun()->getOutput();
-        } catch (ProcessExceptionInterface $e) {
-            throw RuntimeException::readingPdfFailed($path, $process->getErrorOutput(), $e);
-        }
-
-        foreach (explode("\n", $output) as $line) {
-            if (str_starts_with($line, 'Pages:')) {
-                $pageCount = trim(substr($line, 6));
-            }
-        }
-
-        return new File($path, isset($pageCount) ? (int) $pageCount : 1);
-    }
-
-    /**
-     * @return \Generator<int, Page>
+     * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
      *
      * @throws RuntimeException when converting one or more pages fails
      */
@@ -104,5 +84,30 @@ final readonly class PopplerProvider implements ProviderInterface
 
             yield new Page($outputType, $output, $page);
         }
+    }
+
+    /**
+     * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
+     *
+     * @throws RuntimeException when reading the PDF fails
+     */
+    #[\Override]
+    public function read(string $path): File
+    {
+        $process = new Process([$this->findBinary($this->pdfInfoBinary), $path]);
+
+        try {
+            $output = $process->mustRun()->getOutput();
+        } catch (ProcessExceptionInterface $e) {
+            throw RuntimeException::readingPdfFailed($path, $process->getErrorOutput(), $e);
+        }
+
+        foreach (explode("\n", $output) as $line) {
+            if (str_starts_with($line, 'Pages:')) {
+                $pageCount = trim(substr($line, 6));
+            }
+        }
+
+        return new File($path, isset($pageCount) ? (int) $pageCount : 1);
     }
 }

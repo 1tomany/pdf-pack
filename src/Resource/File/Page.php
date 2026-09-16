@@ -18,7 +18,7 @@ final readonly class Page implements \Stringable
     public string $hash;
 
     /**
-     * @var non-negative-int
+     * @var positive-int
      */
     public int $page;
 
@@ -27,16 +27,20 @@ final readonly class Page implements \Stringable
      */
     public int $size;
 
+    /**
+     * @throws DomainException when the page is empty
+     */
     public function __construct(
         public OutputType $outputType,
         public string $data,
         int $page = 1,
     ) {
+        $this->hash = hash('sha256', $data);
+
         if ($page < 0) {
             throw new DomainException('The page cannot be negative.');
         }
 
-        $this->hash = hash('sha256', $data);
         $this->page = $page;
         $this->size = strlen($data);
     }

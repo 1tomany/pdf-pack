@@ -37,7 +37,7 @@ try {
     }
 
     // Switch the facade to another registered provider.
-    // $file = $pdfClient->use(Vendor::Mock)->files->read($path);
+    $file = $pdfClient->use(Vendor::Mock)->files->read($path);
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());
 }

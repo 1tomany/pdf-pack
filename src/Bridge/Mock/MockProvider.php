@@ -13,6 +13,9 @@ use function random_int;
 
 final readonly class MockProvider implements ProviderInterface
 {
+    /**
+     * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
+     */
     #[\Override]
     public static function getVendor(): Vendor
     {
@@ -20,7 +23,7 @@ final readonly class MockProvider implements ProviderInterface
     }
 
     /**
-     * @return \Generator<int, Page>
+     * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
      */
     #[\Override]
     public function convert(
@@ -37,6 +40,9 @@ final readonly class MockProvider implements ProviderInterface
         }
     }
 
+    /**
+     * @see OneToMany\PdfPack\Contract\Bridge\ProviderInterface
+     */
     #[\Override]
     public function read(string $path): File
     {
