@@ -21,10 +21,10 @@ final class PdfClient implements PdfClientInterface
     public private(set) FilesInterface $files;
 
     public function __construct(
-        string|Vendor $vendor,
+        string|Vendor $defaultVendor,
         private readonly Registry $providers,
     ) {
-        $this->use($vendor);
+        $this->use($defaultVendor);
     }
 
     #[\Override]
