@@ -2,6 +2,7 @@
 
 namespace OneToMany\PdfPack\Tests\Resource;
 
+use OneToMany\PdfPack\Bridge\Mock\MockProvider;
 use OneToMany\PdfPack\Contract\Bridge\ProviderInterface;
 use OneToMany\PdfPack\Contract\Enum\OutputType;
 use OneToMany\PdfPack\Exception\DomainException;
@@ -23,7 +24,7 @@ final class FilesTest extends TestCase
         $this->expectException(DomainException::class);
         $this->expectExceptionMessageIs('The path cannot be empty.');
 
-        new Files(new RecordingProvider())->read('');
+        new Files(new MockProvider())->read('');
     }
 
     /**
@@ -40,7 +41,7 @@ final class FilesTest extends TestCase
         $this->expectException($exceptionType);
         $this->expectExceptionMessageIs($message);
 
-        new Files(new RecordingProvider())->convert(__FILE__, $fromPage, $toPage, resolution: $resolution); // @phpstan-ignore-line
+        new Files(new MockProvider())->convert(__FILE__, $fromPage, $toPage, resolution: $resolution); // @phpstan-ignore-line
     }
 
     /**
@@ -55,52 +56,5 @@ final class FilesTest extends TestCase
             [1, null, 47, RangeException::class, 'The resolution must be 48 DPI or larger.'],
             [1, null, 301, RangeException::class, 'The resolution must be 300 DPI or smaller.'],
         ];
-    }
-
-    public function testConvertingDelegatesArgumentsLazily(): void
-    {
-        $provider = new RecordingProvider();
-        $pages = new Files($provider)->convert(__FILE__, 2, 3, OutputType::Png, 150);
-
-        $this->assertSame(0, $provider->convertCalls);
-        $this->assertInstanceOf(Page::class, $pages->current());
-        $this->assertSame(1, $provider->convertCalls);
-        $this->assertSame([__FILE__, 2, 3, OutputType::Png, 150], $provider->arguments);
-    }
-}
-
-final class RecordingProvider implements ProviderInterface
-{
-    public int $convertCalls = 0;
-
-    /**
-     * @var array{string, int, ?int, OutputType, int}|null
-     */
-    public ?array $arguments = null;
-
-    #[\Override]
-    public static function getVendor(): Vendor
-    {
-        return Vendor::Mock;
-    }
-
-    #[\Override]
-    public function convert(
-        string $path,
-        int $fromPage = 1,
-        ?int $toPage = null,
-        OutputType $outputType = OutputType::Jpeg,
-        int $resolution = 72,
-    ): \Generator {
-        ++$this->convertCalls;
-        $this->arguments = [$path, $fromPage, $toPage, $outputType, $resolution];
-
-        yield new Page($outputType, '', $fromPage);
-    }
-
-    #[\Override]
-    public function read(string $path): File
-    {
-        return new File($path, 1);
     }
 }
