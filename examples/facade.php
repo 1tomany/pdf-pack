@@ -21,9 +21,10 @@ $providers = new Registry([
 $pdfClient = new PdfClient($providers, Vendor::Poppler);
 
 try {
-    $pdf = $pdfClient->files->read($path);
+    $file = $pdfClient->files->read($path);
 
-    printf("The PDF '%s' has %d %s.\n\n", $pdf->getName(), $pdf->getPageCount(), 1 === $pdf->getPageCount() ? 'page' : 'pages');
+    printf('The PDF file "%s" has %d %s.', $file->getName(), $file->getPageCount(), 1 === $file->getPageCount() ? 'page' : 'pages');
+    printf("\n\n");
 
     // The generator converts each page only as it is requested.
     foreach ($pdfClient->files->convert($path, outputType: OutputType::Jpeg, resolution: 150) as $page) {
