@@ -18,7 +18,7 @@ $providers = new Registry([
     new PopplerProvider(),
 ]);
 
-$pdfClient = new PdfClient($providers, Vendor::Poppler);
+$pdfClient = new PdfClient(Vendor::Poppler, $providers);
 
 try {
     $file = $pdfClient->files->read($path);
@@ -36,7 +36,7 @@ try {
         printf("Page %d size: %d bytes\n", $page->getPage(), $page->getSize());
     }
 
-    // Select another registered provider without changing the default facade.
+    // Switch the facade to another registered provider.
     // $file = $pdfClient->use(Vendor::Mock)->files->read($path);
 } catch (PdfPackExceptionInterface $e) {
     printf("[ERROR] %s\n", $e->getMessage());

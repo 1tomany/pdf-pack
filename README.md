@@ -61,7 +61,7 @@ foreach ($pdfClient->files->convert('/path/to/file.pdf', outputType: OutputType:
 }
 ```
 
-The configured provider can be changed for one chain without mutating the original facade:
+The active provider can be changed fluently. Previously created resource objects are memoized, so switching back to a provider reuses its `Files` instance:
 
 ```php
 $pdf = $pdfClient->use('mock')->files->read('/path/to/file.pdf');

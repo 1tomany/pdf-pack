@@ -9,21 +9,40 @@ use OneToMany\PdfPack\Resource\File\File;
 use OneToMany\PdfPack\Resource\Files;
 use OneToMany\PdfPack\Resource\Registry;
 
-final readonly class PdfClient implements PdfClientInterface
+final class PdfClient implements PdfClientInterface
 {
-    public FilesInterface $files;
+    /**
+     * @var array{
+     *   files: array<non-empty-lowercase-string, FilesInterface>,
+     * }
+     */
+    private array $facades = [
+        'files' => [],
+    ];
+
+    public private(set) FilesInterface $files;
 
     public function __construct(
-        private Registry $providers,
-        string|Vendor $vendor = Vendor::Poppler,
+        string|Vendor $vendor,
+        private readonly Registry $providers,
     ) {
-        $this->files = new Files($this->providers->get(Vendor::create($vendor)));
+        $this->use($vendor);
     }
 
     #[\Override]
     public function use(string|Vendor $vendor): static
     {
-        return new self($this->providers, $vendor);
+        $vendor = Vendor::create($vendor);
+
+        if (!isset($this->facades['files'][$vendor->value])) {
+            $this->facades['files'][$vendor->value] = new Files(...[
+                'provider' => $this->providers->get($vendor),
+            ]);
+        }
+
+        $this->files = $this->facades['files'][$vendor->value];
+
+        return $this;
     }
 
     /**
