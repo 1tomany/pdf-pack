@@ -18,7 +18,7 @@ use OneToMany\PdfPack\Transfer\Request\ReadRequest;
 $vendor = Vendor::Poppler;
 
 /** @var non-empty-string $path */
-$path = realpath(__DIR__.'/../config/files/s3.pdf');
+$path = realpath(__DIR__.'/../data/files/s3.pdf');
 
 $clientContainer = new ClientContainer([
     new MockClient(),

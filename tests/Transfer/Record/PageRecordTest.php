@@ -79,7 +79,7 @@ final class PageRecordTest extends TestCase
 
     public function testToDataUri(): void
     {
-        $path = __DIR__.'/../../../config/files/label.jpeg';
+        $path = __DIR__.'/../../../data/files/label.jpeg';
         $this->assertFileExists($path);
 
         $data = file_get_contents($path);

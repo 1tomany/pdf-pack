@@ -13,7 +13,10 @@ use PHPUnit\Framework\TestCase;
 final class OutputTypeTest extends TestCase
 {
     #[DataProvider('providerOutputTypeAndExtension')]
-    public function testGettingExtension(OutputType $type, string $extension): void
+    public function testGettingExtension(
+        OutputType $type,
+        string $extension,
+    ): void
     {
         $this->assertEquals($extension, $type->getExtension());
     }
@@ -33,7 +36,10 @@ final class OutputTypeTest extends TestCase
     }
 
     #[DataProvider('providerOutputTypeAndFormat')]
-    public function testGettingFormat(OutputType $type, string $format): void
+    public function testGettingFormat(
+        OutputType $type,
+        string $format,
+    ): void
     {
         $this->assertEquals($format, $type->getFormat());
     }

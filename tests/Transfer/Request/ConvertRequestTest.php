@@ -26,7 +26,7 @@ final class ConvertRequestTest extends TestCase
     #[\Override]
     public static function setUpBeforeClass(): void
     {
-        $file = __DIR__.'/../../../config/files/label.pdf';
+        $file = __DIR__.'/../../../data/files/label.pdf';
 
         if (!$path = realpath($file)) {
             throw new \RuntimeException(sprintf('The file "%s" does not exist.', $file));
